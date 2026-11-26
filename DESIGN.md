@@ -34,9 +34,9 @@ AGENCY (source of truth)
 WIRE  (src/lib/live.ts)           normalises → SafetySignal { id, pillar, severity, confidence,
    │                               publishedAt, sourceUrl, rawOfficialText … }
    ▼                               zero transformation of meaning — labels + links only
-SELECT (Radar/Guard views)        filters by pillar/severity/query — stateless over the pool
+SELECT (Side-Eye/Receipts views)        filters by pillar/severity/query — stateless over the pool
    ▼
-ACT    (Recover / drawer / Safety Card export)   statutory engines are DETERMINISTIC (src/statutes.ts)
+ACT    (Comeuppance / drawer / Safety Card export)   statutory engines are DETERMINISTIC (src/statutes.ts)
 ENDPOINT                          link-out to the agency that can actually act
 ```
 
@@ -44,10 +44,10 @@ ENDPOINT                          link-out to the agency that can actually act
 
 | Surface | Owns | Never shows |
 |---|---|---|
-| **Radar** | "What's on *right now*?" — recalls, weather hazards, police/stops, and the unclaimed-money gateways | court dockets, baggage math, legal advice |
-| **Guard** | Recall Scanner (openFDA+FSA) · Docket Watchdog (CourtListener token + UK Find Case Law lane) · Field Wire (police/stops) | statutory compensation verdicts |
-| **Recover** | Deterministic money engines (EU261 · DOT 254 · Montreal 1999 · APPR) · claim packets · demand letters | live enforcement feeds |
-| **Country Vault** | The 46-row regulator registry with *verified* statuses (WIRED/PORTAL/BOT-WALLED/UNVERIFIABLE/GATED/QUEUED) + flat pricing | signals, claims |
+| **Side-Eye** | "What's on *right now*?" — recalls, weather hazards, police/stops, and the unclaimed-money gateways | court dockets, baggage math, legal advice |
+| **Receipts** | Recall Scanner (openFDA+FSA) · Docket Watchdog (CourtListener token + UK Find Case Law lane) · Field Wire (police/stops) | statutory compensation verdicts |
+| **Comeuppance** | Deterministic money engines (EU261 · DOT 254 · Montreal 1999 · APPR) · claim packets · demand letters | live enforcement feeds |
+| **The Black Book** | The 46-row regulator registry with *verified* statuses (WIRED/PORTAL/BOT-WALLED/UNVERIFIABLE/GATED/QUEUED) + flat pricing | signals, claims |
 
 **Failure states are designed, not defaulted:** every async surface has exactly three honest states — `loading` (says who it is contacting), `live` (pulse + "synced Xs ago" — green dot *means* data is on screen), `unavailable` (named reason + official portal — never stale, never invented).
 
@@ -58,7 +58,7 @@ ENDPOINT                          link-out to the agency that can actually act
 ## 3 · UX law, applied
 
 - **Fitts** — primary actions are 44–52px, thumb-anchored (bottom nav on mobile); destructive/forget actions are deliberately small.
-- **Hick** — 4 tabs, 4 nav items, 5 severities, 7→4 Radar pillars. Every choice list was cut to what fits working memory (Miller).
+- **Hick** — 4 tabs, 4 nav items, 5 severities, 4 Side-Eye pillars. Every choice list was cut to what fits working memory (Miller).
 - **Jakob** — feed + scope split (familiar from every tracker/dashboard), standard drawers, standard select styling. Novelty is rationed to moments of delight, never to how you "close" something.
 - **Doherty < 400ms** — local filters are synchronous; agency calls show named contact state, re-sync is one tap; skeleton-free by design (no layout shift).
 - **Reading law** — statutory ticker pauses on hover/focus; paragraphs cap at ~68ch; mono for machine text, serif only for verdicts and display.
@@ -66,7 +66,7 @@ ENDPOINT                          link-out to the agency that can actually act
 
 ## 4 · Motion language — "SCAN" (changed from fades to scan)
 
-Motion in Petty is **emitted by the radar, never pasted on**. One question per variant:
+Motion in Petty is **emitted by the scope, never pasted on**. One question per variant:
 
 | Variant | Trigger | Feeling | Budget |
 |---|---|---|---|

@@ -167,7 +167,7 @@ function Scanner({ pack }: { pack: CountryPack }) {
 interface LiveArgument { caseName: string; court: string; dateArgued: string; audioUrl: string | null; pageUrl: string }
 
 /* UK judgments lane — Find Case Law, The National Archives (Open Justice Licence).
- * Wired live, keyless, CORS-open. Courts belong to Guard, never Radar. */
+ * Wired live, keyless, CORS-open. Courts belong to Receipts, never Side-Eye. */
 function UKCaseLaw() {
   const [state, setState] = useState<'loading' | 'live' | 'unavailable'>('loading');
   const [items, setItems] = useState<{ id: string; title: string; court: string; when: string; url: string }[]>([]);
@@ -308,7 +308,7 @@ function DocketSearch({ market }: { market: string }) {
             <li>◦ Shows you a verdict Petty has not seen in the source</li>
           </ul>
         </div>
-        <p className="mono text-[8px] text-[var(--dim)] mt-3">CourtListener free tier: 5 req/min · 50/hr · 125/day. UK judgments: Find Case Law (Open Justice Licence) — api available to registered users. CanLII / AustLII: licence-gated, shown as such in the Vault.</p>
+        <p className="mono text-[8px] text-[var(--dim)] mt-3">CourtListener free tier: 5 req/min · 50/hr · 125/day. UK judgments: Find Case Law (Open Justice Licence) — api available to registered users. CanLII / AustLII: licence-gated, shown as such in The Black Book.</p>
       </section>
     </div>
   );

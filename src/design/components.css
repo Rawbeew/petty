@@ -35,7 +35,7 @@
 .chip-green { border-color: rgba(61,220,151,.35); color: var(--green); background: rgba(61,220,151,.08); }
 .dot { width: .42rem; height: .42rem; border-radius: 9999px; display: inline-block; }
 
-/* ---------- radar scope ---------- */
+/* ---------- scope ---------- */
 @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes blipPulse { 0%,100% { opacity: .9; r: 4; } 50% { opacity: .35; r: 6.5; } }
 @keyframes pingRing { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(2.4); opacity: 0; } }

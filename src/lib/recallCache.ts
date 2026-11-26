@@ -1,5 +1,5 @@
 /* Server-ingested recall portal cache (public/recall-cache.json).
- * Loaded SAME-ORIGIN at runtime by the Guard view. Absent file → null → UI shows
+ * Loaded SAME-ORIGIN at runtime by the Receipts view. Absent file → null → UI shows
  * nothing about scraped portals (never placeholders). Present file → every entry
  * renders with its provenance: source URL, fetch time, ok/unreachable status. */
 

@@ -6,7 +6,7 @@ with sync_playwright() as p:
     pg.wait_for_selector('text=LIVE WIRE')
     pg.wait_for_timeout(5000)
     pg.screenshot(path='shots/v3-radar.png')
-    pg.locator('header nav.hidden button', has_text='Guard').click()
+    pg.locator('header nav.hidden button', has_text='Receipts').click()
     pg.locator('button', has_text='Field Wire').click()
     for _ in range(80):
         t = pg.locator('section').nth(0).inner_text()

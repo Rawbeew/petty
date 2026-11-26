@@ -1,4 +1,4 @@
-/* Motion language — "SCAN": every movement is emitted by the radar, never pasted on.
+/* Motion language — "SCAN": every movement is emitted by the scope, never pasted on.
  * Variants answer one question each: what just arrived, where is the truth, what can I do.
  * Single source of truth for Petty's animation language. */
 import { stagger, type Variants } from 'motion/react';

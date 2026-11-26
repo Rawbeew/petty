@@ -14,10 +14,10 @@ with sync_playwright() as p:
         print('    main:', main)
 
     dump('initial (expect Radar gold)')
-    pg.locator('header nav.hidden button', has_text='COUNTRY VAULT').click(); pg.wait_for_timeout(400)
+    pg.locator('header nav.hidden button', has_text='Black Book').click(); pg.wait_for_timeout(400)
     dump('after Vault click (expect Vault gold + vault content)')
-    pg.locator('header nav.hidden button', has_text='Recover').click(); pg.wait_for_timeout(400)
+    pg.locator('header nav.hidden button', has_text='Comeuppance').click(); pg.wait_for_timeout(400)
     dump('after Recover click (expect Recover gold + recover content)')
-    pg.locator('header nav.hidden button', has_text='Radar').click(); pg.wait_for_timeout(400)
+    pg.locator('header nav.hidden button', has_text='Side-Eye').click(); pg.wait_for_timeout(400)
     dump('after Radar click (expect Radar gold + radar content)')
     b.close()

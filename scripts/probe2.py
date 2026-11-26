@@ -5,7 +5,7 @@ with sync_playwright() as p:
     pg.on('console', lambda m: print('[console]', m.type, m.text[:300]))
     pg.on('requestfailed', lambda r: print('[reqfail]', r.url[:120], r.failure))
     pg.goto('http://127.0.0.1:4173/', wait_until='networkidle')
-    pg.locator('header nav.hidden button', has_text='Guard').click()
+    pg.locator('header nav.hidden button', has_text='Receipts').click()
     pg.locator('button', has_text='Field Wire').click()
     pg.wait_for_timeout(12000)
     secs = pg.locator('section')

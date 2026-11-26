@@ -5,7 +5,7 @@ A redesign is not "make it pop." It is: understand *why* the interface exists, t
 
 **P1 · Truth before beauty. Citation-or-silence.** If a number/verdict/alert cannot be traced to a live agency source *or a statute in this repo*, it does not render. A spinner, an "UNREACHABLE" chip, or an empty state are *correct UX* when the data isn't there. Emptiness is information; fabrication is betrayal. (YMYL.)
 
-**P2 · One job per screen.** Radar = *see*. Guard = *check a product*. Recover = *get money back / baggage rights*. Vault = *audit the supply chain & price*. If an element doesn't serve the view's single job, it moves or dies.
+**P2 · One job per screen.** Side-Eye = *see*. Receipts = *check a product*. Comeuppance = *get money back / baggage rights*. Black Book = *audit the supply chain & price*. If an element doesn't serve the view's single job, it moves or dies.
 
 **P3 · The source is the product.** Every claim links to the agency. The UI's job is to get a human to the primary document faster than Google would — never to intermediate, paraphrase into vagueness, or editorialize between the user and the agency.
 
@@ -17,7 +17,7 @@ A redesign is not "make it pop." It is: understand *why* the interface exists, t
 
 **P7 · Progressive disclosure.** First layer: verdict. Second: evidence (verbatim text, source URL). Third: action (download letter, open portal). Nobody is forced through the funnel; experts jump straight to the verbatim drawer.
 
-**P8 · Hands first, screen second.** Touch targets ≥44px, bottom nav thumb zone on mobile, one-handed flows (Guard scan → verdict). Keyboard: Tab order matches visual order, Esc closes drawers/menus, focus-visible rings always.
+**P8 · Hands first, screen second.** Touch targets ≥44px, bottom nav thumb zone on mobile, one-handed flows (Receipts scan → verdict). Keyboard: Tab order matches visual order, Esc closes drawers/menus, focus-visible rings always.
 
 **P9 · Calm interface for anxious moments.** The user may be dealing with a recalled crib, a seized bag, or a missing payout. No gradients-assault, no dark patterns, no countdown timers, no red-urgency copy. The UI lowers heart rate: serif display voice, generous leading, dry legal tone.
 
@@ -27,7 +27,7 @@ A redesign is not "make it pop." It is: understand *why* the interface exists, t
 
 ```
             ┌─────────────────────────────────────────┐
-            │  VIEWS (one job each): Radar Guard Rec. Vault │
+            │  VIEWS (one job each): Side-Eye Receipts Comeuppance Black Book │
             ├─────────────────────────────────────────┤
             │  PATTERNS: ConfidenceBadge · SectionHeader ·  │
             │  EmptyState · StatusChip · Stat · BigStat     │

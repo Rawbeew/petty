@@ -4,7 +4,7 @@ with sync_playwright() as p:
     pg = b.new_page()
     pg.on('console', lambda m: print('[console]', m.type, m.text[:200]))
     pg.goto('http://127.0.0.1:4173/', wait_until='networkidle')
-    pg.locator('header nav.hidden button', has_text='Guard').click()
+    pg.locator('header nav.hidden button', has_text='Receipts').click()
     pg.locator('button', has_text='Field Wire').click()
     for wait in [3000, 6000, 6000]:
         pg.wait_for_timeout(wait)

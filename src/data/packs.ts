@@ -36,9 +36,9 @@ const G = (name: string, pillar: Pillar | 'GL', url: string, cadence: Regulator[
        : { name, pillar, url, license: 'public_domain', cadence, status, ...(wireUrl ? { wireUrl } : {}) };
 
 /* Surface doctrine — each surface shows only what it owns (see DESIGN.md §Surfaces):
- * Radar  → health · weather · stops · money   (agency-checkable "what's on now")
- * Guard  → courts (docket) · health (recall scanner)
- * Recover→ luggage (baggage Co-Pilot)          Vault → registry: everything
+ * Side-Eye  → health · weather · stops · money   (agency-checkable "what's on now")
+ * Receipts  → courts (docket) · health (recall scanner)
+ * Comeuppance→ luggage (baggage Co-Pilot)      Black Book → registry: everything
  */
 export const RADAR_PILLARS = PILLARS.filter(p => (['health', 'weather', 'stops', 'money'] as Pillar[]).includes(p.id));
 
@@ -56,7 +56,7 @@ export const COUNTRY_PACKS: CountryPack[] = [
       'wired', 'Socrata SODA — CORS-open, keyless · wired in Field Wire', 'https://data.cityofnewyork.us/resource/h9gi-nx95.json'),
     G('DC — stop data (Socrata)', 'stops', 'https://dev.socrata.com/foundry/opendata.dc.gov', 'monthly',
       'portal', 'Docs verified 200 · not yet wired; NYPD feed wired instead'),
-    { name: 'CourtListener REST v4 (worker pool)', pillar: 'courts', url: 'https://www.courtlistener.com/help/api', license: 'api', cadence: 'hourly', status: 'queued', note: 'Free token = 125 req/day · worker pool planned; deep-link + token lane live in Guard' },
+    { name: 'CourtListener REST v4 (worker pool)', pillar: 'courts', url: 'https://www.courtlistener.com/help/api', license: 'api', cadence: 'hourly', status: 'queued', note: 'Free token = 125 req/day · worker pool planned; deep-link + token lane live in Receipts' },
     G('Broadcastify Calls API (recorded)', 'dispatch', 'https://www.broadcastify.com/calls', 'realtime',
       'gated', 'Calls API requires a free account + key — page verified 200; not wired'),
     G('NAUPA / MissingMoney sweep', 'money', 'https://www.missingmoney.com', 'monthly',
@@ -72,11 +72,11 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('Treasury Hunt', 'money', 'https://www.treasurydirect.gov/savings-bonds/treasury-hunt/', 'monthly',
       'portal', 'URL corrected 2026-11-26 (old /indiv/tools link 505s) · no public API'),
     G('DOT 14 CFR Part 254 — fee refunds', 'luggage', 'https://www.transportation.gov/airconsumer', 'monthly',
-      'bot-walled', '403 from build network — browsers render fine; statute wired deterministically in Recover'),
+      'bot-walled', '403 from build network — browsers render fine; statute wired deterministically in Comeuppance'),
   ]},
   { code: 'GB', name: 'United Kingdom', tier: 'launch', flag: '🇬🇧', currency: 'GBP', ppp: null, regulators: [
     G('FSA — food alerts (API)', 'health', 'https://data.food.gov.uk/food-alerts', 'weekly',
-      'wired', 'OGL v3 · CORS-open, keyless · wired in Radar + Guard scanner · server search broken upstream (returns 0) — we client-filter', 'https://data.food.gov.uk/food-alerts/id.json?_sort=-created'),
+      'wired', 'OGL v3 · CORS-open, keyless · wired in Side-Eye + Receipts scanner · server search broken upstream (returns 0) — we client-filter', 'https://data.food.gov.uk/food-alerts/id.json?_sort=-created'),
     G('MHRA — drug & device alerts', 'health', 'https://www.gov.uk/drug-device-alerts', 'weekly',
       'portal', 'Alerts page verified · atom feed exists but sends no CORS headers — not browser-embeddable; subscribe in a reader'),
     G('Met Office', 'weather', 'https://www.metoffice.gov.uk', 'realtime',
@@ -84,7 +84,7 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('police.uk — stops-street + crimes', 'stops', 'https://data.police.uk/docs/method/stops-street/', 'monthly',
       'wired', 'OGL v3 · CORS-open, keyless · crimes + stops wired in Field Wire (URL fixed: /stops 404s)', 'https://data.police.uk/api/stops-street'),
     G('Find Case Law', 'courts', 'https://caselaw.nationalarchives.gov.uk', 'weekly',
-      'wired', 'Open Justice Licence · CORS-open atom.xml — wired in Guard › Docket (UK judgments lane)', 'https://caselaw.nationalarchives.gov.uk/atom.xml'),
+      'wired', 'Open Justice Licence · CORS-open atom.xml — wired in Receipts › Docket (UK judgments lane)', 'https://caselaw.nationalarchives.gov.uk/atom.xml'),
     G('HMRC — Marriage Allowance (backdate 4 yrs)', 'money', 'https://www.gov.uk/marriage-allowance', 'monthly',
       'portal', 'Verified 200 (2026-11-26) · up to 4 tax years backdated — the pettiest £252 you’ll ever claim'),
     G('DWP/HMRC — Pension Tracing Service', 'money', 'https://www.gov.uk/find-pension-contact-details', 'monthly',
@@ -96,20 +96,20 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('MyLostAccount', 'money', 'https://www.mylostaccount.org.uk', 'monthly',
       'bot-walled', '403 from build network — browsers render fine; no public API'),
     G('CAA — UK261 denied boarding', 'luggage', 'https://www.caa.co.uk/air-passengers/travel-problems-and-rights/flight-delays-and-cancellations/denied-boarding/', 'monthly',
-      'portal', 'URL replaced 2026-11-26 (caasbis.com is not a CAA property) · statute wired deterministically in Recover'),
+      'portal', 'URL replaced 2026-11-26 (caasbis.com is not a CAA property) · statute wired deterministically in Comeuppance'),
   ]},
   { code: 'CA', name: 'Canada', tier: 'launch', flag: '🇨🇦', currency: 'CAD', ppp: null, regulators: [
     G('CFIA & Health Canada — recalls', 'health', 'https://recalls-rappels.canada.ca', 'weekly',
       'portal', 'Page verified 200 · no keyless JSON/GeoJSON feed published; EFT 404s · not wired'),
     G('ECCC — weather alerts (GeoMet)', 'weather', 'https://weather.gc.ca', 'realtime',
-      'wired', 'OGC API Features, keyless + CORS-open · issued/continued only · wired in Radar (weather)', 'https://api.weather.gc.ca/collections/weather-alerts/items'),
+      'wired', 'OGC API Features, keyless + CORS-open · issued/continued only · wired in Side-Eye (weather)', 'https://api.weather.gc.ca/collections/weather-alerts/items'),
     { name: 'CanLII (license-gated)', pillar: 'courts', url: 'https://www.canlii.org', license: 'license_gated', cadence: 'weekly', status: 'gated', note: 'Licence-gated; 403 from build network' },
     G('Bank of Canada — unclaimed balances', 'money', 'https://www.unclaimedproperties.bankofcanada.ca/', 'monthly',
       'portal', 'URL corrected 2026-11-26 (unclaimed-balances 301s here) · search portal, no public API'),
     G('CRA — uncashed cheques', 'money', 'https://www.canada.ca/en/revenue-agency/services/e-services/cra-login-services/uncashed-cheques.html', 'monthly',
       'unverifiable', 'Akamai refused TCP from build network 2026-11-26 (000) — browsers render fine · $1.8bn+ uncashed federal cheques, never expire'),
     G('CTA — APPR flight rights', 'luggage', 'https://otc-cta.gc.ca/en/airlines-and-other-rms', 'monthly',
-      'unverifiable', 'Akamai edge refused TCP from build network 2026-11-26 (000) — re-verify from a CA vantage; statute wired deterministically in Recover'),
+      'unverifiable', 'Akamai edge refused TCP from build network 2026-11-26 (000) — re-verify from a CA vantage; statute wired deterministically in Comeuppance'),
   ]},
   { code: 'AU', name: 'Australia', tier: 'launch', flag: '🇦🇺', currency: 'AUD', ppp: null, regulators: [
     G('TGA — recalls & safety alerts', 'health', 'https://www.tga.gov.au/safety/alerts-and-recalls', 'weekly',
@@ -124,11 +124,11 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('ATO — unclaimed super', 'money', 'https://www.ato.gov.au/individuals-and-families/super/keeping-track-of-your-super/lost-and-unclaimed-super', 'monthly',
       'bot-walled', '403 from build network (browsers render fine) · $16bn+ lost/unclaimed super, ATO-held'),
     G('Montreal 1999 — baggage (aviation consumer protections)', 'luggage', 'https://www.infrastructure.gov.au/infrastructure-transport-vehicles/aviation/aviation-consumer-protections', 'monthly',
-      'unverifiable', 'Page exists per gov publications; Akamai refused TCP from build network 2026-11-26 (000); Montreal wired deterministically in Recover'),
+      'unverifiable', 'Page exists per gov publications; Akamai refused TCP from build network 2026-11-26 (000); Montreal wired deterministically in Comeuppance'),
   ]},
   { code: 'GL', name: 'Global backbone', tier: 'launch', flag: '🌐', currency: 'USD', ppp: null, regulators: [
     G('WHO — News (English) RSS', 'health', 'https://www.who.int/emergencies/disease-outbreak-news', 'weekly',
-      'wired', 'DON has no keyless feed (legacy RSS 404s) · we wire WHO News (English) RSS + label it exactly — wired in Radar (GL)', 'https://www.who.int/rss-feeds/news-english.xml'),
+      'wired', 'DON has no keyless feed (legacy RSS 404s) · we wire WHO News (English) RSS + label it exactly — wired in Side-Eye (GL)', 'https://www.who.int/rss-feeds/news-english.xml'),
     G('OECD GlobalRecalls', 'health', 'https://globalrecalls.oecd.org', 'weekly',
       'portal', 'Page verified 200 · probed /api, /api/v1/recalls, ?format=json — all 404; no public machine API found 2026-11-26'),
     G('WMO — hazardous weather bulletins', 'weather', 'https://public.wmo.int', 'realtime',
@@ -136,7 +136,7 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('ECC-Net — cross-border EU consumer disputes', 'money', 'https://www.eccnet.eu/', 'monthly',
       'portal', 'Verified 200 (2026-11-26) · European Consumer Centres — free help when an EU trader owes you; 30 centres'),
     G('Montreal Convention 1999 (ICAO)', 'luggage', 'https://www.icao.int/secretariat/legal', 'monthly',
-      'bot-walled', '403 from build network — browsers render fine; Montreal wired deterministically in Recover'),
+      'bot-walled', '403 from build network — browsers render fine; Montreal wired deterministically in Comeuppance'),
   ]},
 ];
 
@@ -149,7 +149,7 @@ export const PHASE2_PACKS = [
 ];
 
 export const PRICING = [
-  { id: 'radar', name: 'Radar', price: '$9', per: '/mo', annual: '$86/yr (−20%)', blurb: 'All launch-ring signals, weekly digest, 1 market', cta: 'Start free trial' },
-  { id: 'plus', name: 'Radar Plus', price: '$19', per: '/mo', annual: '$182/yr (−20%)', blurb: 'Everything + Guard scanner, Recover packets, priority docket alerts', cta: 'Upgrade to Plus', featured: true },
+  { id: 'radar', name: 'The Side-Eye', price: '$9', per: '/mo', annual: '$86/yr (−20%)', blurb: 'All launch-ring signals, weekly digest, 1 market', cta: 'Start free trial' },
+  { id: 'plus', name: 'The Comeuppance', price: '$19', per: '/mo', annual: '$182/yr (−20%)', blurb: 'Everything + Receipts scanner, Comeuppance packets, priority docket alerts', cta: 'Upgrade to Plus', featured: true },
   { id: 'sentinel', name: 'Sentinel (agents)', price: '$49', per: '/mo', annual: '$470/yr (−20%)', blurb: 'Bloomberg-of-liability: API access, 4 seats, SLA, regulator-grade exports', cta: 'Talk to sales' },
 ];

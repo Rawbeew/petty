@@ -22,7 +22,7 @@ with sync_playwright() as p:
     # ---- Radar view
     pg.screenshot(path=str(SHOTS/'01-radar.png'), full_page=True)
     check(pg.locator('text=SIGNALS 7D').count() >= 1, 'radar: stats strip renders')
-    check(pg.locator('text=WATCH SCOPE').count() >= 1, 'radar: scope header renders')
+    check(pg.locator('text=SIDE-EYE').count() >= 1, 'radar: scope header renders')
     check(pg.locator('.ping-ring').count() >= 1, 'radar: blips render on scope')
     check(pg.locator('text=DEMO DATASET').count() >= 1, 'radar: demo banner renders')
     # click first feed card -> drawer opens
@@ -40,7 +40,7 @@ with sync_playwright() as p:
     pg.screenshot(path=str(SHOTS/'03-pack-gb.png'))
 
     # ---- Guard view
-    pg.locator('nav.hidden button', has_text='Guard').click()
+    pg.locator('nav.hidden button', has_text='Receipts').click()
     pg.wait_for_selector('text=Pantry, pill bottle', timeout=3000)
     pg.screenshot(path=str(SHOTS/'04-guard-scan.png'), full_page=True)
     pg.locator('input[aria-label="Product to scan"]').fill('peanut butter')
@@ -61,7 +61,7 @@ with sync_playwright() as p:
     pg.screenshot(path=str(SHOTS/'06-guard-docket.png'), full_page=True)
 
     # ---- Recover view
-    pg.locator('nav.hidden button', has_text='Recover').click()
+    pg.locator('nav.hidden button', has_text='Comeuppance').click()
     pg.wait_for_selector('text=Permutation builder', timeout=3000)
     pg.screenshot(path=str(SHOTS/'07-recover.png'), full_page=True)
     check(pg.locator('text=NAME VARIANTS').count() >= 1, 'recover: name variants render')
@@ -78,7 +78,7 @@ with sync_playwright() as p:
     pg.screenshot(path=str(SHOTS/'08-recover-eu.png'), full_page=True)
 
     # ---- Vault view
-    pg.locator('nav.hidden button', has_text='Vault').click()
+    pg.locator('nav.hidden button', has_text='Black Book').click()
     pg.wait_for_selector('text=regulator registry', timeout=3000)
     pg.screenshot(path=str(SHOTS/'09-vault.png'), full_page=True)
     check(pg.locator('text=regulator registry').count() >= 1, 'vault: registry renders')

@@ -33,7 +33,7 @@ export default function useSafetyCard() {
     bg.addColorStop(0, '#0d1017'); bg.addColorStop(1, '#06080d');
     ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
 
-    // radar rings (top emblem)
+    // scope rings (top emblem)
     const cx = W / 2, cy = 330;
     ctx.strokeStyle = 'rgba(242,193,78,0.28)';
     for (const r of [190, 140, 90]) { ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); }

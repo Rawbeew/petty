@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { X, ExternalLink, Download, Link2, CloudLightning, HeartPulse, Siren, TrafficCone, Banknote, LayoutGrid, Search, Radar as RadarIcon, RadioTower, RefreshCw, ShieldQuestion, Landmark, LockKeyhole } from 'lucide-react';
+import { X, ExternalLink, Download, Link2, CloudLightning, HeartPulse, Siren, TrafficCone, Banknote, LayoutGrid, Search, Eye, RadioTower, RefreshCw, ShieldQuestion, Landmark, LockKeyhole } from 'lucide-react';
 import type { SafetySignal, Pillar } from '../data/signals';
 import { COUNTRY_PACKS, RADAR_PILLARS } from '../data/packs';
 import type { CountryPack } from '../data/packs';
@@ -28,7 +28,7 @@ function RadarScope({ signals, selected, onSelect }: { signals: SafetySignal[]; 
   const cxp = 400, cyp = 240, rx = 365, ry = 225;
   const proj = (lat: number, lng: number) => ({ x: cxp + (lng / 180) * rx * 0.96, y: cyp - (lat / 90) * ry * 0.96 });
   return (
-    <svg viewBox="0 0 800 480" className="w-full h-full select-none" role="img" aria-label="Live radar scope of agency-reported signals">
+    <svg viewBox="0 0 800 480" className="w-full h-full select-none" role="img" aria-label="Live Side-Eye scope of agency-reported signals">
       <defs>
         <clipPath id="globeClip"><ellipse cx={cxp} cy={cyp} rx={rx} ry={ry} /></clipPath>
         <radialGradient id="globeFill" cx="50%" cy="45%" r="70%">
@@ -139,7 +139,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
           {/* Scope */}
           <section className="panel p-3 sm:p-4 flex flex-col">
             <div className="flex items-center justify-between mb-2 px-1">
-              <div className="flex items-center gap-2 text-[10px] mono tracking-[0.25em] text-[var(--gold)]"><RadarIcon size={12} />WATCH SCOPE — {pack.name.toUpperCase()}</div>
+              <div className="flex items-center gap-2 text-[10px] mono tracking-[0.25em] text-[var(--gold)]"><Eye size={12} />THE SIDE-EYE — {pack.name.toUpperCase()}</div>
               <span className="mono text-[9px] text-[var(--dim)]">SWEEP 7.0s</span>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-[#05070c] aspect-[5/3] overflow-hidden">
@@ -229,7 +229,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
               </li>
             ))}
           </ul>
-          <p className="mono text-[7.5px] text-[var(--dim)] mt-2 leading-relaxed">Government-held unclaimed balances are found ONLY on the official portals linked above. Anyone selling you a guaranteed list is defrauding you. Flat subscription · never a percentage of the recovery (see Country Vault).</p>
+          <p className="mono text-[7.5px] text-[var(--dim)] mt-2 leading-relaxed">Government-held unclaimed balances are found ONLY on the official portals linked above. Anyone selling you a guaranteed list is defrauding you. Flat subscription · never a percentage of the recovery (see The Black Book).</p>
         </section>
       </div>
 

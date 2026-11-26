@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Radar, ScanLine, Landmark, Vault, Lock, Check } from 'lucide-react';
+import { ChevronDown, Eye, Receipt, Gavel, BookLock, Lock, Check } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
 import type { ViewId } from '../App';
 import { cx } from '../lib/ui';
 import { m } from 'motion/react';
 
-const VIEWS: { id: ViewId; label: string; icon: typeof Radar }[] = [
-  { id: 'radar', label: 'Radar', icon: Radar },
-  { id: 'guard', label: 'Guard', icon: ScanLine },
-  { id: 'recover', label: 'Recover', icon: Landmark },
-  { id: 'vault', label: 'Country Vault', icon: Vault },
+const VIEWS: { id: ViewId; label: string; icon: typeof Eye; title: string }[] = [
+  { id: 'radar', label: 'Side-Eye', icon: Eye, title: 'The Side-Eye — the agencies, watched' },
+  { id: 'guard', label: 'Receipts', icon: Receipt, title: 'The Receipts — recalls, dockets, incidents on record' },
+  { id: 'recover', label: 'Comeuppance', icon: Gavel, title: 'The Comeuppance — statutory money, yours by right' },
+  { id: 'vault', label: 'Black Book', icon: BookLock, title: 'The Black Book — every regulator, audited and dated' },
+
 ];
 
 function Wordmark() {
@@ -75,7 +76,7 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
               {[['🇳🇬','Nigeria — flagship'],['🇿🇦','South Africa'],['🇮🇳','India'],['🇧🇷','Brazil']].map(([f,n]) => (
                 <div key={n} className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 opacity-50">
                   <span className="text-base">{f}</span>
-                  <span className="flex-1 text-[12px]">{n}<span className="block mono text-[8px] text-[var(--dim)]">GATED — see Country Vault</span></span>
+                  <span className="flex-1 text-[12px]">{n}<span className="block mono text-[8px] text-[var(--dim)]">GATED — see The Black Book</span></span>
                   <Lock size={13} className="text-[var(--dim)]" />
                 </div>
               ))}
@@ -86,7 +87,7 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
         {/* Desktop view nav */}
         <nav className="hidden md:flex items-center gap-1 rounded-xl border border-[var(--line)] bg-[var(--panel)] p-1">
           {VIEWS.map(v => (
-            <button key={v.id} onClick={() => { onView(v.id); }} aria-current={view === v.id ? 'page' : undefined}
+            <button key={v.id} title={v.title} onClick={() => { onView(v.id); }} aria-current={view === v.id ? 'page' : undefined}
               className={cx('relative flex items-center gap-2 rounded-lg px-3.5 py-2 text-[11px] mono tracking-[0.14em] uppercase transition-colors duration-200',
                 view === v.id ? 'text-black font-bold' : 'text-[var(--dim)] hover:text-[var(--ink)]')}>
               {view === v.id && <m.span layoutId="nav-active-pill" className="absolute inset-0 rounded-lg bg-[var(--gold)]" transition={{ type: 'spring', stiffness: 520, damping: 38 }} />}
@@ -100,7 +101,7 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--line)] bg-[rgba(6,8,13,0.94)] backdrop-blur-lg">
         <div className="grid grid-cols-4 h-16">
           {VIEWS.map(v => (
-            <button key={v.id} onClick={() => { onView(v.id); }} aria-current={view === v.id ? 'page' : undefined} className="flex flex-col items-center justify-center gap-0.5">
+            <button key={v.id} title={v.title} onClick={() => { onView(v.id); }} aria-current={view === v.id ? 'page' : undefined} className="flex flex-col items-center justify-center gap-0.5">
               <v.icon size={18} className={cx(view === v.id ? 'text-[var(--gold)]' : 'text-[var(--dim)]')} />
               <span className={cx('mono text-[8px] tracking-[0.18em] uppercase', view === v.id ? 'text-[var(--gold)]' : 'text-[var(--dim)]')}>{v.label.replace('Country ', '')}</span>
             </button>

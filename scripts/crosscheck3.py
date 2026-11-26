@@ -22,7 +22,7 @@ with sync_playwright() as p:
     # ---- Radar view
     pg.screenshot(path=str(SHOTS/'01-radar.png'), full_page=True)
     check(pg.locator('text=SIGNALS').count() >= 1, 'radar: stats strip renders')
-    check(pg.locator('text=WATCH SCOPE').count() >= 1, 'radar: scope header renders')
+    check(pg.locator('text=SIDE-EYE').count() >= 1, 'radar: scope header renders')
     check(pg.locator('.ping-ring').count() >= 1, 'radar: blips render on scope')
     check(pg.locator('text=LIVE — openFDA').count() >= 1 or pg.locator('text=LIVE — FSA').count() >= 1 or pg.locator('text=LIVE — ECCC').count() >= 1 or pg.locator('text=LIVE — WHO').count() >= 1 or pg.locator('text=SOURCES UNREACHABLE').count() >= 1 or pg.locator('text=CONTACTING SOURCE AGENCIES').count() >= 1 or pg.locator('text=no keyless').count() >= 1, 'radar: honest live/offline banner renders')
     # click first feed card -> drawer opens
@@ -45,7 +45,7 @@ with sync_playwright() as p:
     pg.locator('header button').filter(has_text='United Kingdom').first.click()
     pg.locator('role=option').filter(has_text='United States').click()
     pg.wait_for_timeout(1200)
-    pg.locator('nav.hidden button', has_text='Guard').click()
+    pg.locator('nav.hidden button', has_text='Receipts').click()
     pg.wait_for_selector('text=Pantry, pill bottle', timeout=3000)
     pg.screenshot(path=str(SHOTS/'04-guard-scan.png'), full_page=True)
     pg.locator('input[aria-label="Product to scan"]').fill('peanut butter')
@@ -77,7 +77,7 @@ with sync_playwright() as p:
     pg.screenshot(path=str(SHOTS/'06-guard-docket.png'), full_page=True)
 
     # ---- Recover view
-    pg.locator('nav.hidden button', has_text='Recover').click()
+    pg.locator('nav.hidden button', has_text='Comeuppance').click()
     pg.wait_for_selector('text=Permutation builder', timeout=3000)
     pg.screenshot(path=str(SHOTS/'07-recover.png'), full_page=True)
     check(pg.locator('text=NAME VARIANTS').count() >= 1, 'recover: name variants render')
@@ -94,7 +94,7 @@ with sync_playwright() as p:
     pg.screenshot(path=str(SHOTS/'08-recover-eu.png'), full_page=True)
 
     # ---- Guard tabs: Herald Cuts + Field Wire + live docket
-    pg.locator('header nav.hidden button', has_text='Guard').click()
+    pg.locator('header nav.hidden button', has_text='Receipts').click()
     pg.wait_for_selector('text=Pantry, pill bottle')
     # Field Wire — live NYPD + police.uk
     pg.locator('button', has_text='Field Wire').click()
@@ -160,15 +160,15 @@ with sync_playwright() as p:
     mp.wait_for_selector('text=PETTY')
     overflow = mp.evaluate('document.documentElement.scrollWidth - document.documentElement.clientWidth')
     check(overflow <= 1, f'mobile: no horizontal overflow ({overflow}px)')
-    check(mp.locator('nav.md\\:hidden').count() >= 1 or mp.locator('text=Guard').count() >= 4, 'mobile: bottom nav present')
-    for tab in ['Guard', 'Recover', 'Vault']:
+    check(mp.locator('nav.md\\:hidden').count() >= 1 or mp.locator('text=Receipts').count() >= 4, 'mobile: bottom nav present')
+    for tab in ['Receipts', 'Comeuppance', 'Black Book']:
         mp.locator('nav').last.locator('button', has_text=tab).click()
         mp.wait_for_timeout(500)
     mp.screenshot(path=str(SHOTS/'15-mobile.png'))
     mp.close()
 
     # ---- Vault view
-    pg.locator('nav.hidden button', has_text='Vault').click()
+    pg.locator('nav.hidden button', has_text='Black Book').click()
     pg.wait_for_selector('text=regulator registry', timeout=3000)
     pg.screenshot(path=str(SHOTS/'09-vault.png'), full_page=True)
     check(pg.locator('text=regulator registry').count() >= 1, 'vault: registry renders')

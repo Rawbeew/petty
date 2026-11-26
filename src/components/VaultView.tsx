@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Vault, Lock, ExternalLink, ShieldCheck, BadgeDollarSign, Sparkles, Code2 } from 'lucide-react';
+import { BookLock, Lock, ExternalLink, ShieldCheck, BadgeDollarSign, Sparkles, Code2 } from 'lucide-react';
 import { COUNTRY_PACKS, PHASE2_PACKS, PRICING } from '../data/packs';
 import type { CountryPack } from '../data/packs';
 import { cx } from '../lib/ui';
@@ -22,7 +22,7 @@ function RegistryTable({ pack }: { pack: CountryPack }) {
     <section className="panel overflow-hidden">
       <div className="flex items-center justify-between px-5 pt-4 pb-2 flex-wrap gap-2">
         <div>
-          <div className="mono text-[9px] tracking-[0.3em] text-[var(--gold)] flex items-center gap-2"><Vault size={11} />COUNTRY VAULT</div>
+          <div className="mono text-[9px] tracking-[0.3em] text-[var(--gold)] flex items-center gap-2"><BookLock size={11} />THE BLACK BOOK</div>
           <h2 className="font-display text-lg mt-1">{pack.flag} {pack.name} — regulator registry</h2>
         </div>
         <span className="mono text-[9px] text-[var(--dim)]">{rows.length} FEEDS · EVERY URL {AUDIT.toUpperCase()} · RE-VERIFY AT SOURCE</span>
