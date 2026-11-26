@@ -2,7 +2,7 @@
 
 > Legal pettiness to the core. Petty is a free, static web app that helps ordinary people exercise small, statute-backed rights — baggage and fee refunds, tenant deposits, unpaid wages, unclaimed property, recalls — using **published, public, attributed sources only**.
 
-**Status:** v2.2.0 · US launch ring live · repo is public · single-maintainer
+**Status:** v2.3.0 · US launch ring live · repo is public · single-maintainer
 **Doctrine:** citation or silence · no LLM in the compliance path · flat fees or free · information, not legal advice · you always send the letter yourself · nothing public, ever (no reviews, no shaming)
 
 ## The honesty contract
@@ -95,6 +95,24 @@ To open billing (≈20 min, one time):
 4. Paste the three URLs into `src/config/billing.ts` (`monthlyLink`, `annualLink`, `portalLink`), commit, deploy.
 
 Until then nothing charges and no dead checkout buttons render. Clearing browser data reverts the device to the free tier — users re-enter via the portal link; Stripe handles renewals, dunning and cancellation. Founding price is locked for members forever (by copy, not by code — the rate lives in Stripe).
+
+## Accounts (optional) — magic link + E2EE sync
+
+Dormant unless configured: with no `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`, zero account code runs and no sign-in button renders. **The law never requires an account.**
+
+What an account is for: (1) verified Household billing (Stripe webhook → `profiles.plan`), (2) 6 real household seats, (3) optional **E2EE vault sync** of Clockwatch deadlines and pantry items (AES-256-GCM; key derived from your passphrase via PBKDF2-250k, never transmitted), (4) optional daily digest email — content-free by design ("a deadline exists on <date>"; the server cannot read your titles).
+
+Setup (≈45 min, $0 at launch):
+
+1. **Supabase**: create project → SQL editor → run `supabase/migrations/0001_init.sql` → Authentication → URL Config: add your domain + `http://localhost:5173`; disable "Confirm email" flow mismatch, enable email OTP.
+2. **Resend**: create account → verify a domain (or use the test sender) → SMTP Settings in Supabase → paste Resend SMTP host/key; raise auth rate limit; sender must pass SPF/DKIM.
+3. **Stripe**: existing payment links from README § Billing — set success URLs to `https://<domain>/?billing=household`. For verified plans: Developers → Webhooks → `https://<project>.supabase.co/functions/v1/stripe-webhook`, event `customer.subscription.*`, copy signing secret.
+4. **Edge Functions** (Deno): `supabase functions deploy stripe-webhook daily-digest` · `supabase secrets set STRIPE_WEBHOOK_SECRET=… SUPABASE_SERVICE_ROLE_KEY=… RESEND_API_KEY=… DIGEST_FROM='Petty <hello@yourdomain>'` · Dashboard → Edge Functions → daily-digest schedule `0 7 * * *`.
+5. **Env**: Cloudflare Pages (or Netlify) → `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`; redeploy.
+
+Honesty contract delta: email address + plan row + subscription metadata exist on Supabase/Stripe; encrypted envelopes + routing dates exist for synced collections; everything else stays on-device. Terms § Accounts states this verbatim in-app.
+
+Known limits (disclosed, not hidden): local deletes don't propagate (tombstones = v2); wrong passphrase skips rows, reported as “skipped N”; free Supabase projects pause after a week idle (Pro $25/mo when real users arrive); Stripe webhook maps subscriptions via `stripe_customer_id` (set at checkout — put `email` in Payment Link metadata for first-event linking).
 
 ## License & repo policy
 

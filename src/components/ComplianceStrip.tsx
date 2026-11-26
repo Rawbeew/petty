@@ -13,7 +13,7 @@ export default function ComplianceStrip() {
         <span className="flex items-center gap-1.5 min-w-0"><ShieldCheck size={9} className="text-[var(--green)]" aria-hidden /><span className="truncate">INFORMATION, NOT ADVICE · VERIFY AT THE LINKED SOURCE · NOT AFFILIATED WITH ANY AGENCY</span></span>
         <span className="flex items-center gap-3 shrink-0">
           {plan === 'household' && <span className="chip chip-gold !text-[7px]">HOUSEHOLD</span>}
-          <span className="hidden sm:inline">PETTY v2.2.0 · open-government data, attributed</span>
+          <span className="hidden sm:inline">PETTY v2.3.0 · open-government data, attributed</span>
           <button onClick={() => { setTermsOpen(true); }} className="underline underline-offset-2 hover:text-[var(--ink)] transition-colors" aria-haspopup="dialog">TERMS &amp; HONESTY</button>
         </span>
       </footer>

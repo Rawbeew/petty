@@ -48,6 +48,13 @@ export const addReminder = (title: string, dueAt: string, source: ReminderSource
   const r: Reminder = { id: newId(), title: title.trim(), dueAt, source, done: false, createdAt: new Date().toISOString() };
   return persist([...loadReminders(), r]) ? r : null;
 };
+/* Idempotent by id — used by account sync pulls; validates like addReminder. */
+export const upsertReminder = (r: Reminder): boolean => {
+  if (!isReminder(r)) return false;
+  const rest = loadReminders().filter(x => x.id !== r.id);
+  return persist([...rest, r]);
+};
+
 export const toggleReminder = (id: string): Reminder[] => { const next = loadReminders().map(r => (r.id === id ? { ...r, done: !r.done } : r)); persist(next); return next; };
 export const removeReminder = (id: string): Reminder[] => { const next = loadReminders().filter(r => r.id !== id); persist(next); return next; };
 export const clearDone = (): Reminder[] => { const next = loadReminders().filter(r => !r.done); persist(next); return next; };

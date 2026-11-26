@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', '.agent', 'shots', 'public/sw.js'] },
+  { ignores: ['dist', 'node_modules', '.agent', 'shots', 'public/sw.js', 'supabase/functions'] },
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,

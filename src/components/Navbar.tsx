@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Eye, Receipt, Gavel, BookLock, Check } from 'lucide-react';
+import { ChevronDown, Eye, Receipt, Gavel, BookLock, Check, UserRound } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
 import type { ViewId } from '../App';
 import { cx } from '../lib/ui';
+import { isSupabaseConfigured } from '../lib/supabase';
+import AccountModal from './AccountModal';
 import { m } from 'motion/react';
 
 const VIEWS: { id: ViewId; label: string; icon: typeof Eye; title: string }[] = [
@@ -34,6 +36,7 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
   packs: CountryPack[]; active: CountryPack; onPack: (p: CountryPack) => void; view: ViewId; onView: (v: ViewId) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const close = (e: MouseEvent) => { if (!(e.target instanceof Node) || !ref.current?.contains(e.target)) setOpen(false); };
@@ -87,7 +90,14 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
             </button>
           ))}
         </nav>
+
+        {isSupabaseConfigured() && (
+          <button onClick={() => { setAccountOpen(true); }} aria-label="Open account" title="Optional account — sign in with magic link" className="hidden sm:flex items-center gap-2 rounded-xl border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)] hover:border-[var(--gold)] transition-colors px-3 py-2">
+            <UserRound size={14} /><span className="mono text-[8px] tracking-[0.2em] uppercase">Account</span>
+          </button>
+        )}
       </div>
+      {accountOpen && <AccountModal onClose={() => { setAccountOpen(false); }} />}
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--line)] bg-[rgba(6,8,13,0.94)] backdrop-blur-lg">
