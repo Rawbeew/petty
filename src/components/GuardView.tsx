@@ -4,7 +4,9 @@ import type { CountryPack } from '../data/packs';
 import { COUNTRY_PACKS } from '../data/packs';
 import { SectionHeader } from './Shared';
 import { cx } from '../lib/ui';
+import { useEffect } from 'react';
 import { fetchOpenFDARecalls, fetchFSAFoodAlerts, type FDAEnforcementHit, type FSAFoodAlert } from '../lib/live';
+import { loadRecallCache, type RecallCache } from '../lib/recallCache';
 import FieldWire from './FieldWire';
 import ClipStudio from './ClipStudio';
 
@@ -278,6 +280,34 @@ function DocketSearch() {
   );
 }
 
+/* Server-ingested portal snapshot — appears ONLY when public/recall-cache.json exists
+ * (produced by scripts/ingest_recalls.py with a Firecrawl key). Every entry shows
+ * provenance; unreachable sources are shown as unreachable. Never fabricated. */
+function IngestedPortals() {
+  const [cache, setCache] = useState<RecallCache | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => { let alive = true; void loadRecallCache().then(c => { if (alive) { setCache(c); setFailed(c === null); } }); return () => { alive = false; }; }, []);
+  if (failed || cache === null || cache.entries.length === 0) return null;
+  const ok = cache.entries.filter(e => e.status === 'ok').length;
+  return (
+    <section className="rounded-xl border border-[var(--line2)] p-4">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="mono text-[9px] tracking-[0.25em] text-[var(--dim)]">SERVER-INGESTED PORTALS · <span className="text-[var(--gold)]">SCRAPED, MARKED AS SUCH</span></div>
+        <div className="mono text-[8px] text-[var(--dim)]">cache {cache.generated_at.replace('T', ' ').slice(0, 16)}Z · {ok}/{cache.entries.length} ok · engine: {cache.engine}</div>
+      </div>
+      <ul className="mt-2 grid sm:grid-cols-2 gap-1.5">
+        {cache.entries.map(e => (
+          <li key={e.id} className="flex items-center justify-between gap-2 rounded-lg border border-[var(--line)] px-2.5 py-1.5">
+            <a href={e.url} target="_blank" rel="noreferrer" className="mono text-[8px] text-[var(--ink)] hover:text-[var(--cyan)] truncate flex items-center gap-1.5"><ExternalLink size={10} />{e.name}</a>
+            <span className={cx('chip', e.status === 'ok' ? 'chip-green' : 'chip-red')}>{e.status === 'ok' ? 'CACHED' : 'UNREACHABLE'}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="mono text-[7px] text-[var(--dim)] mt-2">Scraped verbatim from public pages — no summarisation, no invented recalls. Confirmed live by opening the source portal. Discovery-only Firecrawl search results never render here.</p>
+    </section>
+  );
+}
+
 export default function GuardView({ pack }: { pack: CountryPack }) {
   const [tab, setTab] = useState<'scan' | 'docket' | 'cuts' | 'wire'>('scan');
   return (
@@ -292,6 +322,7 @@ export default function GuardView({ pack }: { pack: CountryPack }) {
           ))}
         </div>
         {tab === 'scan' && <Scanner pack={pack} />}
+        {tab === 'scan' && <IngestedPortals />}
         {tab === 'docket' && <DocketSearch />}
         {tab === 'cuts' && <ClipStudio />}
         {tab === 'wire' && <FieldWire />}
