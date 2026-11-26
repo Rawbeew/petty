@@ -1,7 +1,7 @@
 /* The Pantry — your household shelf, watched. Local-only (IndexedDB), no account, no sync.
  * Purpose: keep the items you actually have one re-scan away from every new enforcement dataset. */
 import { useCallback, useEffect, useState } from 'react';
-import { Package, Trash2, ShieldCheck, ScanLine, Download, ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { Package, Trash2, ShieldCheck, ScanLine, Download, ChevronDown, ChevronUp, FileText, Hourglass, AlarmClock } from 'lucide-react';
 import {
   isStorageAvailable, listItems, putItem, deleteItem, newItem, itemScope, requestPersistence,
   type HouseholdItem, type HouseholdCategory, type PersistStatus,
@@ -11,6 +11,7 @@ import PhotoEvidence from './PhotoEvidence';
 import { useCaseFile } from '../lib/caseFile';
 import LitigationSweep from './LitigationSweep';
 import { cx, downloadText } from '../lib/ui';
+import { addReminder, daysUntilDue } from '../lib/reminders';
 
 const CATEGORIES: { id: HouseholdCategory; label: string }[] = [
   { id: 'food', label: 'Food & drink' }, { id: 'drug', label: 'Drug / OTC' }, { id: 'device', label: 'Medical device' },
@@ -22,7 +23,8 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
   const [items, setItems] = useState<HouseholdItem[] | null>(null);
   const [unavailable, setUnavailable] = useState(!isStorageAvailable());
   const [persist, setPersist] = useState<PersistStatus | null>(null);
-  const [name, setName] = useState(''); const [brand, setBrand] = useState(''); const [category, setCategory] = useState<HouseholdCategory>('food'); const [note, setNote] = useState('');
+  const [name, setName] = useState(''); const [brand, setBrand] = useState(''); const [category, setCategory] = useState<HouseholdCategory>('food'); const [note, setNote] = useState(''); const [expiry, setExpiry] = useState('');
+  const [watched, setWatched] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const isCategory = (v: string): v is HouseholdCategory => CATEGORIES.some(c => c.id === v);
   const storageOk = !unavailable;
@@ -44,11 +46,21 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
   const add = async () => {
     if (!name.trim()) return;
     try {
-      await putItem(newItem(name, brand, category, note));
-      setName(''); setBrand(''); setNote('');
+      await putItem(newItem(name, brand, category, note, expiry || undefined));
+      setName(''); setBrand(''); setNote(''); setExpiry('');
       await reload();
     } catch { setUnavailable(true); }
   };
+  const expiryDays = (it: HouseholdItem): number | null => (it.expiresAt ? daysUntilDue(it.expiresAt) : null);
+  const expiringSoon = (items ?? []).filter(it => { const d = expiryDays(it); return d !== null && d >= 0 && d <= 7; });
+  const expired = (items ?? []).filter(it => { const d = expiryDays(it); return d !== null && d < 0; });
+  const watchExpiry = (it: HouseholdItem) => {
+    if (!it.expiresAt) return;
+    const r = addReminder(`Use by: ${it.name}${it.brand ? ` — ${it.brand}` : ''}`, it.expiresAt, 'manual');
+    setWatched(r ? it.id : null);
+    if (r) window.setTimeout(() => { setWatched(null); }, 3000);
+  };
+
   const remove = async (id: string) => { if (!window.confirm('Remove this item and its photos from this device?')) return; await deleteItem(id).catch(() => { setUnavailable(true); }); await reload(); };
 
   const exportManifest = () => {
@@ -57,7 +69,7 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
       'PETTY — HOUSEHOLD LEDGER (on-device export)',
       `Generated: ${new Date().toISOString()} · ${rows.length} item(s)`,
       '',
-      ...rows.map((r, i) => `${String(i + 1).padStart(2, ' ')}. ${r.name}${r.brand ? ` — ${r.brand}` : ''} [${r.category}]${r.note ? `\n     note: ${r.note}` : ''}\n     added: ${r.addedAt.slice(0, 10)}`),
+      ...rows.map((r, i) => `${String(i + 1).padStart(2, ' ')}. ${r.name}${r.brand ? ` — ${r.brand}` : ''} [${r.category}]${r.note ? `\n     note: ${r.note}` : ''}\n     added: ${r.addedAt.slice(0, 10)}${r.expiresAt ? ` · expires: ${r.expiresAt}` : ''}`),
       '',
       'HOW TO USE THIS FILE',
       ' - Re-verify any item in Petty → Receipts → Recall Scanner. Scans are dated; this manifest is NOT a recall clearance.',
@@ -78,10 +90,11 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
         <input className="field" placeholder="Brand" value={brand} onChange={e => { setBrand(e.target.value); }} aria-label="Brand" />
         <select className="field" value={category} onChange={e => { setCategory(isCategory(e.target.value) ? e.target.value : 'other'); }} aria-label="Category">{CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select>
         <input className="field col-span-2" placeholder="Note (lot, store, why — optional)" value={note} onChange={e => { setNote(e.target.value); }} aria-label="Note" />
+        <label className="col-span-2 flex items-center gap-2 rounded-xl border border-[var(--line2)] px-3 h-[42px]"><Hourglass size={13} className="text-[var(--dim)] shrink-0" aria-hidden /><span className="mono text-[8px] text-[var(--dim)] uppercase whitespace-nowrap">Expiry</span><input type="date" value={expiry} onChange={e => { setExpiry(e.target.value); }} className="bg-transparent border-0 outline-none text-[12px] text-[var(--ink)] w-full" aria-label="Best-before / expiry (optional)" /></label>
         <button onClick={() => { void add(); }} disabled={!name.trim()} className="col-span-2 md:col-span-2 rounded-xl bg-[var(--gold)] text-black font-bold py-2.5 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[var(--gold2)] disabled:opacity-40">Add to pantry</button>
       </div>
       <div className="flex items-center justify-between gap-2 border-t border-[var(--line)] pt-3">
-        <span className="mono text-[9px] text-[var(--dim)]">{items === null ? 'LOADING…' : `${items.length} ITEM${items.length === 1 ? '' : 'S'} ON FILE`}</span>
+        <span className="mono text-[9px] text-[var(--dim)] flex items-center gap-2 flex-wrap">{items === null ? 'LOADING…' : `${items.length} ITEM${items.length === 1 ? '' : 'S'} ON FILE`}{expired.length > 0 && <span className="chip chip-red">{expired.length} EXPIRED</span>}{expiringSoon.length > 0 && <span className="chip chip-gold">{expiringSoon.length} EXPIRING ≤7D</span>}</span>
         <button onClick={exportManifest} disabled={!items || items.length === 0} className="inline-flex items-center gap-1.5 mono text-[9px] text-[var(--dim)] hover:text-[var(--ink)] disabled:opacity-40"><Download size={11} />Export ledger (.txt)</button>
       </div>
       <ul className="space-y-2">
@@ -91,10 +104,11 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
               <button onClick={() => { setExpanded(expanded === it.id ? null : it.id); }} className="flex-1 min-w-0 text-left" aria-expanded={expanded === it.id}>
                 <div className="flex items-center gap-2 flex-wrap"><span className="text-[12px] text-[var(--ink)]">{it.name}</span>{it.brand && <span className="mono text-[8px] text-[var(--dim)]">· {it.brand}</span>}<span className="chip">{it.category}</span></div>
                 {it.note && <p className="text-[10px] text-[var(--dim)] mt-1">{it.note}</p>}
-                <p className="mono text-[8px] text-[var(--dim)] mt-1">added {it.addedAt.slice(0, 10)}</p>
+                <p className="mono text-[8px] text-[var(--dim)] mt-1 flex items-center gap-2 flex-wrap">added {it.addedAt.slice(0, 10)}{it.expiresAt && (() => { const d = expiryDays(it); const tone = d !== null && d < 0 ? 'text-[#ff5a5a]' : d !== null && d <= 7 ? 'text-[var(--gold)]' : 'text-[var(--dim)]'; const label = d !== null && d < 0 ? `EXPIRED ${-d}D AGO` : d === 0 ? 'EXPIRES TODAY' : d !== null ? `EXPIRING IN ${d}D` : ''; return <span className={cx('font-bold', tone)}>· {it.expiresAt} · {label}</span>; })()}</p>
               </button>
               <span className="flex items-center gap-1 shrink-0">
                 <button onClick={() => { onRecallCheck([it.brand, it.name].filter(Boolean).join(' ')); }} title="Scan this item in the Recall Scanner" aria-label="Scan in recall scanner" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[var(--gold)] text-[var(--dim)] hover:text-[var(--gold)]"><ScanLine size={14} /></button>
+                {it.expiresAt && <button onClick={() => { watchExpiry(it); }} title="Watch this expiry in the Clockwatch" aria-label="Watch expiry in Clockwatch" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[var(--gold)] text-[var(--dim)] hover:text-[var(--gold)]">{watched === it.id ? <ShieldCheck size={14} className="text-[var(--green)]" /> : <AlarmClock size={14} />}</button>}
                 <button onClick={() => { beginFromItem(it); }} title="Start an official complaint using this item" aria-label="Start complaint with this item" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[var(--cyan)] text-[var(--dim)] hover:text-[var(--cyan)]"><FileText size={14} /></button>
                 <button onClick={() => { void remove(it.id); }} aria-label="Remove item" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[#ff5a5a] text-[var(--dim)] hover:text-[#ff5a5a]"><Trash2 size={14} /></button>
                 <button onClick={() => { setExpanded(expanded === it.id ? null : it.id); }} aria-label={expanded === it.id ? 'Hide photos' : 'Show photos'} className="p-2 rounded-lg border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)]">{expanded === it.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>

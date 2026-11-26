@@ -12,6 +12,7 @@ import RecoverView from './components/RecoverView';
 import VaultView from './components/VaultView';
 import ErrorBoundary from './components/ErrorBoundary';
 import { CaseProvider } from './components/CaseProvider';
+import { setPlan, BILLING } from './config/billing';
 import { COUNTRY_PACKS } from './data/packs';
 import type { CountryPack } from './data/packs';
 
@@ -23,6 +24,16 @@ const US_PACK: CountryPack = COUNTRY_PACKS.find(p => p.code === 'US') ?? {
 
 export default function App() {
   const [packCode, setPackCode] = useState('US');
+  /* Stripe Payment Link success URL lands as ?billing=household — captured in the
+     initializer (before first paint): self-reported, on-device, no server involved. */
+  const [justJoined, setJustJoined] = useState(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('billing') !== 'household') return false;
+    setPlan('household');
+    url.searchParams.delete('billing');
+    window.history.replaceState(null, '', url.pathname + (url.searchParams.toString() ? `?${url.searchParams}` : ''));
+    return true;
+  });
   const [view, setView] = useState<ViewId>('radar');
   const pack = COUNTRY_PACKS.find(p => p.code === packCode) ?? US_PACK;
 
@@ -39,6 +50,12 @@ export default function App() {
 
       <Navbar packs={COUNTRY_PACKS} active={pack} onPack={p => { setPackCode(p.code); }} view={view} onView={setView} />
       <Ticker />
+      {justJoined && (
+        <div role="status" className="relative z-10 flex items-center justify-center gap-3 border-b border-[rgba(242,193,78,0.35)] bg-[rgba(242,193,78,0.12)] px-4 py-1.5 text-[11px] text-[var(--gold)]">
+          <span>Welcome to {BILLING.planName} — recorded on this device. Manage or cancel anytime via the Stripe portal.</span>
+          <button onClick={() => { setJustJoined(false); }} className="mono text-[9px] underline underline-offset-2 hover:text-[var(--ink)]" aria-label="Dismiss">Dismiss</button>
+        </div>
+      )}
 
       <main id="main" className="relative flex-1 min-h-0" tabIndex={-1}>
         <ErrorBoundary key={view} label={view === 'guard' ? 'Receipts' : view === 'recover' ? 'Comeuppance' : view === 'vault' ? 'The Black Book' : 'Side-Eye'}>

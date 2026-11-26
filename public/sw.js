@@ -3,7 +3,7 @@
    Same-origin static assets: cache-first (filenames are hashed by the build).
    Navigations: network-first, offline falls back to the cached shell.
    Cross-origin (openFDA, NWS, FSA, Health Canada snapshot, GitHub…): untouched. */
-const VERSION = 'petty-shell-v2.1.0';
+const VERSION = 'petty-shell-v2.2.0';
 const SHELL = ['/', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/icon-maskable-512.png', '/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

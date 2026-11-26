@@ -6,6 +6,7 @@ export type HouseholdCategory = 'food' | 'drug' | 'device' | 'cosmetic' | 'other
 export interface HouseholdItem {
   id: string; name: string; brand: string; category: HouseholdCategory;
   note: string; addedAt: string;
+  expiresAt?: string; /* ISO date YYYY-MM-DD — optional best-by/use-by/expiry watch */
 }
 export interface EvidencePhoto {
   id: string; scope: string; blob: Blob; mime: string; size: number; addedAt: string;
@@ -128,8 +129,9 @@ export async function requestPersistence(): Promise<PersistStatus> {
   } catch { return 'unsupported'; }
 }
 
-export const newItem = (name: string, brand: string, category: HouseholdCategory, note: string): HouseholdItem =>
-  ({ id: newId(), name: name.trim(), brand: brand.trim(), category, note: note.trim(), addedAt: new Date().toISOString() });
+export const newItem = (name: string, brand: string, category: HouseholdCategory, note: string, expiresAt?: string): HouseholdItem =>
+  ({ id: newId(), name: name.trim(), brand: brand.trim(), category, note: note.trim(), addedAt: new Date().toISOString(),
+     ...(expiresAt ? { expiresAt } : {}) });
 
 /* One-shot scope migration (e.g. legacy 'complaint'/'foodfraud' → 'case'). Idempotent. */
 export async function migratePhotoScopes(map: Record<string, string>): Promise<number> {

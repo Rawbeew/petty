@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { BookLock, ExternalLink, ShieldCheck, BadgeDollarSign, Sparkles, Code2 } from 'lucide-react';
 import { COUNTRY_PACKS } from '../data/packs';
+import { BILLING, isBillingConfigured, getPlan } from '../config/billing';
 import type { CountryPack } from '../data/packs';
 import { cx } from '../lib/ui';
 import TariffWatch from './TariffWatch';
@@ -65,30 +66,49 @@ function RegistryTable({ pack }: { pack: CountryPack }) {
 }
 
 function Pricing({ pack }: { pack: CountryPack }) {
+  const configured = isBillingConfigured();
+  const plan = getPlan();
   return (
     <section>
       <div className="flex items-end justify-between flex-wrap gap-2 mb-3">
         <div>
-          <div className="mono text-[9px] tracking-[0.3em] text-[var(--dim)] flex items-center gap-2"><BadgeDollarSign size={11} />FLAT SUBSCRIPTIONS — NO PERCENTAGE FINDER’S FEES, EVER</div>
-          <h3 className="font-display text-lg mt-1">Free while we launch — flat when billing opens</h3>
+          <div className="mono text-[9px] tracking-[0.3em] text-[var(--dim)] flex items-center gap-2"><BadgeDollarSign size={11} />FLAT — NEVER A PERCENTAGE FINDER’S FEE</div>
+          <h3 className="font-display text-lg mt-1">{plan === 'household' ? 'The Household — you are on it. Thank you.' : 'The Household — one flat price, six seats'}</h3>
         </div>
-        <span className="mono text-[8px] text-[var(--dim)]">PRICED IN {pack.currency} WHEN LIVE</span>
+        <span className="mono text-[8px] text-[var(--dim)]">PRICED IN {pack.currency === 'USD' ? 'USD' : 'USD'} · FLAT</span>
       </div>
-      <div className="glow-card p-5 sm:p-6">
-        <p className="text-[12.5px] leading-relaxed text-[#c9cddb] max-w-2xl">
-          Every Petty engine is free right now — the statute calculators, live wires, letter packs, the Clockwatch,
-          the complaint desk and this registry. When billing opens it will be a <strong className="text-[var(--ink)]">flat subscription — never a percentage of your recovery, never a success fee</strong> —
-          and early users keep the launch price for as long as they stay. You will get at least a 30-day free trial and a dated
-          announcement before anything is ever charged to you.
-        </p>
-        <ul className="mt-3 space-y-1.5 text-[11.5px] text-[#c9cddb]">
-          <li><span className="text-[var(--green)]">✓</span> The law stays free — statute engines are never paywalled</li>
-          <li><span className="text-[var(--green)]">✓</span> No percentage of recoveries — we never touch your money</li>
-          <li><span className="text-[var(--green)]">✓</span> Cancel in one tap, keep your on-device data forever</li>
-        </ul>
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <a href="https://github.com/Rawbeew/petty" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] hover:bg-[rgba(242,193,78,0.1)] transition-colors px-4 py-2.5 mono text-[10px] tracking-[0.2em] uppercase"><Sparkles size={12} />Follow the repo — billing lands there first</a>
-          <span className="mono text-[8.5px] text-[var(--dim)]">NOT CHARGING YET — NOTHING YOU TOUCH TODAY ENTAILS PAYMENT</span>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div className="glow-card p-5 flex flex-col">
+          <div className="mono text-[10px] tracking-[0.25em] text-[var(--dim)]">THE FREE LAW — FOREVER</div>
+          <div className="mt-2 font-display text-4xl text-[var(--ink)]">$0</div>
+          <ul className="mt-3 space-y-1.5 text-[11.5px] text-[#c9cddb] flex-1">
+            <li><span className="text-[var(--green)]">✓</span> Every statute engine — baggage, deposit, wages, settlements</li>
+            <li><span className="text-[var(--green)]">✓</span> Every live wire + letter pack + print/PDF</li>
+            <li><span className="text-[var(--green)]">✓</span> Pantry, case file, evidence photos — on-device</li>
+            <li><span className="text-[var(--green)]">✓</span> Clockwatch — up to {5} open clocks</li>
+          </ul>
+          <p className="mono text-[8px] text-[var(--dim)] mt-3">Law is never paywalled. Statute engines don’t take subscriptions; neither do we.</p>
+        </div>
+        <div className="glow-card card-hover p-5 flex flex-col border-beam relative">
+          <span className="absolute top-3 right-3 chip chip-gold"><Sparkles size={10} />FOUNDING PRICE</span>
+          <div className="mono text-[10px] tracking-[0.25em] text-[var(--gold)]">THE HOUSEHOLD — $9/MO · $79/YR</div>
+          <div className="mt-2 flex items-end gap-2"><span className="font-display text-4xl text-[var(--ink)]">$9</span><span className="mono text-[10px] text-[var(--dim)] mb-1.5">/mo</span><span className="mono text-[9px] text-[var(--cyan)] mb-1.5">or $79/yr (save $29)</span></div>
+          <ul className="mt-3 space-y-1.5 text-[11.5px] text-[#c9cddb] flex-1">
+            <li><span className="text-[var(--green)]">✓</span> 6 seats — your household on one flat plan</li>
+            <li><span className="text-[var(--green)]">✓</span> Unlimited Clockwatch deadlines</li>
+            <li><span className="text-[var(--green)]">✓</span> Founding price locked for life</li>
+            <li><span className="text-[var(--green)]">✓</span> Funds the free law part for everyone</li>
+          </ul>
+          {configured ? (
+            <div className="mt-4 space-y-2">
+              <a href={BILLING.monthlyLink} target="_blank" rel="noreferrer" className="block w-full text-center rounded-xl bg-[var(--gold)] text-black font-bold py-2.5 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[var(--gold2)] transition-colors">Subscribe — $9/mo</a>
+              <a href={BILLING.annualLink} target="_blank" rel="noreferrer" className="block w-full text-center rounded-xl border border-[var(--gold)] text-[var(--gold)] py-2 mono text-[9px] tracking-[0.2em] uppercase hover:bg-[rgba(242,193,78,0.1)] transition-colors">Subscribe — $79/yr</a>
+              {BILLING.portalLink && <a href={BILLING.portalLink} target="_blank" rel="noreferrer" className="block text-center mono text-[8px] text-[var(--dim)] hover:text-[var(--ink)] underline underline-offset-2 transition-colors">Manage or cancel (Stripe portal)</a>}
+            </div>
+          ) : (
+            <p className="mono text-[8px] text-[var(--dim)] mt-4 border border-dashed border-[var(--line2)] rounded-xl px-3 py-2.5 leading-relaxed">NOT CHARGING YET — THIS BUILD HAS NO STRIPE LINKS. WHEN BILLING OPENS: one announcement, a 30-day free trial, cancel in one tap via the Stripe portal, and founding pricing locked forever. Watch the repo for the launch.</p>
+          )}
+          <p className="mono text-[7.5px] text-[var(--dim)] mt-2 opacity-80">Entitlement is honor-system: this build records your subscription on-device only. No accounts, no servers — your word is the license.</p>
         </div>
       </div>
     </section>

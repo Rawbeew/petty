@@ -2,7 +2,7 @@
 
 > Legal pettiness to the core. Petty is a free, static web app that helps ordinary people exercise small, statute-backed rights — baggage and fee refunds, tenant deposits, unpaid wages, unclaimed property, recalls — using **published, public, attributed sources only**.
 
-**Status:** v2.1.0 · US launch ring live · repo is public · single-maintainer
+**Status:** v2.2.0 · US launch ring live · repo is public · single-maintainer
 **Doctrine:** citation or silence · no LLM in the compliance path · flat fees or free · information, not legal advice · you always send the letter yourself · nothing public, ever (no reviews, no shaming)
 
 ## The honesty contract
@@ -27,7 +27,7 @@ npm run build     # production build (static SPA, no server needed)
 | Surface | Owns |
 |---|---|
 | **Side-Eye** (Radar) | Live agency signals — recalls, weather hazards, public data. Every merged signal passes the **eligibility gate** (`src/lib/pipeline.ts`): no https source, parseable date and known confidence class → dropped and counted, never rendered |
-| **Receipts** (Guard) | Recall scanner (openFDA + FSA) · docket watchdog (CourtListener, token or deep-link) · **The Pantry** (household goods ledger, on-device) · Label Lies (food fraud) |
+| **Receipts** (Guard) | Recall scanner (openFDA + FSA) · docket watchdog (CourtListener, token or deep-link) · **The Pantry** (household goods ledger, on-device — with optional best-by/expiry watch wired to the Clockwatch) · Label Lies (food fraud) |
 | **Comeuppance** (Recover) | Deterministic engines: EU261/DOT/Montreal/APPR baggage · tenant deposit (NY/CA/TX/FL/IL) · unpaid wages (FLSA § 216(b) + NY/CA layers) · US settlement watchlist · **Clockwatch** (on-device deadline reminders) · **Complaint Desk** (9 lanes, 50 states + DC AG routing, audited) |
 | **The Black Book** (Vault) | 46-row regulator registry with audited statuses (WIRED/PORTAL/BOT-WALLED/UNVERIFIABLE) + tariff docket watch (importers only) |
 
@@ -53,6 +53,7 @@ Eligibility is never a function of prominence: a critical severity cannot outran
 
 ```
 src/
+  config/billing.ts   # flat-plan config — links, prices, honor-system entitlement
   statutes.ts        # baggage engines — deterministic; SDR_VERIFIED_AT stamp
   lib/               # engines & infra: packets, complaints (router + letters), courtlistener,
                      # household (IndexedDB), reminders (Clockwatch), caseFile, safeStorage, print
@@ -81,6 +82,19 @@ docs/                # FIRST_PRINCIPLES.md (P1–P10, PV1–PV4), EDGE_CACHING.m
 ## Not built yet / honestly labeled
 
 AU recall & safety data has no machine-readable open dataset — AU is portal framing, honestly labeled; CA ships a weekly CI-built snapshot of Health Canada’s open data (verbatim, attributed, dated). One maintainer — the CI gate is a floor, not a guarantee.
+
+## Billing — “The Household” (flat $9/mo · $79/yr, 6 seats)
+
+The free law stays free: statute engines never paywalled; statute-clock imports (deposit / complaint) never capped. Free manual Clockwatch = 5 open clocks; unlimited with the plan. Entitlement is **self-reported on-device** — Petty has no accounts, so billing is wiring, not a backend. This build ships with checkout **disabled** (honest “not charging yet” panel) until the Stripe links exist.
+
+To open billing (≈20 min, one time):
+
+1. Create a Stripe account → **Products**: “Petty Household — Monthly” $9.00 USD recurring · “Petty Household — Annual” $79.00 USD recurring.
+2. Create a **Payment Link** for each. Set each link’s post-payment redirect to `https://<your-domain>/?billing=household`.
+3. Enable the **Customer Portal** (manage/cancel self-serve) and copy its login URL.
+4. Paste the three URLs into `src/config/billing.ts` (`monthlyLink`, `annualLink`, `portalLink`), commit, deploy.
+
+Until then nothing charges and no dead checkout buttons render. Clearing browser data reverts the device to the free tier — users re-enter via the portal link; Stripe handles renewals, dunning and cancellation. Founding price is locked for members forever (by copy, not by code — the rate lives in Stripe).
 
 ## License & repo policy
 
