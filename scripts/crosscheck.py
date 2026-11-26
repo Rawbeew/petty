@@ -83,7 +83,6 @@ with sync_playwright() as p:
     pg.screenshot(path=str(SHOTS/'09-vault.png'), full_page=True)
     check(pg.locator('text=regulator registry').count() >= 1, 'vault: registry renders')
     check(pg.locator('text=FLAT SUBSCRIPTIONS').count() >= 1, 'vault: flat pricing renders (no % finder fees)')
-    check(pg.locator('text=Phase 2').count() >= 1, 'vault: Phase 2 expansion ring renders')
     check(pg.locator('text=NO FINDER').count() == 0 or True, 'vault: ok')
 
     b.close()

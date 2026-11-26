@@ -1,0 +1,37 @@
+name: SDR rate auto-refresh (weekly)
+on:
+  schedule: [{ cron: '23 4 * * 1' }]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { token: ${{ secrets.GITHUB_TOKEN }} }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - name: Refresh SDR constant
+        id: refresh
+        run: python3 scripts/refresh_sdr.py
+      - name: Gate
+        run: |
+          npm ci
+          npm run gate
+      - name: Open PR if changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto/sdr-refresh
+          delete-branch: true
+          commit-message: 'chore(sdr): weekly SDR/USD refresh from cross-checked public rates'
+          title: 'chore(sdr): weekly SDR/USD refresh'
+          body: |
+            Automated weekly refresh of `SDR_TO_USD` + `SDR_VERIFIED_AT`.
+            Sources (2 public, keyless, cross-checked): exchangerate-api.com · jsdelivr currency-api.
+            IMF remains the primary authority — re-verify before filing.
+            See `reports/sdr-refresh-*.md` for fetch details. Gate ran green or this PR does not exist.

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Eye, Receipt, Gavel, BookLock, Lock, Check } from 'lucide-react';
+import { ChevronDown, Eye, Receipt, Gavel, BookLock, Check } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
 import type { ViewId } from '../App';
 import { cx } from '../lib/ui';
@@ -55,14 +55,14 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
             <span className="text-lg leading-none">{active.flag}</span>
             <span className="hidden sm:block text-left leading-tight">
               <span className="block text-[11px] font-semibold text-[var(--ink)]">{active.name}</span>
-              <span className="block mono text-[8px] text-[var(--dim)] tracking-[0.2em]">{active.tier === 'launch' ? 'TIER-1 · LAUNCH' : 'PHASE 2'}</span>
+              <span className="block mono text-[8px] text-[var(--dim)] tracking-[0.2em]">LAUNCH RING</span>
             </span>
             <ChevronDown size={14} className={cx('text-[var(--dim)] transition-transform', open && 'rotate-180')} />
           </button>
           {open && (
             <div role="listbox" className="absolute right-0 sm:left-0 sm:right-auto top-[calc(100%+8px)] w-[300px] panel-flat shadow-2xl shadow-black/60 p-1.5 max-h-[70vh] overflow-auto">
-              <div className="px-2.5 pt-2 pb-1 mono text-[9px] tracking-[0.25em] text-[var(--dim)]">TIER-1 LAUNCH RING</div>
-              {packs.filter(p => p.tier === 'launch').map(p => (
+              <div className="px-2.5 pt-2 pb-1 mono text-[9px] tracking-[0.25em] text-[var(--dim)]">LAUNCH RING</div>
+              {packs.map(p => (
                 <button key={p.code} role="option" aria-selected={p.code === active.code} onClick={() => { onPack(p); setOpen(false); }}
                   className="w-full flex items-center gap-2.5 rounded-lg px-2.5 py-2 hover:bg-[var(--panel2)] text-left">
                   <span className="text-base">{p.flag}</span>
@@ -71,14 +71,6 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
                   </span>
                   {p.code === active.code && <Check size={14} className="text-[var(--gold)]" />}
                 </button>
-              ))}
-              <div className="px-2.5 pt-2 pb-1 mono text-[9px] tracking-[0.25em] text-[var(--dim)] flex items-center gap-1.5"><Lock size={9} />PHASE 2 — EXPANSION RING</div>
-              {[['🇳🇬','Nigeria — flagship'],['🇿🇦','South Africa'],['🇮🇳','India'],['🇧🇷','Brazil']].map(([f,n]) => (
-                <div key={n} className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 opacity-50">
-                  <span className="text-base">{f}</span>
-                  <span className="flex-1 text-[12px]">{n}<span className="block mono text-[8px] text-[var(--dim)]">GATED — see The Black Book</span></span>
-                  <Lock size={13} className="text-[var(--dim)]" />
-                </div>
               ))}
             </div>
           )}

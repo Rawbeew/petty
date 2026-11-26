@@ -1,4 +1,4 @@
-/* Petty — Country Pack registry. Tier 1 launch ring (HIC); Phase 2 gated. Voice: legal pettiness to the core — every claim statutory, every link verified. */
+/* Petty — Country Pack registry. Launch ring: US · GB · CA · AU · Global backbone. Voice: legal pettiness to the core — every claim statutory, every link verified. */
 export type Pillar = 'health' | 'weather' | 'dispatch' | 'stops' | 'courts' | 'money' | 'luggage';
 
 /* Link audit 2026-11-26 (curl + browser UA, full log: reports/link-audit-2026-11-26.md).
@@ -15,7 +15,7 @@ export interface Regulator {
   note?: string;
 }
 export interface CountryPack {
-  code: string; name: string; tier: 'launch' | 'phase2'; flag: string;
+  code: string; name: string; tier: 'launch'; flag: string;
   currency: string; ppp: string | null;
   regulators: Regulator[];
 }
@@ -126,6 +126,22 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('Montreal 1999 — baggage (aviation consumer protections)', 'luggage', 'https://www.infrastructure.gov.au/infrastructure-transport-vehicles/aviation/aviation-consumer-protections', 'monthly',
       'unverifiable', 'Page exists per gov publications; Akamai refused TCP from build network 2026-11-26 (000); Montreal wired deterministically in Comeuppance'),
   ]},
+  { code: 'EU', name: 'European Union', tier: 'launch', flag: '🇪🇺', currency: 'EUR', ppp: null, regulators: [
+    G('EU Safety Gate — dangerous non-food products', 'health', 'https://ec.europa.eu/safety-gate-alerts/', 'weekly',
+      'portal', 'Verified 200 (2026-11-26) · no keyless machine API published — portal framing only; open in a browser'),
+    G('RASFF — food & feed alerts', 'health', 'https://food.ec.europa.eu/safety/rasff-food-and-feed-safety-alerts_en', 'weekly',
+      'portal', 'Verified 200 (2026-11-26) · weekly RASFF notifications; no keyless API — portal framing; TIS database requires registration'),
+    G('EUR-Lex — official EU law', 'courts', 'https://eur-lex.europa.eu/', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · official journal & consolidated law, incl. EU261/UK261 (retained EU law) — the primary source for flight/baggage rights'),
+    G('Your Europe — air passenger rights', 'luggage', 'https://europa.eu/youreurope/citizens/travel/passenger-rights/air/index_en.htm', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · EU261 plain-language citizen guidance; statute wired deterministically in Comeuppance (EU261 engine)'),
+    G('Your Europe — citizen entry point', 'money', 'https://europa.eu/youreurope/citizens/index_en.htm', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · EU-wide rights, work, tax, travel and consumer help — no EU-wide unclaimed-money database exists (national schemes only); free help via ECC-Net'),
+    G('ECC-Net — European Consumer Centres (cross-border disputes)', 'money', 'https://www.eccnet.eu/', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · 30 centres · free help when an EU trader owes you money — keep the receipt, they do the chasing'),
+    G('EEA — air quality & environment signals', 'weather', 'https://www.eea.europa.eu/data-and-maps', 'monthly',
+      'portal', 'Portal framing — no keyless CAP-style feed for EU hazards; national met services (e.g. Aemet, Météo-France) are the authoritative hazard source'),
+  ]},
   { code: 'GL', name: 'Global backbone', tier: 'launch', flag: '🌐', currency: 'USD', ppp: null, regulators: [
     G('WHO — News (English) RSS', 'health', 'https://www.who.int/emergencies/disease-outbreak-news', 'weekly',
       'wired', 'DON has no keyless feed (legacy RSS 404s) · we wire WHO News (English) RSS + label it exactly — wired in Side-Eye (GL)', 'https://www.who.int/rss-feeds/news-english.xml'),
@@ -133,23 +149,10 @@ export const COUNTRY_PACKS: CountryPack[] = [
       'portal', 'Page verified 200 · probed /api, /api/v1/recalls, ?format=json — all 404; no public machine API found 2026-11-26'),
     G('WMO — hazardous weather bulletins', 'weather', 'https://public.wmo.int', 'realtime',
       'portal', 'Redirects to wmo.int (200) · bulletins are PDF/HTML — no keyless JSON API; not wired'),
-    G('ECC-Net — cross-border EU consumer disputes', 'money', 'https://www.eccnet.eu/', 'monthly',
-      'portal', 'Verified 200 (2026-11-26) · European Consumer Centres — free help when an EU trader owes you; 30 centres'),
     G('Montreal Convention 1999 (ICAO)', 'luggage', 'https://www.icao.int/secretariat/legal', 'monthly',
       'bot-walled', '403 from build network — browsers render fine; Montreal wired deterministically in Comeuppance'),
   ]},
 ];
 
 
-export const PHASE2_PACKS = [
-  { code: 'NG', name: 'Nigeria (flagship)', flag: '🇳🇬', gate: '≥2 machine feeds (NAFDAC · SON · NiMet · SEC e-Dividend) · NGN rails (cards/transfer/USSD) · PPP validated · retention ≥35%', unlocks: ['NAFDAC recalls', 'NiMet hazards', 'NCAA Part 19 ($1,000)', 'SEC e-Dividend claims', 'Lagos pilot: unclaimed funds'] },
-  { code: 'ZA', name: 'South Africa', flag: '🇿🇦', gate: 'SAHPRA feed · SAWS API · NCC recalls · ZAR rails · POPIA sign-off', unlocks: ['SAHPRA', 'SAWS', 'NCC recalls'] },
-  { code: 'IN', name: 'India', flag: '🇮🇳', gate: 'CDSCO feed · IMD API · CCPA/consumer forum access · UPI rails', unlocks: ['CDSCO', 'IMD'] },
-  { code: 'BR', name: 'Brazil', flag: '🇧🇷', gate: 'Anvisa API · INMET feed · ANATEL? · PIX rails', unlocks: ['Anvisa', 'INMET'] },
-];
 
-export const PRICING = [
-  { id: 'radar', name: 'The Side-Eye', price: '$9', per: '/mo', annual: '$86/yr (−20%)', blurb: 'All launch-ring signals, weekly digest, 1 market', cta: 'Start free trial' },
-  { id: 'plus', name: 'The Comeuppance', price: '$19', per: '/mo', annual: '$182/yr (−20%)', blurb: 'Everything + Receipts scanner, Comeuppance packets, priority docket alerts', cta: 'Upgrade to Plus', featured: true },
-  { id: 'sentinel', name: 'Sentinel (agents)', price: '$49', per: '/mo', annual: '$470/yr (−20%)', blurb: 'Bloomberg-of-liability: API access, 4 seats, SLA, regulator-grade exports', cta: 'Talk to sales' },
-];

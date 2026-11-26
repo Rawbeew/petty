@@ -1,0 +1,26 @@
+name: Canada recall snapshot (weekly)
+on:
+  schedule: [{ cron: '47 5 * * 1' }]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Rebuild verbatim recall snapshot
+        run: python3 scripts/ingest_ca_recalls.py
+      - name: Commit if changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet public/ca-recalls.json; then
+            echo 'snapshot unchanged — nothing to commit'
+          else
+            git add public/ca-recalls.json
+            git commit -m "chore(ca): weekly Health Canada recall snapshot (verbatim, OGL-CA)"
+            git push
+          fi

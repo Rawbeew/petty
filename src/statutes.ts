@@ -1,9 +1,9 @@
 /* Petty — deterministic statutory engine. No LLM in the compliance path.
  * Simplified rules; always verify against current regulation + SDR rates before filing.
- * Sources: US 14 CFR Part 254 · EU261/UK261 · CTA APPR · Montreal Convention 1999 · NCAA Part 19 (Phase 2) */
+ * Sources: US 14 CFR Part 254 · EU261/UK261 · CTA APPR · Montreal Convention 1999 */
 
-export const SDR_TO_USD = 1.31; // approx — verify daily at IMF
-export const SDR_VERIFIED_AT = '2026-11-26'; /* last manual check of IMF SDR rate + Montreal cap (1,519 SDR) */
+export const SDR_TO_USD = 1.34; // auto-refreshed weekly by .github/workflows/sdr-refresh.yml (2 keyless public sources, cross-checked; IMF is the primary authority) — see reports/sdr-refresh-*.md
+export const SDR_VERIFIED_AT = '2026-11-26'; /* last check of SDR rate + Montreal cap (1,519 SDR). Stamp is bumped by the weekly CI job, not by memory */
 export const MONTREAL_CAP_SDR = 1519;
 export const USD_PER_SDR_CAP = Math.round(MONTREAL_CAP_SDR * SDR_TO_USD);
 

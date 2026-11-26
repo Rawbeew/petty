@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { usDotFeeRefundEligible, eu261, apprLargeCarrier, montrealNotice, MONTREAL_CAP_SDR, USD_PER_SDR_CAP, assessLuggage, namePermutations, addressPermutations, claimTargets } from '../src/statutes';
+import { usDotFeeRefundEligible, eu261, apprLargeCarrier, montrealNotice, MONTREAL_CAP_SDR, USD_PER_SDR_CAP, SDR_TO_USD, assessLuggage, namePermutations, addressPermutations, claimTargets } from '../src/statutes';
 
 // US DOT boundary math (12h domestic / 15h intl<=12h / 30h intl>12h)
 assert.equal(usDotFeeRefundEligible({ route: 'us_domestic', delayHours: 11.99 }).eligible, false);
@@ -24,7 +24,7 @@ assert.deepEqual([apprLargeCarrier(2.9).cad, apprLargeCarrier(3).cad, apprLargeC
 assert.equal(montrealNotice('damaged').days, 7);
 assert.equal(montrealNotice('delayed').days, 21);
 assert.equal(MONTREAL_CAP_SDR, 1519);
-assert.equal(USD_PER_SDR_CAP, Math.round(1519 * 1.31));
+assert.equal(USD_PER_SDR_CAP, Math.round(MONTREAL_CAP_SDR * SDR_TO_USD)); /* derives from the live constant — bump SDR_VERIFIED_AT, not magic numbers */
 
 // Full assessment composes (US domestic, delayed, 13h late, € — defaults)
 const a = assessLuggage({ route: 'us_domestic', distanceKm: 900, delayHours: 13, flightHours: 5, arrivalDelayHours: 0, interimExpensesUsd: 140, damaged: false, delayed: true, airline: 'TestAir', pnr: 'X7KQ2L' });

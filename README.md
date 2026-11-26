@@ -2,7 +2,7 @@
 
 > Legal pettiness to the core. Petty is a free, static web app that helps ordinary people exercise small, statute-backed rights — baggage and fee refunds, tenant deposits, unpaid wages, unclaimed property, recalls — using **published, public, attributed sources only**.
 
-**Status:** v2.0.0 · US launch ring live · repo is public · single-maintainer
+**Status:** v2.1.0 · US launch ring live · repo is public · single-maintainer
 **Doctrine:** citation or silence · no LLM in the compliance path · flat fees or free · information, not legal advice · you always send the letter yourself · nothing public, ever (no reviews, no shaming)
 
 ## The honesty contract
@@ -80,7 +80,7 @@ docs/                # FIRST_PRINCIPLES.md (P1–P10, PV1–PV4), EDGE_CACHING.m
 
 ## Not built yet / honestly labeled
 
-CA and AU packs are largely portal-only. Phase-2 markets (NG, ZA, IN, BR) are gated placeholders. Monetization is flat-subscription-only and not implemented. One maintainer — the CI gate is a floor, not a guarantee.
+AU recall & safety data has no machine-readable open dataset — AU is portal framing, honestly labeled; CA ships a weekly CI-built snapshot of Health Canada’s open data (verbatim, attributed, dated). One maintainer — the CI gate is a floor, not a guarantee.
 
 ## License & repo policy
 

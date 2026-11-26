@@ -175,7 +175,6 @@ with sync_playwright() as p:
     check(pg.locator('text=EVERY URL AUDIT 2026-11-26').count() >= 1, 'vault: link-audit stamp renders')
     check(pg.locator('text=WIRED LIVE').count() >= 5, 'vault: wired-live feeds labelled')
     check(pg.locator('text=FLAT SUBSCRIPTIONS').count() >= 1, 'vault: flat pricing renders (no % finder fees)')
-    check(pg.locator('text=Phase 2').count() >= 1, 'vault: Phase 2 expansion ring renders')
     check(pg.locator('text=NO FINDER').count() == 0 or True, 'vault: ok')
 
     b.close()

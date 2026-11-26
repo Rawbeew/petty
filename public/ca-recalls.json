@@ -1,0 +1,732 @@
+{
+ "generatedAt": "2026-11-26T18:03:47Z",
+ "source": "Health Canada / CFIA / Transport Canada — Recalls and Safety Alerts (open data)",
+ "sourceUrl": "https://recalls-rappels.canada.ca/",
+ "datasetUrl": "https://recalls-rappels.canada.ca/sites/default/files/opendata-donneesouvertes/HCRSAMOpenData.json",
+ "license": "Open Government Licence – Canada",
+ "attribution": "Health Canada (recalls-rappels.canada.ca), used under the Open Government Licence – Canada",
+ "note": "Weekly static snapshot — not live. Titles verbatim (unicode-normalized). Verify every recall at its URL before acting.",
+ "count": 80,
+ "recalls": [
+  {
+   "nid": "82874",
+   "title": "Klean Strip Denatured Alcohol Fuel recalled due to improper labelling",
+   "organization": "Consumer product safety",
+   "issue": "Labelling and packaging",
+   "recallClass": "",
+   "updated": "2026-11-24",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/klean-strip-denatured-alcohol-fuel-recalled-due-improper-labelling"
+  },
+  {
+   "nid": "82994",
+   "title": "Yeshi brand Sesame Ginger Nutritional Yeast Dressing & Dip recalled due to pieces of glass",
+   "organization": "CFIA",
+   "issue": "Extraneous Material",
+   "recallClass": "Class 2",
+   "updated": "2026-11-24",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/yeshi-brand-sesame-ginger-nutritional-yeast-dressing-dip-recalled-due-pieces-glass"
+  },
+  {
+   "nid": "82995",
+   "title": "TAVNEOS (avacopan) - Canadian Patient Transition and Market Withdrawal Plan",
+   "organization": "Marketed health products",
+   "issue": "New safety information - Product withdrawal",
+   "recallClass": "",
+   "updated": "2026-11-24",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/tavneos-avacopan-canadian-patient-transition-and-market-withdrawal-plan"
+  },
+  {
+   "nid": "82997",
+   "title": "CARESITE Micro® Luer Access Device and Extension Sets",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-24",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/caresite-micror-luer-access-device-and-extension-sets"
+  },
+  {
+   "nid": "83000",
+   "title": "TeleflexTM Loss Of Resistance Syringe",
+   "organization": "Medical devices",
+   "issue": "Labelling and packaging",
+   "recallClass": "Type II",
+   "updated": "2026-11-24",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/teleflextm-loss-resistance-syringe"
+  },
+  {
+   "nid": "83001",
+   "title": "QinFlow Warrior Lite Base Unit",
+   "organization": "Medical devices",
+   "issue": "Device compatibility",
+   "recallClass": "Type II",
+   "updated": "2026-11-24",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/qinflow-warrior-lite-base-unit"
+  },
+  {
+   "nid": "82986",
+   "title": "Unauthorized drugs, including prescription drugs and injectable peptides, seized from Canada Biogenix as they may pose serious health risks",
+   "organization": "Controlled substances and cannabis",
+   "issue": "Unauthorized product",
+   "recallClass": "",
+   "updated": "2026-11-23",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/unauthorized-drugs-including-prescription-drugs-and-injectable-peptides-seized-canada"
+  },
+  {
+   "nid": "82931",
+   "title": "Transport Canada Recall - 2026524 - JAYCO",
+   "organization": "TC",
+   "issue": "Electrical",
+   "recallClass": "",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026524-jayco"
+  },
+  {
+   "nid": "82978",
+   "title": "C.A.M.P. Mountain Ice Axes recalled due to fall hazard",
+   "organization": "Consumer product safety",
+   "issue": "Fall hazard",
+   "recallClass": "",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/camp-mountain-ice-axes-recalled-due-fall-hazard"
+  },
+  {
+   "nid": "82979",
+   "title": "Certain Nora's brand Non-Dairy Frozen Desserts recalled due to undeclared peanut",
+   "organization": "CFIA",
+   "issue": "Peanut",
+   "recallClass": "Class 1",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/certain-nora-s-brand-non-dairy-frozen-desserts-recalled-due-undeclared-peanut"
+  },
+  {
+   "nid": "82983",
+   "title": "Relay® Pro and Treo® Stent-Graft Systems",
+   "organization": "Medical devices",
+   "issue": "Sterility",
+   "recallClass": "Type I",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/relayr-pro-and-treor-stent-graft-systems"
+  },
+  {
+   "nid": "82984",
+   "title": "Cadbury brand Dairy Milk Oreo Candy (treat size bar) recalled due to undeclared pistachio",
+   "organization": "CFIA",
+   "issue": "Tree nut",
+   "recallClass": "Class 1",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/cadbury-brand-dairy-milk-oreo-candy-treat-size-bar-recalled-due-undeclared-pistachio"
+  },
+  {
+   "nid": "82991",
+   "title": "Transport Canada Recall - 2026534 - FORD",
+   "organization": "TC",
+   "issue": "Electrical",
+   "recallClass": "",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026534-ford"
+  },
+  {
+   "nid": "82992",
+   "title": "Transport Canada Recall - 2026541 - BMW",
+   "organization": "TC",
+   "issue": "Electrical",
+   "recallClass": "",
+   "updated": "2026-11-20",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026541-bmw"
+  },
+  {
+   "nid": "82933",
+   "title": "ScotchTM Thermal Laminators TL1302Z recalled due to fire hazard",
+   "organization": "Consumer product safety",
+   "issue": "Fire hazard",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/scotchtm-thermal-laminators-tl1302z-recalled-due-fire-hazard"
+  },
+  {
+   "nid": "82954",
+   "title": "Importation of Italian-Authorized BUPISEN iperbarica 7,5 mg/ml soluzione iniettabile (Bupivacaine Hydrochloride in Dextrose Injection) due to the Current Shortage of Canadian-Authorized Bupivacaine Hydrochloride in Dextrose Injection USP",
+   "organization": "Marketed health products",
+   "issue": "Product safety - Supply - Labelling",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/importation-italian-authorized-bupisen-iperbarica-75-mgml-soluzione-iniettabile"
+  },
+  {
+   "nid": "82957",
+   "title": "Ororo PD10K-Pro Rechargeable Lithium-ion Battery recalled due to fire hazard",
+   "organization": "Consumer product safety",
+   "issue": "Fire hazard",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/ororo-pd10k-pro-rechargeable-lithium-ion-battery-recalled-due-fire-hazard"
+  },
+  {
+   "nid": "82974",
+   "title": "PleurXTM Drainage Kits",
+   "organization": "Medical devices",
+   "issue": "Sterility",
+   "recallClass": "Type II",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/pleurxtm-drainage-kits"
+  },
+  {
+   "nid": "82975",
+   "title": "Medline 0.9% Sodium Chloride Injection, USP 10ml in a 10ml Flush Syringe ZR",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type I",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/medline-09-sodium-chloride-injection-usp-10ml-10ml-flush-syringe-zr"
+  },
+  {
+   "nid": "82976",
+   "title": "VascuPunctureTM PICC High Performance Guidewire",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type I",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/vascupuncturetm-picc-high-performance-guidewire"
+  },
+  {
+   "nid": "82977",
+   "title": "PortexTM Endotracheal Tubes",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type I",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/portextm-endotracheal-tubes"
+  },
+  {
+   "nid": "82980",
+   "title": "Olympus Endoscopic Ultrasound System and Ultrasonic Gastrovideoscopes For Aloka Ultrasound Processors",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/olympus-endoscopic-ultrasound-system-and-ultrasonic-gastrovideoscopes-aloka-ultrasound"
+  },
+  {
+   "nid": "82981",
+   "title": "Philips Bridge Prep Kit",
+   "organization": "Medical devices",
+   "issue": "Labelling and packaging - Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/philips-bridge-prep-kit"
+  },
+  {
+   "nid": "82982",
+   "title": "CARDIOSAVE® Hybrid And CARDIOSAVE® Rescue Intra-Aortic Balloon Pumps",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/cardiosaver-hybrid-and-cardiosaver-rescue-intra-aortic-balloon-pumps"
+  },
+  {
+   "nid": "82987",
+   "title": "Transport Canada Recall - 2026530 - TRIUMPH",
+   "organization": "TC",
+   "issue": "Accessories",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026530-triumph"
+  },
+  {
+   "nid": "82988",
+   "title": "Transport Canada Recall - 2026532 - MACK",
+   "organization": "TC",
+   "issue": "Accessories",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026532-mack"
+  },
+  {
+   "nid": "82989",
+   "title": "Transport Canada Recall - 2026533 - HYUNDAI",
+   "organization": "TC",
+   "issue": "Airbag",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026533-hyundai"
+  },
+  {
+   "nid": "82990",
+   "title": "Transport Canada Recall - 2026563 - SUTPHEN CORPORATION",
+   "organization": "TC",
+   "issue": "Fuel System",
+   "recallClass": "",
+   "updated": "2026-11-19",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026563-sutphen-corporation"
+  },
+  {
+   "nid": "82969",
+   "title": "Paras brand Wheat Free Flour recalled due to undeclared wheat",
+   "organization": "CFIA",
+   "issue": "Wheat - Gluten",
+   "recallClass": "Class 1",
+   "updated": "2026-11-18",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/paras-brand-wheat-free-flour-recalled-due-undeclared-wheat"
+  },
+  {
+   "nid": "82970",
+   "title": "DxC 500i Clinical Analyzer and DxC 500i AU Chemistry Module",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-18",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/dxc-500i-clinical-analyzer-and-dxc-500i-au-chemistry-module"
+  },
+  {
+   "nid": "82971",
+   "title": "Raz Shower Commode Chairs",
+   "organization": "Medical devices",
+   "issue": "Device compatibility",
+   "recallClass": "Type II",
+   "updated": "2026-11-18",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/raz-shower-commode-chairs"
+  },
+  {
+   "nid": "82972",
+   "title": "Blueprint®",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-18",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/blueprintr"
+  },
+  {
+   "nid": "82973",
+   "title": "Spring-Wire Guide, Pressure Injectable PICC Kit, Arrow PICC With Arrowg+ard Blue Advance® Technology, No Placement Wire",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type I",
+   "updated": "2026-11-18",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/spring-wire-guide-pressure-injectable-picc-kit-arrow-picc-arrowgard-blue-advancer"
+  },
+  {
+   "nid": "82964",
+   "title": "PegLyte Powder: Affected lots may contain foreign matter",
+   "organization": "Drugs and health products",
+   "issue": "Contamination",
+   "recallClass": "Type III",
+   "updated": "2026-11-17",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/peglyte-powder-affected-lots-may-contain-foreign-matter"
+  },
+  {
+   "nid": "82966",
+   "title": "Certain Ashoka brand Kathi Rolls recalled due to undeclared sesame",
+   "organization": "CFIA",
+   "issue": "Sesame seeds",
+   "recallClass": "Class 2",
+   "updated": "2026-11-17",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/certain-ashoka-brand-kathi-rolls-recalled-due-undeclared-sesame"
+  },
+  {
+   "nid": "82967",
+   "title": "Sorbelicious Dessert brand Dubai Chocolate Style Dessert - Dark recalled due to undeclared hazelnut and peanut",
+   "organization": "CFIA",
+   "issue": "Peanut - Tree nut",
+   "recallClass": "Class 2",
+   "updated": "2026-11-17",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/sorbelicious-dessert-brand-dubai-chocolate-style-dessert-dark-recalled-due-undeclared"
+  },
+  {
+   "nid": "82955",
+   "title": "Health Canada warns of inaccurate radon detectors sold online",
+   "organization": "Controlled substances and cannabis",
+   "issue": "Impact hazard - Injury hazard",
+   "recallClass": "",
+   "updated": "2026-11-16",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/health-canada-warns-inaccurate-radon-detectors-sold-online"
+  },
+  {
+   "nid": "82965",
+   "title": "TARO-CANDESARTAN: affected lots may contain Esomeprazole 20mg capsules",
+   "organization": "Drugs and health products",
+   "issue": "Product quality",
+   "recallClass": "Type II",
+   "updated": "2026-11-16",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/taro-candesartan-affected-lots-may-contain-esomeprazole-20mg-capsules"
+  },
+  {
+   "nid": "82958",
+   "title": "Soup Time brand Baba's Borscht Soup and Wardy's Bow Valley Beef Barley recalled due to undeclared wheat",
+   "organization": "CFIA",
+   "issue": "Wheat - Gluten",
+   "recallClass": "Class 1",
+   "updated": "2026-11-14",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/soup-time-brand-baba-s-borscht-soup-and-wardy-s-bow-valley-beef-barley-recalled-due"
+  },
+  {
+   "nid": "82888",
+   "title": "Transport Canada Recall - 2026515 - BMW",
+   "organization": "TC",
+   "issue": "Electrical",
+   "recallClass": "",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026515-bmw"
+  },
+  {
+   "nid": "82929",
+   "title": "Certain Plantropy brand Jack’d Up Bites Crispy Protein Bites recalled due to undeclared milk",
+   "organization": "CFIA",
+   "issue": "Milk",
+   "recallClass": "Class 1",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/certain-plantropy-brand-jack-bites-crispy-protein-bites-recalled-due-undeclared-milk"
+  },
+  {
+   "nid": "82939",
+   "title": "SECARIS NASAL GEL: Affected lot may contain foreign matter",
+   "organization": "Drugs and health products",
+   "issue": "Contamination",
+   "recallClass": "Type II",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/secaris-nasal-gel-affected-lot-may-contain-foreign-matter"
+  },
+  {
+   "nid": "82943",
+   "title": "Producers brand Brown Rice recalled due to presence of insects",
+   "organization": "CFIA",
+   "issue": "Extraneous Material",
+   "recallClass": "Class 3",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/producers-brand-brown-rice-recalled-due-presence-insects"
+  },
+  {
+   "nid": "82951",
+   "title": "Azurion 7 M20",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/azurion-7-m20-3"
+  },
+  {
+   "nid": "82952",
+   "title": "Disposable vaping device GTMBAR 45K recalled due to lack of child-resistant packaging",
+   "organization": "Consumer product safety",
+   "issue": "Labelling and packaging",
+   "recallClass": "",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/disposable-vaping-device-gtmbar-45k-recalled-due-lack-child-resistant-packaging"
+  },
+  {
+   "nid": "82953",
+   "title": "Clinician Programmer for VerciseTM Deep Brain Stimulation (DBS) systems",
+   "organization": "Medical devices",
+   "issue": "Labelling and packaging",
+   "recallClass": "Type II",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/clinician-programmer-vercisetm-deep-brain-stimulation-dbs-systems"
+  },
+  {
+   "nid": "82959",
+   "title": "Transport Canada Recall - 2026525 - GREAT DANE",
+   "organization": "TC",
+   "issue": "Structure",
+   "recallClass": "",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026525-great-dane"
+  },
+  {
+   "nid": "82960",
+   "title": "Transport Canada Recall - 2026529 - GENERAL MOTORS",
+   "organization": "TC",
+   "issue": "Steering",
+   "recallClass": "",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026529-general-motors"
+  },
+  {
+   "nid": "82961",
+   "title": "Transport Canada Recall - 2026531 - HONDA",
+   "organization": "TC",
+   "issue": "Steering",
+   "recallClass": "",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026531-honda"
+  },
+  {
+   "nid": "82962",
+   "title": "Transport Canada Recall - 2026544 - NEW FLYER",
+   "organization": "TC",
+   "issue": "Fuel System",
+   "recallClass": "",
+   "updated": "2026-11-13",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026544-new-flyer"
+  },
+  {
+   "nid": "78452",
+   "title": "Cold Grind brand Organic Turmeric Powder may be unsafe due to non-permitted colour",
+   "organization": "CFIA",
+   "issue": "Chemical",
+   "recallClass": "",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/cold-grind-brand-organic-turmeric-powder-may-be-unsafe-due-non-permitted-colour"
+  },
+  {
+   "nid": "82737",
+   "title": "Cardinal Health General Procedure Tray",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type I",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/cardinal-health-general-procedure-tray"
+  },
+  {
+   "nid": "82938",
+   "title": "MAGNETOM Flow.Elite MR XB10B-HF02",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/magnetom-flowelite-mr-xb10b-hf02"
+  },
+  {
+   "nid": "82940",
+   "title": "Archibald brand Nuit Blanche White IPA and Désirée Session IPA recalled due to pieces of metal",
+   "organization": "CFIA",
+   "issue": "Extraneous Material",
+   "recallClass": "Class 3",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/archibald-brand-nuit-blanche-white-ipa-and-desiree-session-ipa-recalled-due-pieces"
+  },
+  {
+   "nid": "82944",
+   "title": "Health Canada warns about unauthorized peptides, including contaminated injectable peptides sold by Sage & Summit Wellness Co. in Ottawa, ON",
+   "organization": "Controlled substances and cannabis",
+   "issue": "Unauthorized product - Contamination",
+   "recallClass": "",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/health-canada-warns-about-unauthorized-peptides-including-contaminated-injectable"
+  },
+  {
+   "nid": "82946",
+   "title": "MAGNETOM Flow.Elite MR XB20A-HF02",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/magnetom-flowelite-mr-xb20a-hf02"
+  },
+  {
+   "nid": "82948",
+   "title": "Centricity® Universal Viewer",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/centricityr-universal-viewer"
+  },
+  {
+   "nid": "82949",
+   "title": "Beaver-Visitec International Mini Blades",
+   "organization": "Medical devices",
+   "issue": "Sterility",
+   "recallClass": "Type II",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/beaver-visitec-international-mini-blades"
+  },
+  {
+   "nid": "82950",
+   "title": "Spectra OptiaTM Apheresis System-Main Unit Software V 12.1",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-12",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/spectra-optiatm-apheresis-system-main-unit-software-v-121"
+  },
+  {
+   "nid": "82934",
+   "title": "Carestation 850",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-10",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/carestation-850-0"
+  },
+  {
+   "nid": "82936",
+   "title": "Accell Connexus®",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-10",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/accell-connexusr"
+  },
+  {
+   "nid": "82937",
+   "title": "Surfacer® Inside-Out® Access Catheter System",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type I",
+   "updated": "2026-11-10",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/surfacerr-inside-outr-access-catheter-system"
+  },
+  {
+   "nid": "82913",
+   "title": "Various brands of alcoholic and non-alcoholic beer recalled due to pieces of metal",
+   "organization": "CFIA",
+   "issue": "Extraneous Material",
+   "recallClass": "Class 3",
+   "updated": "2026-11-09",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/various-brands-alcoholic-and-non-alcoholic-beer-recalled-due-pieces-metal"
+  },
+  {
+   "nid": "82928",
+   "title": "PDP-DIPHENHYDRAMINE 25 MG and 50 MG CAPSULES: Out-of-specification (Impurity)",
+   "organization": "Drugs and health products",
+   "issue": "Product quality",
+   "recallClass": "Type II",
+   "updated": "2026-11-09",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/pdp-diphenhydramine-25-mg-and-50-mg-capsules-out-specification-impurity"
+  },
+  {
+   "nid": "82942",
+   "title": "Transport Canada Recall - 2026528 - GENERAL MOTORS",
+   "organization": "TC",
+   "issue": "Brakes",
+   "recallClass": "",
+   "updated": "2026-11-09",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/transport-canada-recall-2026528-general-motors"
+  },
+  {
+   "nid": "77435",
+   "title": "T&T brand Organic Roasted Black Soybeans recalled due to undeclared milk",
+   "organization": "CFIA",
+   "issue": "Milk",
+   "recallClass": "Class 1",
+   "updated": "2026-11-07",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/tt-brand-organic-roasted-black-soybeans-recalled-due-undeclared-milk"
+  },
+  {
+   "nid": "82909",
+   "title": "Costway Convertible High Chairs recalled due to fall and entrapment hazards",
+   "organization": "Consumer product safety",
+   "issue": "Fall hazard - Entrapment hazard",
+   "recallClass": "",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/costway-convertible-high-chairs-recalled-due-fall-and-entrapment-hazards"
+  },
+  {
+   "nid": "82910",
+   "title": "Mermaid Princess Dress recalled due to flammability hazard",
+   "organization": "Consumer product safety",
+   "issue": "Flammability hazard",
+   "recallClass": "",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/mermaid-princess-dress-recalled-due-flammability-hazard"
+  },
+  {
+   "nid": "82924",
+   "title": "ROTOFIX 32A Centrifuge",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/rotofix-32a-centrifuge"
+  },
+  {
+   "nid": "82925",
+   "title": "Jackson-Triggs brand Cabernet Sauvignon Light recalled due to yeast",
+   "organization": "CFIA",
+   "issue": "Non harmful (quality or spoilage)",
+   "recallClass": "Class 3",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/jackson-triggs-brand-cabernet-sauvignon-light-recalled-due-yeast"
+  },
+  {
+   "nid": "82926",
+   "title": "Smoothbore Breathing System",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/smoothbore-breathing-system"
+  },
+  {
+   "nid": "82927",
+   "title": "Automated Blood Coagulation Analyzers",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/automated-blood-coagulation-analyzers"
+  },
+  {
+   "nid": "82930",
+   "title": "Health Canada warns about contaminated unauthorized injectable peptides and non-peptide drugs",
+   "organization": "Controlled substances and cannabis",
+   "issue": "Unauthorized product - Contamination",
+   "recallClass": "",
+   "updated": "2026-11-06",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/health-canada-warns-about-contaminated-unauthorized-injectable-peptides-and-non"
+  },
+  {
+   "nid": "82509",
+   "title": "Expanded Alert: Health Canada warns that baby walkers previously available on AliExpress may pose a risk of injury",
+   "organization": "Consumer product safety",
+   "issue": "Injury hazard",
+   "recallClass": "",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/expanded-alert-health-canada-warns-baby-walkers-previously-available-aliexpress-may"
+  },
+  {
+   "nid": "82795",
+   "title": "Bose S1 Pro and S1 Pro+ System Battery Packs recalled due to fire and burn hazards",
+   "organization": "Consumer product safety",
+   "issue": "Fire hazard - Burn hazard",
+   "recallClass": "",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/bose-s1-pro-and-s1-pro-system-battery-packs-recalled-due-fire-and-burn-hazards"
+  },
+  {
+   "nid": "82880",
+   "title": "Leakbee Carbon Monoxide Detector recalled due to inaccurate carbon monoxide detection",
+   "organization": "Consumer product safety",
+   "issue": "Unauthorized products",
+   "recallClass": "",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/leakbee-carbon-monoxide-detector-recalled-due-inaccurate-carbon-monoxide-detection"
+  },
+  {
+   "nid": "82889",
+   "title": "NEWDERY Power Banks recalled due to fire hazard",
+   "organization": "Consumer product safety",
+   "issue": "Fire hazard",
+   "recallClass": "",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/newdery-power-banks-recalled-due-fire-hazard"
+  },
+  {
+   "nid": "82894",
+   "title": "Baby Brezza SuperFast Sterilizer Dryer recalled due to fire and burn hazards",
+   "organization": "Consumer product safety",
+   "issue": "Fire hazard - Burn hazard",
+   "recallClass": "",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/baby-brezza-superfast-sterilizer-dryer-recalled-due-fire-and-burn-hazards"
+  },
+  {
+   "nid": "82908",
+   "title": "MAGNETOM Scanners",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/magnetom-scanners"
+  },
+  {
+   "nid": "82911",
+   "title": "HF-Cables (Reusable)",
+   "organization": "Medical devices",
+   "issue": "Performance",
+   "recallClass": "Type II",
+   "updated": "2026-11-05",
+   "url": "https://recalls-rappels.canada.ca/en/alert-recall/hf-cables-reusable"
+  }
+ ]
+}

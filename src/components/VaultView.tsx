@@ -1,9 +1,8 @@
 import { Fragment } from 'react';
-import { BookLock, Lock, ExternalLink, ShieldCheck, BadgeDollarSign, Sparkles, Code2 } from 'lucide-react';
-import { COUNTRY_PACKS, PHASE2_PACKS, PRICING } from '../data/packs';
+import { BookLock, ExternalLink, ShieldCheck, BadgeDollarSign, Sparkles, Code2 } from 'lucide-react';
+import { COUNTRY_PACKS } from '../data/packs';
 import type { CountryPack } from '../data/packs';
 import { cx } from '../lib/ui';
-import { Reveal } from './ui/Motion';
 import TariffWatch from './TariffWatch';
 
 const LICENSE_STYLE: Record<string, { label: string; cls: string }> = {
@@ -70,46 +69,27 @@ function Pricing({ pack }: { pack: CountryPack }) {
     <section>
       <div className="flex items-end justify-between flex-wrap gap-2 mb-3">
         <div>
-          <div className="mono text-[9px] tracking-[0.3em] text-[var(--dim)] flex items-center gap-2"><BadgeDollarSign size={11} />FLAT SUBSCRIPTIONS — NO PERCENTAGE FINDER’S FEES</div>
-          <h3 className="font-display text-lg mt-1">Simple, honest pricing in {pack.currency}</h3>
+          <div className="mono text-[9px] tracking-[0.3em] text-[var(--dim)] flex items-center gap-2"><BadgeDollarSign size={11} />FLAT SUBSCRIPTIONS — NO PERCENTAGE FINDER’S FEES, EVER</div>
+          <h3 className="font-display text-lg mt-1">Free while we launch — flat when billing opens</h3>
         </div>
-        <span className="mono text-[8px] text-[var(--dim)]">PPP localisation = Phase 2 only</span>
+        <span className="mono text-[8px] text-[var(--dim)]">PRICED IN {pack.currency} WHEN LIVE</span>
       </div>
-      <div className="grid sm:grid-cols-3 gap-3">
-        {PRICING.map(p => (
-          <Reveal key={p.id} className="h-full">
-          <div className={cx('glow-card card-hover p-5 flex flex-col h-full', p.featured && 'border-beam')}>
-            {p.featured && <span className="absolute top-3 right-3 chip chip-gold"><Sparkles size={10} />MOST CHOSEN</span>}
-            <div className="mono text-[10px] tracking-[0.25em] text-[var(--dim)]">{p.name.toUpperCase()}</div>
-            <div className="mt-2 flex items-end gap-1"><span className="font-display text-4xl text-[var(--ink)]">{p.price}</span><span className="mono text-[10px] text-[var(--dim)] mb-1.5">{p.per}</span></div>
-            <div className="mono text-[9px] text-[var(--cyan)]">{p.annual}</div>
-            <p className="text-[11px] leading-relaxed text-[#c9cddb] mt-3 flex-1">{p.blurb}</p>
-            <button className={cx('mt-4 rounded-xl py-2.5 mono text-[10px] tracking-[0.2em] uppercase font-bold', p.featured ? 'bg-[var(--gold)] text-black hover:bg-[var(--gold2)]' : 'border border-[var(--line2)] text-[var(--ink)] hover:border-[var(--gold)] hover:text-[var(--gold)]')}>{p.cta}</button>
-          </div>
-          </Reveal>
-        ))}
-      </div>
-      <p className="mono text-[8px] text-[var(--dim)] mt-2">30-day money-back if zero verified signals surface in your radius · Cancel anytime · Petty is not affiliated with any government agency · Information, not advice.</p>
-    </section>
-  );
-}
-
-function Phase2() {
-  return (
-    <section>
-      <div className="flex items-center gap-2 mb-2">
-        <Lock size={13} className="text-[var(--dim)]" />
-        <h3 className="font-display text-lg text-[var(--dim)]">Expansion Ring — Phase 2 (earned, not assumed)</h3>
-      </div>
-      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-2.5">
-        {PHASE2_PACKS.map(p => (
-          <div key={p.code} className="rounded-xl border border-dashed border-[var(--line2)] p-4 opacity-80">
-            <div className="text-xl">{p.flag}</div>
-            <div className="mono text-[10px] tracking-[0.2em] mt-1 text-[var(--ink)]">{p.name.toUpperCase()}</div>
-            <p className="mono text-[8px] text-[var(--dim)] mt-2 leading-relaxed">{p.gate}</p>
-            <div className="mono text-[8px] text-[var(--cyan)] mt-2">UNLOCKS → {p.unlocks.join(' · ')}</div>
-          </div>
-        ))}
+      <div className="glow-card p-5 sm:p-6">
+        <p className="text-[12.5px] leading-relaxed text-[#c9cddb] max-w-2xl">
+          Every Petty engine is free right now — the statute calculators, live wires, letter packs, the Clockwatch,
+          the complaint desk and this registry. When billing opens it will be a <strong className="text-[var(--ink)]">flat subscription — never a percentage of your recovery, never a success fee</strong> —
+          and early users keep the launch price for as long as they stay. You will get at least a 30-day free trial and a dated
+          announcement before anything is ever charged to you.
+        </p>
+        <ul className="mt-3 space-y-1.5 text-[11.5px] text-[#c9cddb]">
+          <li><span className="text-[var(--green)]">✓</span> The law stays free — statute engines are never paywalled</li>
+          <li><span className="text-[var(--green)]">✓</span> No percentage of recoveries — we never touch your money</li>
+          <li><span className="text-[var(--green)]">✓</span> Cancel in one tap, keep your on-device data forever</li>
+        </ul>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <a href="https://github.com/Rawbeew/petty" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] hover:bg-[rgba(242,193,78,0.1)] transition-colors px-4 py-2.5 mono text-[10px] tracking-[0.2em] uppercase"><Sparkles size={12} />Follow the repo — billing lands there first</a>
+          <span className="mono text-[8.5px] text-[var(--dim)]">NOT CHARGING YET — NOTHING YOU TOUCH TODAY ENTAILS PAYMENT</span>
+        </div>
       </div>
     </section>
   );
@@ -122,7 +102,6 @@ export default function VaultView({ pack }: { pack: CountryPack }) {
         <RegistryTable pack={pack} />
         <TariffWatch />
         <Pricing pack={pack} />
-        <Phase2 />
         <div className="flex flex-wrap gap-x-5 gap-y-1.5 mono text-[8px] text-[var(--dim)] border-t border-[var(--line)] pt-4">
           <span className="flex items-center gap-1"><ShieldCheck size={10} className="text-[var(--green)]" />citation-or-silence</span>
           <span>◦ K-anonymity ≥25 stops/cell</span>

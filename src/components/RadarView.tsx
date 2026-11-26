@@ -8,6 +8,7 @@ import { cx, timeAgo, useGlow } from '../lib/ui';
 import { fetchOpenFDA, fetchNWSAlerts, fetchCPSCRecalls, fetchFSAAsSignals, fetchECCCWeatherAlerts, fetchWHONews } from '../lib/live';
 import useSafetyCard from './SafetyCard';
 import { partitionEligible } from '../lib/pipeline';
+import CaRecalls from './CaRecalls';
 import { Stagger, StaggerItem } from './ui/Motion';
 import { EmptyState } from './ui/EmptyState';
 
@@ -212,6 +213,8 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
             </div>
           </section>
         </div>
+
+        {pack.code === 'CA' && <CaRecalls />}
 
         {/* UNCLAIMED MONEY — always-visible verified gateways. No honest API exists anywhere;
             Petty links official portals, never fabricates matches. */}
