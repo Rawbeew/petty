@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScanLine, Gavel, FlaskConical, CheckCircle2, CircleAlert, ExternalLink, FileSearch, AudioLines, Clapperboard, Radio, Sparkles, CircleSlash, Milk } from 'lucide-react';
+import { ScanLine, Gavel, FlaskConical, CheckCircle2, CircleAlert, ExternalLink, FileSearch, AudioLines, Clapperboard, Radio, Sparkles, CircleSlash, Milk, Package } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
 import { COUNTRY_PACKS } from '../data/packs';
 import { SectionHeader } from './ui/SectionHeader';
@@ -11,6 +11,7 @@ import FieldWire from './FieldWire';
 import { PopVerdict } from './ui/Motion';
 import ClipStudio from './ClipStudio';
 import FoodFraudCard from './FoodFraudCard';
+import PantryLedger from './PantryLedger';
 
 const SAMPLES = ['peanut butter', 'losartan', 'infusion pump', 'e-bike battery', 'sunscreen'];
 
@@ -38,8 +39,8 @@ function FSAHitCard({ h }: { h: FSAFoodAlert }) {
   );
 }
 
-function Scanner({ pack }: { pack: CountryPack }) {
-  const [input, setInput] = useState('');
+function Scanner({ pack, seed }: { pack: CountryPack; seed?: string | undefined }) {
+  const [input, setInput] = useState(seed ?? '');
   const [result, setResult] = useState<{ query: string; fda: FDAEnforcementHit[] | null; fsa: FSAFoodAlert[] | null; fdaError: boolean; fsaError: boolean } | null>(null);
   const [scanning, setScanning] = useState(false);
   const healthPortals = COUNTRY_PACKS.filter(p => p.code === pack.code || p.code === 'GL').flatMap(p => p.regulators.filter(r => r.pillar === 'health').slice(0, 2));
@@ -344,24 +345,26 @@ function IngestedPortals() {
 }
 
 export default function GuardView({ pack }: { pack: CountryPack }) {
-  const [tab, setTab] = useState<'scan' | 'docket' | 'cuts' | 'wire' | 'food'>('scan');
+  const [tab, setTab] = useState<'scan' | 'docket' | 'cuts' | 'wire' | 'food' | 'pantry'>('scan');
+  const [scanSeed, setScanSeed] = useState<{ q: string; k: number } | null>(null);
   return (
     <div className="h-full overflow-y-auto pb-20 md:pb-6">
       <div className="p-3 sm:p-5 space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
-          {([['scan', 'Recall Scanner', ScanLine], ['docket', 'Docket Search', Gavel], ['cuts', 'Herald Cuts', Clapperboard], ['wire', 'Field Wire', Radio], ['food', 'Label Lies', Milk]] as const).map(([id, label, I]) => (
+          {([['scan', 'Recall Scanner', ScanLine], ['docket', 'Docket Search', Gavel], ['cuts', 'Herald Cuts', Clapperboard], ['wire', 'Field Wire', Radio], ['food', 'Label Lies', Milk], ['pantry', 'The Pantry', Package]] as const).map(([id, label, I]) => (
             <button key={id} onClick={() => { setTab(id); }} className={cx('flex items-center gap-2 rounded-xl px-4 py-2.5 mono text-[10px] tracking-[0.2em] uppercase border transition-all',
               tab === id ? 'border-[var(--gold)] text-[var(--gold)] bg-[rgba(242,193,78,0.08)]' : 'border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)]')}>
               <I size={13} />{label}
             </button>
           ))}
         </div>
-        {tab === 'scan' && <Scanner pack={pack} />}
+        {tab === 'scan' && <Scanner key={scanSeed?.k ?? 'idle'} pack={pack} seed={scanSeed?.q} />}
         {tab === 'scan' && <IngestedPortals />}
         {tab === 'docket' && <DocketSearch market={pack.code} />}
         {tab === 'cuts' && <ClipStudio />}
         {tab === 'wire' && <FieldWire />}
         {tab === 'food' && <FoodFraudCard />}
+        {tab === 'pantry' && <PantryLedger onRecallCheck={q => { setScanSeed({ q, k: Date.now() }); setTab('scan'); }} />}
       </div>
     </div>
   );

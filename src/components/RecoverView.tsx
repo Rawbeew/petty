@@ -8,6 +8,7 @@ import { cx, downloadText } from '../lib/ui';
 import DepositPacket from './DepositPacket';
 import WagePacket from './WagePacket';
 import SettlementWatchlist from './SettlementWatchlist';
+import ComplaintDesk from './ComplaintDesk';
 
 function Unclaimed({ pack }: { pack: CountryPack }) {
   const [first, setFirst] = useState('Ada'); const [last, setLast] = useState('Okafor'); const [maiden, setMaiden] = useState('');
@@ -157,6 +158,7 @@ export default function RecoverView({ pack }: { pack: CountryPack }) {
           <WagePacket />
         </div>
         <SettlementWatchlist />
+        <ComplaintDesk />
       </div>
     </div>
   );
