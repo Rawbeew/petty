@@ -2,7 +2,7 @@ import sys, json, pathlib
 from playwright.sync_api import sync_playwright
 
 BASE = 'http://127.0.0.1:4173/'
-SHOTS = pathlib.Path('/home/user/petty-radar/web/shots')
+SHOTS = pathlib.Path(__file__).resolve().parent.parent / 'shots'
 errors, problems = [], []
 
 with sync_playwright() as p:
