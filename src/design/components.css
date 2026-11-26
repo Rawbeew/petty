@@ -1,5 +1,5 @@
 /* ============================================================
-   Petty Radar · COMPONENT CLASSES — consume semantic tokens only
+   Petty · COMPONENT CLASSES — consume semantic tokens only
    ============================================================ */
 
 /* ---------- panels & cards ---------- */
@@ -91,3 +91,17 @@ label.lbl { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; 
   *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
   .marquee { animation: none !important; white-space: normal; }
 }
+
+/* ---------- Petty SCAN ambiance (added by Petty rebrand) ---------- */
+.grid-drift { background-image:
+  linear-gradient(rgba(89,213,240,.028) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(89,213,240,.028) 1px, transparent 1px);
+  background-size: 44px 44px; }
+@keyframes scanlineY { 0% { transform: translateY(-8px); opacity: 0; } 12% { opacity: .8; } 60% { opacity: .5; } 100% { transform: translateY(110vh); opacity: 0; } }
+.scanline-once { animation: scanlineY 1.15s var(--ease-out) .15s 1 both; }
+.btn-tactile { transition: transform var(--dur-1) var(--ease-out); }
+.btn-tactile:active { transform: scale(.965); }
+
+/* focus — visible, gold, unmistakable (YMYL: never trap keyboard users) */
+:focus-visible { outline: 2px solid rgba(242,193,78,.75); outline-offset: 2px; border-radius: 4px; }
+::selection { background: rgba(242,193,78,.28); color: #fff8e1; }

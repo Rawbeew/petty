@@ -176,7 +176,7 @@ export default function ClipStudio() {
     ctx2d.fillStyle = '#565d75'; ctx2d.font = `400 15px ${MONO}`; ctx2d.textAlign = 'left';
     ctx2d.fillText('FAIR-USE EXCERPT · NOT LEGAL ADVICE', 80, 1832);
     ctx2d.fillStyle = accent; ctx2d.font = `700 23px ${FONT}`; ctx2d.textAlign = 'center';
-    ctx2d.fillText('petty.io', W / 2, 1834);
+    ctx2d.fillText('petty — legal pettiness', W / 2, 1834);
     ctx2d.fillStyle = '#565d75'; ctx2d.font = `400 15px ${MONO}`; ctx2d.textAlign = 'right';
     ctx2d.fillText('ATTRIBUTION REQUIRED', W - 80, 1832);
   };

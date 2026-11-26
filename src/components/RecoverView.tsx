@@ -17,7 +17,7 @@ function Unclaimed({ pack }: { pack: CountryPack }) {
   const targets = useMemo(() => claimTargets(markets), [markets]);
 
   const packet = () => [
-    'PETTY RADAR — UNCLAIMED PROPERTY SEARCH PACK',
+    'PETTY — UNCLAIMED PROPERTY SEARCH PACK (they owe you; do it properly)',
     `Generated: ${new Date().toISOString()} · Market(s): ${markets.join(', ')}`,
     '',
     '== NAME VARIANTS TO SEARCH (exact → phonetic) ==',

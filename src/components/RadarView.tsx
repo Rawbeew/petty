@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { X, ExternalLink, Download, Link2, CloudLightning, HeartPulse, Siren, TrafficCone, Scale, Banknote, Luggage, LayoutGrid, Search, Radar as RadarIcon, RadioTower, RefreshCw, ShieldQuestion } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { X, ExternalLink, Download, Link2, CloudLightning, HeartPulse, Siren, TrafficCone, Banknote, LayoutGrid, Search, Radar as RadarIcon, RadioTower, RefreshCw, ShieldQuestion, Landmark, LockKeyhole } from 'lucide-react';
 import type { SafetySignal, Pillar } from '../data/signals';
+import { COUNTRY_PACKS, RADAR_PILLARS } from '../data/packs';
 import type { CountryPack } from '../data/packs';
-import { PILLARS } from '../data/packs';
 import { ConfidenceBadge } from './ui/ConfidenceBadge';
 import { cx, timeAgo, useGlow } from '../lib/ui';
-import { fetchOpenFDA, fetchNWSAlerts, fetchCPSCRecalls, fetchFSAAsSignals, fetchFindCaseLaw, fetchECCCWeatherAlerts, fetchWHONews } from '../lib/live';
+import { fetchOpenFDA, fetchNWSAlerts, fetchCPSCRecalls, fetchFSAAsSignals, fetchECCCWeatherAlerts, fetchWHONews } from '../lib/live';
 import useSafetyCard from './SafetyCard';
 import { Stagger, StaggerItem } from './ui/Motion';
 import { EmptyState } from './ui/EmptyState';
 
 const PILLAR_ICON: Record<Pillar, typeof HeartPulse> = {
-  health: HeartPulse, weather: CloudLightning, dispatch: Siren, stops: TrafficCone, courts: Scale, money: Banknote, luggage: Luggage,
+  health: HeartPulse, weather: CloudLightning, dispatch: Siren, stops: TrafficCone, courts: Landmark, money: Banknote, luggage: Landmark,
 };
 const SEV_COLOR: Record<SafetySignal['severity'], string> = { critical: '#ff5a5a', high: '#f2c14e', moderate: '#59d5f0', watch: '#8a8fa3' };
 const isSeverityFilter = (v: string): v is 'all' | SafetySignal['severity'] => v === 'all' || v === 'critical' || v === 'high' || v === 'moderate' || v === 'watch';
@@ -89,7 +89,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
     if (!liveSupported) return Promise.resolve();
     const jobs: Promise<SafetySignal[]>[] =
       pack.code === 'US' ? [fetchOpenFDA(8), fetchCPSCRecalls(45, 4), fetchNWSAlerts(6)]
-      : pack.code === 'GB' ? [fetchFSAAsSignals(6), fetchFindCaseLaw(5)]
+      : pack.code === 'GB' ? [fetchFSAAsSignals(6)]
       : pack.code === 'CA' ? [fetchECCCWeatherAlerts(8)]
       : [fetchWHONews(5)];
     return Promise.allSettled(jobs).then(results => {
@@ -119,7 +119,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
         <RadioTower size={12} className={liveState === 'live' ? 'text-[var(--green)]' : 'text-[var(--dim)]'} />
         <span className="mono">
           {liveSupported
-            ? liveState === 'live' && `LIVE — ${({ US: 'openFDA · CPSC · NWS', GB: 'FSA food alerts · Find Case Law', CA: 'ECCC GeoMet', GL: 'WHO news' } as Record<string, string>)[pack.code] ?? 'open gov'} · synced ${syncedAt ? timeAgo(syncedAt) : 'now'} · every card links to its source agency.`
+            ? liveState === 'live' && `LIVE — ${({ US: 'openFDA · CPSC · NWS', GB: 'FSA food alerts', CA: 'ECCC GeoMet', GL: 'WHO news (90d)' } as Record<string, string>)[pack.code] ?? 'open gov'} · synced ${syncedAt ? timeAgo(syncedAt) : 'now'} · every card links to its source agency.`
             : `${pack.name}: no keyless, CORS-open machine feed verified for this market — registry below links the official portals. Live wire: US · GB · CA · GL.`}
           {liveState === 'loading' && 'CONTACTING SOURCE AGENCIES…'}
           {liveState === 'offline' && 'SOURCES UNREACHABLE FROM THIS NETWORK (or upstream 5xx) — nothing fabricated; retry or verify at source.'}
@@ -148,7 +148,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
             {/* pillar filters */}
             <div className="flex flex-wrap gap-1.5 mt-3">
               <button onClick={() => { setPillar('all'); }} className={cx('chip', pillar === 'all' && 'chip-gold')}><LayoutGrid size={10} />All pillars</button>
-              {PILLARS.map(p => { const I = PILLAR_ICON[p.id]; return (
+              {RADAR_PILLARS.map(p => { const I = PILLAR_ICON[p.id]; return (
                 <button key={p.id} onClick={() => { setPillar(pillar === p.id ? 'all' : p.id); }} title={p.blurb} className={cx('chip', pillar === p.id && 'chip-gold')}><I size={10} />{p.label.split(' ')[0]}</button>
               ); })}
             </div>
@@ -202,6 +202,35 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
             </div>
           </section>
         </div>
+
+        {/* UNCLAIMED MONEY — always-visible verified gateways. No honest API exists anywhere;
+            Petty links official portals, never fabricates matches. */}
+        <section className="panel p-4 sm:p-5" aria-label="Unclaimed money — verified official gateways">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2.5">
+              <span className="rounded-lg border border-[rgba(242,193,78,0.35)] bg-[rgba(242,193,78,0.08)] p-1.5"><Banknote size={16} className="text-[var(--gold)]" /></span>
+              <div>
+                <div className="mono text-[9px] tracking-[0.3em] text-[var(--gold)]">THE PETTY LEDGER — VERIFIED GATEWAYS</div>
+                <h2 className="font-display text-base mt-0.5">Is money waiting for you?</h2>
+              </div>
+            </div>
+            <span className="mono text-[8px] text-[var(--dim)] max-w-[260px] text-right">NO PUBLIC API EXISTS ANYWHERE — Petty never invents matches. Check each gateway yourself.</span>
+          </div>
+          <ul className="mt-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {[...pack.regulators, ...(COUNTRY_PACKS.find(p => p.code === 'GL')?.regulators ?? [])].filter(r => r.pillar === 'money').map((r, i) => (
+              <li key={i}>
+                <a href={r.url} target="_blank" rel="noreferrer" className="group flex items-start gap-2 rounded-xl border border-[var(--line)] hover:border-[rgba(242,193,78,0.4)] p-3 h-full transition-colors focus-visible:outline-2 focus-visible:outline-[var(--gold)]">
+                  <Landmark size={13} className="mt-0.5 shrink-0 text-[var(--dim)] group-hover:text-[var(--gold)]" />
+                  <span className="min-w-0">
+                    <span className="block text-[11px] leading-snug text-[var(--ink)]">{r.name}</span>
+                    <span className="mt-1 flex items-center gap-1.5 mono text-[7px] text-[var(--dim)] uppercase">{r.status === 'bot-walled' ? <LockKeyhole size={8} /> : <ExternalLink size={8} />}{r.status.replace('-', ' ')} · verify at source</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="mono text-[7.5px] text-[var(--dim)] mt-2 leading-relaxed">Government-held unclaimed balances are found ONLY on the official portals linked above. Anyone selling you a guaranteed list is defrauding you. Flat subscription · never a percentage of the recovery (see Country Vault).</p>
+        </section>
       </div>
 
       {/* Verbatim drawer — Esc closes; focus lands on the close button */}
@@ -228,7 +257,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
                 <button onClick={() => { void navigator.clipboard.writeText(selected.sourceUrl); }} className="px-3 py-2.5 rounded-xl border border-[var(--line2)] hover:text-[var(--gold)] text-[var(--dim)]" aria-label="Copy source link"><Link2 size={15} /></button>
               </div>
               <button onClick={() => { exportCard(selected); }} className="w-full flex items-center justify-center gap-2 rounded-xl bg-[var(--gold)] text-black font-bold px-4 py-3 text-xs mono tracking-[0.18em] uppercase hover:bg-[var(--gold2)] transition-colors"><Download size={15} />Export 9:16 Safety Card</button>
-              <p className="mono text-[9px] text-[var(--dim)] leading-relaxed">Safety Card carries the verbatim quote, agency, date, confidence status and source link. Information, not advice. Petty Radar is not affiliated with any listing agency.</p>
+              <p className="mono text-[9px] text-[var(--dim)] leading-relaxed">Safety Card carries the verbatim quote, agency, date, confidence status and source link. Information, not advice. Petty is not affiliated with any listing agency.</p>
             </div>
           </aside>
         </div>

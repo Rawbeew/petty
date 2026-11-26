@@ -1,5 +1,5 @@
 /* ============================================================
-   Petty Radar · DESIGN TOKENS — single source of truth
+   Petty · DESIGN TOKENS — single source of truth
    Layers: primitive → semantic → (components.css consumes semantic only)
    No component may introduce a raw hex outside this file.
    ============================================================ */

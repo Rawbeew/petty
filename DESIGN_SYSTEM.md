@@ -1,5 +1,5 @@
-# Petty Radar — Design System (v3, "First Principles" redesign)
-Derived from docs/FIRST_PRINCIPLES.md. References studied (2026-11): Snapblocks (scroll-driven React pattern), Animata (copy-owned MIT components, reduced-motion built-in), Scroll Shaders/Scrolltide (GPU-polite backgrounds: paused off-screen, ≤2× retina, still frame under reduced-motion), 21st.dev (component grammar: cards/heroes/shaders — patterns only, no paid assets), audiocn (shadcn-owned copy model). **No paid assets were purchased; every effect here is self-made CSS/SVG.**
+# Petty — Design System (v3, "First Principles" redesign)
+Derived from docs/FIRST_PRINCIPLES.md. **Scope:** how v3 implements the doctrine — token layers, component grammar, v3 primitives. Voice, systems model, SCAN motion language and UX law live in **DESIGN.md**; the why lives in **docs/FIRST_PRINCIPLES.md**. References studied (2026-11): Snapblocks (scroll-driven React pattern), Animata (copy-owned MIT components, reduced-motion built-in), Scroll Shaders/Scrolltide (GPU-polite backgrounds: paused off-screen, ≤2× retina, still frame under reduced-motion), 21st.dev (component grammar: cards/heroes/shaders — patterns only, no paid assets), audiocn (shadcn-owned copy model). **No paid assets were purchased; every effect here is self-made CSS/SVG.**
 
 ## 1 · Voice & typography
 - **Display** (Georgia serif) — verdicts, headlines, wordmark. Authority without volume. Never ALL-CAPS except micro-labels.

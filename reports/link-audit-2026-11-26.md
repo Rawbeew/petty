@@ -1,4 +1,4 @@
-# Petty Radar — link audit 2026-11-26
+# Petty — link audit 2026-11-26
 
 Method: curl -L, browser UA, 25 s timeout, separate CORS preflight probe. `ACAO:*` = embeddable cross-origin.
 
@@ -44,6 +44,17 @@ Method: curl -L, browser UA, 25 s timeout, separate CORS preflight probe. `ACAO:
 | AU | ASIC MoneySmart | 403 | BOT-WALLED | — | https://moneysmart.gov.au/find-unclaimed-money |
 | AU | Infrastructure — aviation consumer | 000 | UNREACHABLE | — | https://www.infrastructure.gov.au/infrastructure-transport-vehicles/aviation/aviation-consumer-protections |
 | GL | WHO — DON portal | 200 | OK | ACAO:* | https://www.who.int/emergencies/disease-outbreak-news |
+| US | IRS — unclaimed refunds | 200 | OK | no-cors | https://www.irs.gov/refunds |
+| US | FDIC — long-lost bank account guide | 200 | OK | ACAO:* | https://www.fdic.gov/consumer-resource-center/2020-12/how-find-long-lost-bank-account-or-safe-deposit-box |
+| US | FDIC — bank failures / unclaimed funds | 200 | OK | ACAO:* | https://www.fdic.gov/bank-failures |
+| US | PBGC — Missing Participants | 000 | UNREACHABLE | — | https://missingparticipants.pbgc.gov/ |
+| US | DOL EBSA — Abandoned Plans | 403 | BOT-WALLED | — | https://www.dol.gov/agencies/ebsa/employers-and-advisers/plan-information-and-registers/abandoned-plan-search |
+| GB | HMRC — Marriage Allowance | 200 | OK | no-cors | https://www.gov.uk/marriage-allowance |
+| GB | DWP/HMRC — Pension Tracing | 200 | OK | no-cors | https://www.gov.uk/find-pension-contact-details |
+| GB | FSCS | 200 | OK | no-cors | https://www.fscs.org.uk/ |
+| CA | CRA — uncashed cheques | 000 | UNREACHABLE | — | https://www.canada.ca/en/revenue-agency/services/e-services/cra-login-services/uncashed-cheques.html |
+| AU | ATO — lost & unclaimed super | 403 | BOT-WALLED | — | https://www.ato.gov.au/individuals-and-families/super/keeping-track-of-your-super/lost-and-unclaimed-super |
+| GL | ECC-Net — European Consumer Centres | 200 | OK | no-cors | https://www.eccnet.eu/ |
 | GL | WHO — news English RSS (wired) | 200 | OK | ACAO:* | https://www.who.int/rss-feeds/news-english.xml |
 | GL | OECD GlobalRecalls | 200 | OK | no-cors | https://globalrecalls.oecd.org |
 | GL | WMO | 200 | OK | no-cors | https://public.wmo.int |
@@ -57,12 +68,12 @@ Method: curl -L, browser UA, 25 s timeout, separate CORS preflight probe. `ACAO:
 | CLAIM | BC Unclaimed Property Society | 200 | OK | no-cors | https://unclaimedproperty.ca |
 | CLAIM | ASIC MoneySmart | 403 | BOT-WALLED | — | https://moneysmart.gov.au/find-unclaimed-money |
 | WIRE | FDA accessdata recall index (source links) | 200 | OK | no-cors | https://www.accessdata.fda.gov/scripts/ires/index.cfm |
-| WIRE | openFDA — food enforcement (wired) | 200 | OK | no-cors | https://api.fda.gov/food/enforcement.json?search=status:ongoing&sort=report_date:desc&limit=1 |
+| WIRE | openFDA — food enforcement (wired) | 200 | OK | ACAO:* | https://api.fda.gov/food/enforcement.json?search=status:ongoing&sort=report_date:desc&limit=1 |
 | WIRE | openFDA — drug enforcement (wired) | 200 | OK | ACAO:* | https://api.fda.gov/drug/enforcement.json?search=status:ongoing&sort=report_date:desc&limit=1 |
 | WIRE | openFDA — device enforcement (wired) | 200 | OK | ACAO:* | https://api.fda.gov/device/enforcement.json?search=status:ongoing&sort=report_date:desc&limit=1 |
 
 ## Tally
 
-- OK: 41
-- BOT-WALLED: 12
-- UNREACHABLE: 3
+- OK: 48
+- BOT-WALLED: 14
+- UNREACHABLE: 5

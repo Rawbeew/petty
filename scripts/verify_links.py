@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Petty Radar — registry link audit. Re-runnable; not part of the merge gate.
+"""Petty — registry link audit. Re-runnable; not part of the merge gate.
 
 Fetches every URL in the regulator registry + claim targets with a browser UA,
 classifies the result, and writes reports/link-audit-<today>.md.
@@ -52,7 +52,17 @@ URLS = [
   ('AU', 'Infrastructure — aviation consumer', 'https://www.infrastructure.gov.au/infrastructure-transport-vehicles/aviation/aviation-consumer-protections'),
   # GL
   ('GL', 'WHO — DON portal', 'https://www.who.int/emergencies/disease-outbreak-news'),
-  ('GL', 'WHO — news English RSS (wired)', 'https://www.who.int/rss-feeds/news-english.xml'),
+  ('US', 'IRS — unclaimed refunds', 'https://www.irs.gov/refunds'),
+  ('US', 'FDIC — long-lost bank account guide', 'https://www.fdic.gov/consumer-resource-center/2020-12/how-find-long-lost-bank-account-or-safe-deposit-box'),
+  ('US', 'FDIC — bank failures / unclaimed funds', 'https://www.fdic.gov/bank-failures'),
+  ('US', 'PBGC — Missing Participants', 'https://missingparticipants.pbgc.gov/'),
+  ('US', 'DOL EBSA — Abandoned Plans', 'https://www.dol.gov/agencies/ebsa/employers-and-advisers/plan-information-and-registers/abandoned-plan-search'),
+  ('GB', 'HMRC — Marriage Allowance', 'https://www.gov.uk/marriage-allowance'),
+  ('GB', 'DWP/HMRC — Pension Tracing', 'https://www.gov.uk/find-pension-contact-details'),
+  ('GB', 'FSCS', 'https://www.fscs.org.uk/'),
+  ('CA', 'CRA — uncashed cheques', 'https://www.canada.ca/en/revenue-agency/services/e-services/cra-login-services/uncashed-cheques.html'),
+  ('AU', 'ATO — lost & unclaimed super', 'https://www.ato.gov.au/individuals-and-families/super/keeping-track-of-your-super/lost-and-unclaimed-super'),
+  ('GL', 'ECC-Net — European Consumer Centres', 'https://www.eccnet.eu/'),  ('GL', 'WHO — news English RSS (wired)', 'https://www.who.int/rss-feeds/news-english.xml'),
   ('GL', 'OECD GlobalRecalls', 'https://globalrecalls.oecd.org'),
   ('GL', 'WMO', 'https://public.wmo.int'),
   ('GL', 'ICAO — legal', 'https://www.icao.int/secretariat/legal'),
@@ -102,7 +112,7 @@ for market, name, url in URLS:
         print(f'UNREACHABLE ERR       {market:5} {name} ({e})')
 
 report = pathlib.Path('reports') / f'link-audit-{today}.md'
-lines = [f'# Petty Radar — link audit {today}', '',
+lines = [f'# Petty — link audit {today}', '',
          'Method: curl -L, browser UA, 25 s timeout, separate CORS preflight probe. `ACAO:*` = embeddable cross-origin.',
          '', '| Market | Feed | HTTP | Verdict | CORS | URL |', '|---|---|---|---|---|---|']
 for m, n, c, v, cors, u in rows:

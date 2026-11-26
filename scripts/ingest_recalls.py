@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Petty Radar — server-side recall ingestion via Firecrawl.
+"""Petty — server-side recall ingestion via Firecrawl.
 
 Pulls PUBLIC recall/alert portals that have no keyless JSON/RSS API through the
 Firecrawl scrape endpoint and writes public/recall-cache.json, which the web app

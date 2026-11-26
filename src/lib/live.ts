@@ -1,4 +1,4 @@
-/* Petty Radar — LIVE open-government feeds (keyless, CORS-verified 2026-11-26).
+/* Petty — LIVE open-government feeds (keyless, CORS-verified 2026-11-26).
  * openFDA enforcement · NWS active alerts · NYPD collisions (Socrata) · data.police.uk street crime.
  * No demo fallback exists: on failure the caller renders an explicit source-unavailable state.
  * All parsing goes through unknown + runtime validators — no blind casts. */
@@ -341,7 +341,15 @@ export async function fetchWHONews(limit = 4): Promise<SafetySignal[]> {
   const xml = await fetchText('https://www.who.int/rss-feeds/news-english.xml');
   const doc = new DOMParser().parseFromString(xml, 'text/xml');
   if (doc.getElementsByTagName('parsererror').length > 0) return [];
-  const items = [...doc.getElementsByTagName('item')].slice(0, limit);
+  // WHO feed is oldest-first & corporate — only items from the last 90 days may surface,
+  // otherwise an honest global wire would show 2020 press releases as "live".
+  const freshnessCutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+  const items = [...doc.getElementsByTagName('item')]
+    .map(el => ({ el, d: Date.parse(firstText(el, 'pubDate')) }))
+    .filter(x => Number.isFinite(x.d) && x.d >= freshnessCutoff)
+    .sort((a, b) => b.d - a.d)
+    .slice(0, limit)
+    .map(x => x.el);
   return items.flatMap((el, i) => {
     const title = firstText(el, 'title');
     const link = firstText(el, 'link');

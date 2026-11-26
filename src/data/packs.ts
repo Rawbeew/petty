@@ -1,4 +1,4 @@
-/* Petty Radar — Country Pack registry. Tier 1 launch ring (HIC); Phase 2 gated. */
+/* Petty — Country Pack registry. Tier 1 launch ring (HIC); Phase 2 gated. Voice: legal pettiness to the core — every claim statutory, every link verified. */
 export type Pillar = 'health' | 'weather' | 'dispatch' | 'stops' | 'courts' | 'money' | 'luggage';
 
 /* Link audit 2026-11-26 (curl + browser UA, full log: reports/link-audit-2026-11-26.md).
@@ -35,6 +35,13 @@ const G = (name: string, pillar: Pillar | 'GL', url: string, cadence: Regulator[
   note ? { name, pillar, url, license: 'public_domain', cadence, status, note, ...(wireUrl ? { wireUrl } : {}) }
        : { name, pillar, url, license: 'public_domain', cadence, status, ...(wireUrl ? { wireUrl } : {}) };
 
+/* Surface doctrine — each surface shows only what it owns (see DESIGN.md §Surfaces):
+ * Radar  → health · weather · stops · money   (agency-checkable "what's on now")
+ * Guard  → courts (docket) · health (recall scanner)
+ * Recover→ luggage (baggage Co-Pilot)          Vault → registry: everything
+ */
+export const RADAR_PILLARS = PILLARS.filter(p => (['health', 'weather', 'stops', 'money'] as Pillar[]).includes(p.id));
+
 export const COUNTRY_PACKS: CountryPack[] = [
   { code: 'US', name: 'United States', tier: 'launch', flag: '🇺🇸', currency: 'USD', ppp: null, regulators: [
     G('openFDA — enforcement reports', 'health', 'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts', 'weekly',
@@ -54,6 +61,14 @@ export const COUNTRY_PACKS: CountryPack[] = [
       'gated', 'Calls API requires a free account + key — page verified 200; not wired'),
     G('NAUPA / MissingMoney sweep', 'money', 'https://www.missingmoney.com', 'monthly',
       'bot-walled', '403 from build network — browsers render fine; no public API'),
+    G('IRS — unclaimed refunds', 'money', 'https://www.irs.gov/refunds', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · unclaimed refunds age out at 3 years · Where’s My Refund + amended-return route'),
+    G('FDIC — failed-bank deposits', 'money', 'https://www.fdic.gov/consumer-resource-center/2020-12/how-find-long-lost-bank-account-or-safe-deposit-box', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · unclaimed insured deposits from failed banks, + bank-failure list at fdic.gov/bank-failures'),
+    G('PBGC — Missing Participants (pensions)', 'money', 'https://missingparticipants.pbgc.gov/', 'monthly',
+      'unverifiable', 'Timeout from build network 2026-11-26 — re-verify from US vantage · free searchable database of unclaimed private-sector pensions'),
+    G('DOL EBSA — Abandoned Plans', 'money', 'https://www.dol.gov/agencies/ebsa/employers-and-advisers/plan-information-and-registers/abandoned-plan-search', 'monthly',
+      'bot-walled', '403 from build network (browsers render fine) · abandoned-plan search for dead-employer 401(k)s'),
     G('Treasury Hunt', 'money', 'https://www.treasurydirect.gov/savings-bonds/treasury-hunt/', 'monthly',
       'portal', 'URL corrected 2026-11-26 (old /indiv/tools link 505s) · no public API'),
     G('DOT 14 CFR Part 254 — fee refunds', 'luggage', 'https://www.transportation.gov/airconsumer', 'monthly',
@@ -69,7 +84,13 @@ export const COUNTRY_PACKS: CountryPack[] = [
     G('police.uk — stops-street + crimes', 'stops', 'https://data.police.uk/docs/method/stops-street/', 'monthly',
       'wired', 'OGL v3 · CORS-open, keyless · crimes + stops wired in Field Wire (URL fixed: /stops 404s)', 'https://data.police.uk/api/stops-street'),
     G('Find Case Law', 'courts', 'https://caselaw.nationalarchives.gov.uk', 'weekly',
-      'wired', 'Open Justice Licence · CORS-open atom.xml — wired in Radar (courts)', 'https://caselaw.nationalarchives.gov.uk/atom.xml'),
+      'wired', 'Open Justice Licence · CORS-open atom.xml — wired in Guard › Docket (UK judgments lane)', 'https://caselaw.nationalarchives.gov.uk/atom.xml'),
+    G('HMRC — Marriage Allowance (backdate 4 yrs)', 'money', 'https://www.gov.uk/marriage-allowance', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · up to 4 tax years backdated — the pettiest £252 you’ll ever claim'),
+    G('DWP/HMRC — Pension Tracing Service', 'money', 'https://www.gov.uk/find-pension-contact-details', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · finds lost workplace pensions · free, official — £23.4bn sits unclaimed'),
+    G('FSCS — when a regulated firm fails', 'money', 'https://www.fscs.org.uk/', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · statutory compensation scheme of last resort for authorised firms'),
     G('Bona Vacantia — Crown', 'money', 'https://www.gov.uk/government/organisations/bona-vacantia', 'monthly',
       'portal', 'URL fixed 2026-11-26 (old collection link 404s) · no public API'),
     G('MyLostAccount', 'money', 'https://www.mylostaccount.org.uk', 'monthly',
@@ -85,6 +106,8 @@ export const COUNTRY_PACKS: CountryPack[] = [
     { name: 'CanLII (license-gated)', pillar: 'courts', url: 'https://www.canlii.org', license: 'license_gated', cadence: 'weekly', status: 'gated', note: 'Licence-gated; 403 from build network' },
     G('Bank of Canada — unclaimed balances', 'money', 'https://www.unclaimedproperties.bankofcanada.ca/', 'monthly',
       'portal', 'URL corrected 2026-11-26 (unclaimed-balances 301s here) · search portal, no public API'),
+    G('CRA — uncashed cheques', 'money', 'https://www.canada.ca/en/revenue-agency/services/e-services/cra-login-services/uncashed-cheques.html', 'monthly',
+      'unverifiable', 'Akamai refused TCP from build network 2026-11-26 (000) — browsers render fine · $1.8bn+ uncashed federal cheques, never expire'),
     G('CTA — APPR flight rights', 'luggage', 'https://otc-cta.gc.ca/en/airlines-and-other-rms', 'monthly',
       'unverifiable', 'Akamai edge refused TCP from build network 2026-11-26 (000) — re-verify from a CA vantage; statute wired deterministically in Recover'),
   ]},
@@ -98,6 +121,8 @@ export const COUNTRY_PACKS: CountryPack[] = [
     { name: 'AustLII (license-gated)', pillar: 'courts', url: 'https://www.austlii.edu.au', license: 'license_gated', cadence: 'weekly', status: 'gated', note: 'Licence-gated; 403 from build network' },
     G('ASIC MoneySmart — unclaimed money', 'money', 'https://moneysmart.gov.au/find-unclaimed-money', 'monthly',
       'bot-walled', '403 from build network — browsers render fine; no public API'),
+    G('ATO — unclaimed super', 'money', 'https://www.ato.gov.au/individuals-and-families/super/keeping-track-of-your-super/lost-and-unclaimed-super', 'monthly',
+      'bot-walled', '403 from build network (browsers render fine) · $16bn+ lost/unclaimed super, ATO-held'),
     G('Montreal 1999 — baggage (aviation consumer protections)', 'luggage', 'https://www.infrastructure.gov.au/infrastructure-transport-vehicles/aviation/aviation-consumer-protections', 'monthly',
       'unverifiable', 'Page exists per gov publications; Akamai refused TCP from build network 2026-11-26 (000); Montreal wired deterministically in Recover'),
   ]},
@@ -108,6 +133,8 @@ export const COUNTRY_PACKS: CountryPack[] = [
       'portal', 'Page verified 200 · probed /api, /api/v1/recalls, ?format=json — all 404; no public machine API found 2026-11-26'),
     G('WMO — hazardous weather bulletins', 'weather', 'https://public.wmo.int', 'realtime',
       'portal', 'Redirects to wmo.int (200) · bulletins are PDF/HTML — no keyless JSON API; not wired'),
+    G('ECC-Net — cross-border EU consumer disputes', 'money', 'https://www.eccnet.eu/', 'monthly',
+      'portal', 'Verified 200 (2026-11-26) · European Consumer Centres — free help when an EU trader owes you; 30 centres'),
     G('Montreal Convention 1999 (ICAO)', 'luggage', 'https://www.icao.int/secretariat/legal', 'monthly',
       'bot-walled', '403 from build network — browsers render fine; Montreal wired deterministically in Recover'),
   ]},

@@ -1,4 +1,4 @@
-# Petty Radar — Firecrawl ingestion & discovery (server-side only)
+# Petty — Firecrawl ingestion & discovery (server-side only)
 
 Decision (2026-11-26): Firecrawl is used for **server-side ingestion of public recall portals that publish no
 keyless JSON/RSS/CORS feed**, plus **analyst discovery search**. Never in the browser bundle, never behind a

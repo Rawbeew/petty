@@ -22,8 +22,8 @@ function Wordmark() {
         <circle cx="26.5" cy="13.5" r="1.6" fill="#59d5f0" />
       </svg>
       <div className="leading-none">
-        <div className="font-display text-[19px] tracking-[0.28em] text-[var(--ink)]">PETTY</div>
-        <div className="mono text-[8px] tracking-[0.3em] text-[var(--gold)] mt-1">RADAR · HERALD</div>
+        <div className="font-display text-[19px] tracking-[0.3em] text-[var(--ink)]">PETTY</div>
+        <div className="mono text-[7px] tracking-[0.28em] text-[var(--gold)] mt-1">LAWFUL REVENGE · DELIVERED</div>
       </div>
     </div>
   );

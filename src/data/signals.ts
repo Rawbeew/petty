@@ -1,6 +1,7 @@
-/* Petty Radar — shared signal types. NO seed/demo data exists in this build:
+/* Petty — shared signal types. NO seed/demo data exists in this build:
  * every rendered signal originates from a live, attributed open-government source
- * or is absent (citation-or-silence, spec §4). */
+ * or is absent (citation-or-silence). The single vocabulary the whole app speaks —
+ * a signal that cannot name its source cannot exist. */
 
 export type Pillar = 'health' | 'weather' | 'dispatch' | 'stops' | 'courts' | 'money' | 'luggage';
 export type Confidence = 'verified_agency' | 'anonymized_approx' | 'unconfirmed_dispatch';

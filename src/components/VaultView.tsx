@@ -88,7 +88,7 @@ function Pricing({ pack }: { pack: CountryPack }) {
           </Reveal>
         ))}
       </div>
-      <p className="mono text-[8px] text-[var(--dim)] mt-2">30-day money-back if zero verified signals surface in your radius · Cancel anytime · Petty Radar is not affiliated with any government agency · Information, not advice.</p>
+      <p className="mono text-[8px] text-[var(--dim)] mt-2">30-day money-back if zero verified signals surface in your radius · Cancel anytime · Petty is not affiliated with any government agency · Information, not advice.</p>
     </section>
   );
 }

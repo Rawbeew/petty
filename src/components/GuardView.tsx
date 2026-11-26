@@ -5,7 +5,7 @@ import { COUNTRY_PACKS } from '../data/packs';
 import { SectionHeader } from './ui/SectionHeader';
 import { cx } from '../lib/ui';
 import { useEffect } from 'react';
-import { fetchOpenFDARecalls, fetchFSAFoodAlerts, type FDAEnforcementHit, type FSAFoodAlert } from '../lib/live';
+import { fetchOpenFDARecalls, fetchFSAFoodAlerts, fetchFindCaseLaw, type FDAEnforcementHit, type FSAFoodAlert } from '../lib/live';
 import { loadRecallCache, type RecallCache } from '../lib/recallCache';
 import FieldWire from './FieldWire';
 import { PopVerdict } from './ui/Motion';
@@ -166,7 +166,39 @@ function Scanner({ pack }: { pack: CountryPack }) {
 
 interface LiveArgument { caseName: string; court: string; dateArgued: string; audioUrl: string | null; pageUrl: string }
 
-function DocketSearch() {
+/* UK judgments lane — Find Case Law, The National Archives (Open Justice Licence).
+ * Wired live, keyless, CORS-open. Courts belong to Guard, never Radar. */
+function UKCaseLaw() {
+  const [state, setState] = useState<'loading' | 'live' | 'unavailable'>('loading');
+  const [items, setItems] = useState<{ id: string; title: string; court: string; when: string; url: string }[]>([]);
+  useEffect(() => {
+    let alive = true;
+    void fetchFindCaseLaw(6)
+      .then(signals => { if (!alive) return; setItems(signals.map(s => ({ id: s.id, title: s.title, court: s.agency, when: s.publishedAt, url: s.sourceUrl }))); setState(signals.length > 0 ? 'live' : 'unavailable'); })
+      .catch(() => { if (alive) setState('unavailable'); });
+    return () => { alive = false; };
+  }, []);
+  return (
+    <div className="rounded-xl border border-[var(--line2)] bg-[var(--panel2)] p-3 mt-3">
+      <div className="flex items-center justify-between gap-2">
+        <span className="mono text-[8px] tracking-[0.25em] text-[var(--dim)]">UK JUDGMENTS — FIND CASE LAW (OJL) · WIRED LIVE</span>
+        {state === 'live' && <span className="mono text-[8px] text-[var(--green)]">LIVE</span>}
+      </div>
+      {state === 'loading' && <p className="mono text-[10px] text-[var(--dim)] mt-2">CONTACTING THE NATIONAL ARCHIVES…</p>}
+      {state === 'unavailable' && <p className="mono text-[9px] text-[var(--gold)] mt-2">Unreachable from this network — nothing fabricated. Browse directly: <a className="text-[var(--cyan)] underline" href="https://caselaw.nationalarchives.gov.uk" target="_blank" rel="noreferrer">caselaw.nationalarchives.gov.uk</a></p>}
+      {state === 'live' && <ul className="mt-2 space-y-1.5 max-h-56 overflow-y-auto">{items.map(i => (
+        <li key={i.id}>
+          <a href={i.url} target="_blank" rel="noreferrer" className="block rounded-lg px-2 py-1.5 hover:bg-[var(--panel)] group">
+            <span className="block text-[10.5px] leading-snug text-[var(--ink)] group-hover:text-[var(--gold)] line-clamp-2">{i.title}</span>
+            <span className="mono text-[7.5px] text-[var(--dim)] mt-0.5 block">{i.court} · {new Date(i.when).toUTCString().slice(0, 16)}</span>
+          </a>
+        </li>
+      ))}</ul>}
+    </div>
+  );
+}
+
+function DocketSearch({ market }: { market: string }) {
   const [q, setQ] = useState('daubert');
   const [token, setToken] = useState(() => localStorage.getItem('petty-cl-token') ?? '');
   const [tokenDraft, setTokenDraft] = useState('');
@@ -251,6 +283,7 @@ function DocketSearch() {
         </div>
 
         <a href={deepLink} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 text-[11px] mono text-[var(--cyan)] hover:underline"><ExternalLink size={12} />Open this exact query on CourtListener</a>
+        {market === 'GB' && <UKCaseLaw />}
       </section>
 
       {/* pipeline panel */}
@@ -324,7 +357,7 @@ export default function GuardView({ pack }: { pack: CountryPack }) {
         </div>
         {tab === 'scan' && <Scanner pack={pack} />}
         {tab === 'scan' && <IngestedPortals />}
-        {tab === 'docket' && <DocketSearch />}
+        {tab === 'docket' && <DocketSearch market={pack.code} />}
         {tab === 'cuts' && <ClipStudio />}
         {tab === 'wire' && <FieldWire />}
       </div>

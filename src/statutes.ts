@@ -1,4 +1,4 @@
-/* Petty Radar — deterministic statutory engine. No LLM in the compliance path.
+/* Petty — deterministic statutory engine. No LLM in the compliance path.
  * Simplified rules; always verify against current regulation + SDR rates before filing.
  * Sources: US 14 CFR Part 254 · EU261/UK261 · CTA APPR · Montreal Convention 1999 · NCAA Part 19 (Phase 2) */
 

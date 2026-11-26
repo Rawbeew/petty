@@ -1,4 +1,4 @@
-# Petty Radar — First Principles
+# Petty — First Principles
 A redesign is not "make it pop." It is: understand *why* the interface exists, then delete everything that doesn't serve it.
 
 ## The 10 laws (every design decision traces to one)

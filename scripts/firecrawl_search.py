@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Petty Radar — Firecrawl search CLI for ANALYST DISCOVERY ONLY.
+"""Petty — Firecrawl search CLI for ANALYST DISCOVERY ONLY.
 
 Search results are DISCOVERY, never enforcement evidence and never rendered by the app
 as agency truth. Outputs URLs + snippets for human triage into the audit log.

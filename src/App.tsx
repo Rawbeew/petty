@@ -1,4 +1,4 @@
-/* Composition root — Petty Radar.
+/* Composition root — Petty.
    Structure: ambient layers → skip link → Navbar → statutory Ticker → view → legal frame.
    Each view owns exactly one job (P2). State lives at the leaves; composition here is static. */
 import { useState } from 'react';
@@ -30,6 +30,7 @@ export default function App() {
       {/* ambient layers — purely visual, screen-reader invisible */}
       <div aria-hidden className="aurora" />
       <div aria-hidden className="pointer-events-none absolute inset-0 noise" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 grid-drift" />
 
       <a href="#main" className="skip-link">Skip to content</a>
 

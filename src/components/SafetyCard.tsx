@@ -56,7 +56,7 @@ export default function useSafetyCard() {
     ctx.font = '700 64px Georgia, serif'; ctx.textAlign = 'center';
     ctx.fillText('P E T T Y', W / 2, 620);
     ctx.font = '500 21px ui-monospace, monospace'; ctx.fillStyle = '#8a8fa3';
-    ctx.fillText(`PETTY RADAR · ${PILLARS.find(p => p.id === s.pillar)?.label.toUpperCase()}`, W / 2, 668);
+    ctx.fillText(`PETTY · ${PILLARS.find(p => p.id === s.pillar)?.label.toUpperCase()}`, W / 2, 668);
 
     // headline
     ctx.fillStyle = '#e8e6df'; ctx.font = '700 52px Georgia, serif'; ctx.textAlign = 'left';
@@ -94,10 +94,10 @@ export default function useSafetyCard() {
     // footer
     ctx.fillStyle = '#3a4258'; ctx.fillRect(100, H - 300, 880, 2);
     ctx.fillStyle = '#8a8fa3'; ctx.font = '400 21px Georgia, serif';
-    ctx.fillText('Petty Radar aggregates open government data. Not affiliated with any agency.', 100, H - 236);
+    ctx.fillText('Petty aggregates open government data. Not affiliated with any agency.', 100, H - 236);
     ctx.fillText('Information, not advice. Verify at the linked source before acting.', 100, H - 200);
     ctx.fillStyle = '#F2C14E'; ctx.font = '700 34px Georgia, serif';
-    ctx.fillText('petty.io', 100, H - 118);
+    ctx.fillText('petty — lawful revenge, delivered', 100, H - 118);
     ctx.fillStyle = '#59d5f0'; ctx.font = '400 20px ui-monospace, monospace';
     ctx.textAlign = 'right'; ctx.fillText(s.sourceUrl.replace(/^https?:\/\//, '').slice(0, 46), W - 100, H - 122);
 
