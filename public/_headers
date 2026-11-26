@@ -1,0 +1,24 @@
+# Petty — edge cache policy (Netlify / Cloudflare Pages). Vite content-hashes
+# everything under /assets/, so those can be cached forever; HTML and the recall
+# cache must revalidate so a deploy or a cron refresh shows up immediately.
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/favicon.svg
+  Cache-Control: public, max-age=86400
+
+/recall-cache.json
+  # Short edge freshness + serve-stale-while-revalidate; the UI always prints
+  # `generated_at` next to scraped recall portals, so a stale-but-labelled
+  # response is honest. Browser revalidates every load (see lib/recallCache.ts).
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+
+/index.html
+  Cache-Control: no-cache
+
+/
+  Cache-Control: no-cache
+
+/*.html
+  Cache-Control: no-cache

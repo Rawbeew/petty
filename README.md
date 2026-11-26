@@ -30,10 +30,13 @@ openFDA enforcement · CPSC recalls API · NWS api.weather.gov · NYPD Socrata �
 Unverifiable/unavailable markets ship **explicitly as such** — AU radar, CA/AU recall scanner. No third state exists.
 
 ## Repo layout
-`src/data/signals.ts` (one vocabulary) · `src/data/packs.ts` (registry) · `src/statutes.ts` (deterministic engines + tests) · `src/lib/live.ts` (wires) · `src/components/` (surfaces) · `scripts/` (gate, audit, e2e) · `reports/` (audit logs) · `docs/FIRST_PRINCIPLES.md` · `DESIGN.md` · `DESIGN_SYSTEM.md` (doctrine map) · `INGESTION.md` (Firecrawl contract, server-side only)
+`src/data/signals.ts` (one vocabulary) · `src/data/packs.ts` (registry) · `src/statutes.ts` (deterministic engines + tests) · `src/lib/live.ts` (wires) · `src/components/` (surfaces) · `scripts/` (gate, audit, e2e) · `reports/` (audit logs) · `docs/` (doctrine + EDGE_CACHING.md) · `DESIGN.md` · `DESIGN_SYSTEM.md` (doctrine map) · `INGESTION.md` (Firecrawl contract, server-side only) · `_headers`/`vercel.json` (edge cache)
 
 ## The Petty Ledger
 Radar surfaces verified **official gateways** for money governments are holding for you — IRS unclaimed refunds, FDIC failed-bank deposits, PBGC missing pensions, DOL abandoned plans (US) · Marriage Allowance backdating, Pension Tracing, FSCS, Bona Vacantia (GB) · CRA uncashed cheques, BoC (CA) · ATO lost super (AU) · ECC-Net cross-border disputes (GL). **No API exists anywhere for unclaimed money — Petty links, never fabricates.**
+
+## Edge caching
+Hashed `/assets/*` are `immutable` for a year; `index.html` revalidates every load; `recall-cache.json` gets 5-minute edge freshness with stale-while-revalidate (freshness is printed next to every scraped portal entry). Configs: `public/_headers` (Netlify/Cloudflare Pages) and `vercel.json` (Vercel). Policy, host matrix and exclusions: **docs/EDGE_CACHING.md**.
 
 ## Honesty contract
 Citation or silence · labelled live-or-unavailable · named failures with official links · verbatim traceability · YMYL: information, not advice · not affiliated with any agency/court · flat pricing.

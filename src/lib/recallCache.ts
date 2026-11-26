@@ -23,7 +23,9 @@ const isEntry = (e: unknown): e is RecallCacheEntry => {
 
 export async function loadRecallCache(): Promise<RecallCache | null> {
   try {
-    const res = await fetch('recall-cache.json', { cache: 'no-store' });
+    // 'no-cache' = always revalidate, but 304s are allowed — freshness is
+  // guaranteed while the edge/CDN can answer with revalidation headers.
+  const res = await fetch('recall-cache.json', { cache: 'no-cache' });
     if (!res.ok) return null;
     const j: unknown = await res.json();
     if (!isRecord(j)) return null;
