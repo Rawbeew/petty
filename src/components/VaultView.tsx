@@ -4,6 +4,7 @@ import { COUNTRY_PACKS, PHASE2_PACKS, PRICING } from '../data/packs';
 import type { CountryPack } from '../data/packs';
 import { cx } from '../lib/ui';
 import { Reveal } from './ui/Motion';
+import TariffWatch from './TariffWatch';
 
 const LICENSE_STYLE: Record<string, { label: string; cls: string }> = {
   public_domain: { label: 'PUBLIC DOMAIN', cls: 'chip-green' },
@@ -119,6 +120,7 @@ export default function VaultView({ pack }: { pack: CountryPack }) {
     <div className="h-full overflow-y-auto pb-20 md:pb-6">
       <div className="p-3 sm:p-5 space-y-5">
         <RegistryTable pack={pack} />
+        <TariffWatch />
         <Pricing pack={pack} />
         <Phase2 />
         <div className="flex flex-wrap gap-x-5 gap-y-1.5 mono text-[8px] text-[var(--dim)] border-t border-[var(--line)] pt-4">

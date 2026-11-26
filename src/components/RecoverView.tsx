@@ -5,6 +5,9 @@ import { assessLuggage, luggageLetter, namePermutations, addressPermutations, cl
 import { SectionHeader } from './ui/SectionHeader';
 import { PopVerdict } from './ui/Motion';
 import { cx, downloadText } from '../lib/ui';
+import DepositPacket from './DepositPacket';
+import WagePacket from './WagePacket';
+import SettlementWatchlist from './SettlementWatchlist';
 
 function Unclaimed({ pack }: { pack: CountryPack }) {
   const [first, setFirst] = useState('Ada'); const [last, setLast] = useState('Okafor'); const [maiden, setMaiden] = useState('');
@@ -144,9 +147,16 @@ function Luggage() {
 export default function RecoverView({ pack }: { pack: CountryPack }) {
   return (
     <div className="h-full overflow-y-auto pb-20 md:pb-6">
-      <div className="p-3 sm:p-5 grid xl:grid-cols-2 gap-4 items-start">
-        <Unclaimed pack={pack} />
-        <Luggage />
+      <div className="p-3 sm:p-5 space-y-4">
+        <div className="grid xl:grid-cols-2 gap-4 items-start">
+          <Unclaimed pack={pack} />
+          <Luggage />
+        </div>
+        <div className="grid xl:grid-cols-2 gap-4 items-start">
+          <DepositPacket />
+          <WagePacket />
+        </div>
+        <SettlementWatchlist />
       </div>
     </div>
   );
