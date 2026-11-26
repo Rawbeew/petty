@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { Landmark, Plane, Download, ListChecks, ShieldCheck, TriangleAlert, FileText } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
 import { assessLuggage, luggageLetter, namePermutations, addressPermutations, claimTargets, type RouteKind } from '../statutes';
-import { SectionHeader } from './Shared';
+import { SectionHeader } from './ui/SectionHeader';
+import { PopVerdict } from './ui/Motion';
 import { cx, downloadText } from '../lib/ui';
 
 function Unclaimed({ pack }: { pack: CountryPack }) {
@@ -108,10 +109,10 @@ function Luggage() {
         </div>
       </div>
 
-      {/* live verdict */}
-      <div className="rounded-2xl border border-[rgba(242,193,78,0.35)] bg-[rgba(242,193,78,0.06)] p-4">
+      {/* live verdict — announced politely; pops on recompute */}
+      <PopVerdict className="rounded-2xl border border-[rgba(242,193,78,0.35)] bg-[rgba(242,193,78,0.06)] p-4" ariaLive="polite">
         <div className="flex items-start gap-2">
-          <TriangleAlert size={16} className="text-[var(--gold)] mt-0.5 shrink-0" />
+          <TriangleAlert size={16} className="text-[var(--gold)] mt-0.5 shrink-0" aria-hidden />
           <p className="font-display text-[15px] text-[#f5e3b3]">{a.headline}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
@@ -122,9 +123,9 @@ function Luggage() {
         </div>
         <p className="mono text-[9px] text-[#e6c87a] mt-2 flex items-center gap-1.5"><TriangleAlert size={10} />{a.montreal.warning}</p>
         <ul className="mt-3 space-y-1.5">{a.checklist.map((c, i) => (
-          <li key={i} className="flex items-start gap-2 text-[11px] text-[#c9cddb]"><ListChecks size={11} className="text-[var(--cyan)] mt-0.5 shrink-0" />{c}</li>
+          <li key={i} className="flex items-start gap-2 text-[11px] text-[#c9cddb]"><ListChecks size={11} className="text-[var(--cyan)] mt-0.5 shrink-0" aria-hidden />{c}</li>
         ))}</ul>
-      </div>
+      </PopVerdict>
 
       <div className="grid grid-cols-2 gap-2.5">
         <input className="field" placeholder="Airline" value={f.airline} onChange={set('airline')} aria-label="Airline" />

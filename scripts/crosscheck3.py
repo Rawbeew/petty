@@ -30,7 +30,9 @@ with sync_playwright() as p:
     pg.wait_for_selector('text=VERBATIM SOURCE DRAWER', timeout=3000)
     check(pg.locator('text=Export 9:16 Safety Card').count() == 1, 'radar: verbatim drawer + safety-card export')
     pg.screenshot(path=str(SHOTS/'02-radar-drawer.png'))
-    pg.keyboard.press('Escape'); pg.locator('button[aria-label="Close"]').click()
+    pg.keyboard.press('Escape')
+    pg.wait_for_timeout(300)
+    check(pg.locator('text=VERBATIM SOURCE DRAWER').count() == 0, 'radar: Esc closes verbatim drawer (a11y)')
     # country pack switch -> GB
     pg.locator('header button').filter(has_text='United States').first.click()
     pg.locator('role=option').filter(has_text='United Kingdom').click()

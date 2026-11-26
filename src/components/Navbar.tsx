@@ -3,6 +3,7 @@ import { ChevronDown, Radar, ScanLine, Landmark, Vault, Lock, Check } from 'luci
 import type { CountryPack } from '../data/packs';
 import type { ViewId } from '../App';
 import { cx } from '../lib/ui';
+import { m } from 'motion/react';
 
 const VIEWS: { id: ViewId; label: string; icon: typeof Radar }[] = [
   { id: 'radar', label: 'Radar', icon: Radar },
@@ -35,8 +36,10 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const close = (e: MouseEvent) => { if (!(e.target instanceof Node) || !ref.current?.contains(e.target)) setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
     window.addEventListener('mousedown', close);
-    return () => { window.removeEventListener('mousedown', close); };
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('mousedown', close); window.removeEventListener('keydown', onKey); };
   }, []);
 
   return (
@@ -83,10 +86,11 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
         {/* Desktop view nav */}
         <nav className="hidden md:flex items-center gap-1 rounded-xl border border-[var(--line)] bg-[var(--panel)] p-1">
           {VIEWS.map(v => (
-            <button key={v.id} onClick={() => { onView(v.id); }}
-              className={cx('flex items-center gap-2 rounded-lg px-3.5 py-2 text-[11px] mono tracking-[0.14em] uppercase transition-all',
-                view === v.id ? 'bg-[var(--gold)] text-black font-bold' : 'text-[var(--dim)] hover:text-[var(--ink)]')}>
-              <v.icon size={13} strokeWidth={view === v.id ? 2.5 : 1.8} />{v.label}
+            <button key={v.id} onClick={() => { onView(v.id); }} aria-current={view === v.id ? 'page' : undefined}
+              className={cx('relative flex items-center gap-2 rounded-lg px-3.5 py-2 text-[11px] mono tracking-[0.14em] uppercase transition-colors duration-200',
+                view === v.id ? 'text-black font-bold' : 'text-[var(--dim)] hover:text-[var(--ink)]')}>
+              {view === v.id && <m.span layoutId="nav-active-pill" className="absolute inset-0 rounded-lg bg-[var(--gold)]" transition={{ type: 'spring', stiffness: 520, damping: 38 }} />}
+              <span className="relative flex items-center gap-2"><v.icon size={13} strokeWidth={view === v.id ? 2.5 : 1.8} />{v.label}</span>
             </button>
           ))}
         </nav>
@@ -96,7 +100,7 @@ export default function Navbar({ packs, active, onPack, view, onView }: {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--line)] bg-[rgba(6,8,13,0.94)] backdrop-blur-lg">
         <div className="grid grid-cols-4 h-16">
           {VIEWS.map(v => (
-            <button key={v.id} onClick={() => { onView(v.id); }} className="flex flex-col items-center justify-center gap-0.5">
+            <button key={v.id} onClick={() => { onView(v.id); }} aria-current={view === v.id ? 'page' : undefined} className="flex flex-col items-center justify-center gap-0.5">
               <v.icon size={18} className={cx(view === v.id ? 'text-[var(--gold)]' : 'text-[var(--dim)]')} />
               <span className={cx('mono text-[8px] tracking-[0.18em] uppercase', view === v.id ? 'text-[var(--gold)]' : 'text-[var(--dim)]')}>{v.label.replace('Country ', '')}</span>
             </button>

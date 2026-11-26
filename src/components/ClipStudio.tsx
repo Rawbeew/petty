@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Clapperboard, Upload, Download, Eraser, Circle, Square, Gavel } from 'lucide-react';
-import { SectionHeader } from './Shared';
+import { SectionHeader } from './ui/SectionHeader';
 import { cx } from '../lib/ui';
 
 type Preset = 'argument' | 'recall' | 'docket';

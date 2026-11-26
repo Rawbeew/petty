@@ -1,0 +1,93 @@
+/* ============================================================
+   Petty Radar · COMPONENT CLASSES — consume semantic tokens only
+   ============================================================ */
+
+/* ---------- panels & cards ---------- */
+.panel { background: linear-gradient(180deg, var(--panel2), var(--panel)); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.panel-flat { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.glow-card { position: relative; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--panel); overflow: hidden; }
+.glow-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(420px 220px at var(--mx, 50%) var(--my, -20%), rgba(242,193,78,.13), transparent 60%); transition: opacity var(--dur-2) var(--ease-out); opacity: 0; pointer-events: none; }
+.glow-card:hover::before { opacity: 1; }
+.card-hover { transition: transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out); will-change: transform; }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 18px 42px rgba(0,0,0,.45), 0 0 0 1px rgba(242,193,78,.12); }
+
+/* spotlight — static conic border used by the featured pricing tier */
+.spotlight { position: relative; overflow: hidden; }
+.spotlight::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: conic-gradient(from 180deg at 50% 120%, transparent 60%, rgba(242,193,78,.8), transparent 75%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+
+/* border-beam — animated featured tier only (@property conic rotation) */
+@property --beam { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes beamSpin { to { --beam: 360deg; } }
+.border-beam { border: 1px solid transparent;
+  background: linear-gradient(var(--panel), var(--panel)) padding-box,
+    conic-gradient(from var(--beam), transparent 0%, rgba(242,193,78,.9) 12%, transparent 26%, transparent 50%, rgba(89,213,240,.7) 62%, transparent 76%) border-box;
+  animation: beamSpin 7s linear infinite; }
+
+/* ---------- chips ---------- */
+.chip { display: inline-flex; align-items: center; gap: .35rem; font-size: var(--t-xs); letter-spacing: .14em;
+  text-transform: uppercase; border-radius: 9999px; padding: .28rem .6rem; border: 1px solid var(--line2); color: var(--dim); }
+.chip-gold { border-color: rgba(242,193,78,.4); color: var(--gold); background: rgba(242,193,78,.08); }
+.chip-cyan { border-color: rgba(89,213,240,.35); color: var(--cyan); background: rgba(89,213,240,.08); }
+.chip-red { border-color: rgba(255,90,90,.35); color: var(--red); background: rgba(255,90,90,.08); }
+.chip-green { border-color: rgba(61,220,151,.35); color: var(--green); background: rgba(61,220,151,.08); }
+.dot { width: .42rem; height: .42rem; border-radius: 9999px; display: inline-block; }
+
+/* ---------- radar scope ---------- */
+@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes blipPulse { 0%,100% { opacity: .9; r: 4; } 50% { opacity: .35; r: 6.5; } }
+@keyframes pingRing { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(2.4); opacity: 0; } }
+.sweep { animation: sweep 7s linear infinite; transform-origin: 400px 240px; }
+.ping-ring { animation: pingRing 2.6s cubic-bezier(0,.6,.4,1) infinite; transform-origin: center; transform-box: fill-box; }
+.blip { animation: blipPulse 2.2s ease-in-out infinite; }
+
+/* ---------- statutory ticker ---------- */
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.marquee { animation: marquee 46s linear infinite; white-space: nowrap; }
+.marquee-wrap { mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.marquee-wrap:hover .marquee { animation-play-state: paused; }
+
+/* ---------- aurora ambient (self-made; transform-only; pausable) ---------- */
+.aurora { position: fixed; inset: -20%; z-index: 0; pointer-events: none; opacity: .5;
+  background:
+    radial-gradient(52% 38% at 18% 12%, rgba(242,193,78,.07), transparent 60%),
+    radial-gradient(46% 40% at 82% 8%, rgba(89,213,240,.06), transparent 62%),
+    radial-gradient(60% 52% at 50% 108%, rgba(242,193,78,.05), transparent 65%);
+  animation: auroraDrift 36s ease-in-out infinite alternate; }
+@keyframes auroraDrift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+  50% { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
+  100% { transform: translate3d(-1.5%, 2%, 0) scale(.98); }
+}
+
+/* ---------- rise-in (page load) ---------- */
+@keyframes riseIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.rise-in { animation: riseIn var(--dur-3) var(--ease-out) both; }
+.rise-in-d1 { animation-delay: 70ms; } .rise-in-d2 { animation-delay: 140ms; } .rise-in-d3 { animation-delay: 210ms; }
+
+/* ---------- live dot — truthful: rendered only when a feed synced ---------- */
+@keyframes liveDot { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(61,220,151,.5); } 70% { opacity: .75; box-shadow: 0 0 0 5px rgba(61,220,151,0); } }
+.live-dot { animation: liveDot 2.4s var(--ease-out) infinite; }
+
+/* ---------- inputs ---------- */
+.field { background: #0d1119; border: 1px solid var(--line2); border-radius: var(--r-md); padding: .65rem .8rem;
+  font-size: var(--t-base); width: 100%; color: var(--ink); outline: none;
+  transition: border-color var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out); }
+.field:focus-visible { border-color: rgba(242,193,78,.55); box-shadow: 0 0 0 3px rgba(242,193,78,.12); outline: none; }
+.field::placeholder { color: #565d75; }
+.field.pl-8 { padding-left: 2rem; } .field.pl-9 { padding-left: 2.25rem; }
+label.lbl { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-bottom: .35rem; display: block; }
+
+/* ---------- misc motion ---------- */
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+.shake { animation: shake .3s ease 2; }
+@keyframes slideIn { from { transform: translateX(48px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.slide-in { animation: slideIn var(--dur-2) var(--ease-out) both; }
+
+/* ---------- reduced motion — hard gate ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
+  .marquee { animation: none !important; white-space: normal; }
+}

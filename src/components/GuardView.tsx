@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { ScanLine, Gavel, FlaskConical, CheckCircle2, CircleAlert, ExternalLink, FileSearch, AudioLines, Clapperboard, Radio, Sparkles, CircleSlash } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
 import { COUNTRY_PACKS } from '../data/packs';
-import { SectionHeader } from './Shared';
+import { SectionHeader } from './ui/SectionHeader';
 import { cx } from '../lib/ui';
 import { useEffect } from 'react';
 import { fetchOpenFDARecalls, fetchFSAFoodAlerts, type FDAEnforcementHit, type FSAFoodAlert } from '../lib/live';
 import { loadRecallCache, type RecallCache } from '../lib/recallCache';
 import FieldWire from './FieldWire';
+import { PopVerdict } from './ui/Motion';
 import ClipStudio from './ClipStudio';
 
 const SAMPLES = ['peanut butter', 'losartan', 'infusion pump', 'e-bike battery', 'sunscreen'];
@@ -93,13 +94,13 @@ function Scanner({ pack }: { pack: CountryPack }) {
             <span className="mono text-[9px] text-[var(--dim)] self-center mr-1">TRY:</span>
             {SAMPLES.map(s => <button key={s} type="button" onClick={() => { setInput(s); void scan(s); }} className="chip hover:chip-gold transition-colors">{s}</button>)}
           </div>
-          <button type="submit" disabled={scanning} className="mt-3 w-full rounded-xl bg-[var(--gold)] disabled:opacity-60 text-black font-bold py-3 mono text-xs tracking-[0.2em] uppercase hover:bg-[var(--gold2)] transition-colors flex items-center justify-center gap-2"><Sparkles size={14} />{scanning ? 'QUERYING SOURCES…' : 'Scan enforcement databases'}</button>
+          <button type="submit" disabled={scanning} className="mt-3 w-full rounded-xl bg-[var(--gold)] disabled:opacity-60 text-black font-bold py-3 mono text-xs tracking-[0.2em] uppercase hover:bg-[var(--gold2)] transition-colors flex items-center justify-center gap-2"><Sparkles size={14} aria-hidden />{scanning ? 'QUERYING SOURCES…' : 'Scan enforcement databases'}</button>
         </form>
         <p className="mono text-[8px] text-[var(--dim)]">openFDA: field-limited search (product_description), sort report_date desc · FSA: latest 60 alerts, client-side filter (their server-side search silently returns 0 — verified 2026-11-26) · openFDA disclaimer: data is unvalidated — confirm at the linked recall file before acting.</p>
       </section>
 
-      {/* results side */}
-      <section className="panel-flat p-5 max-h-[620px] overflow-y-auto">
+      {/* results side — announced politely to assistive tech */}
+      <section className="panel-flat p-5 max-h-[620px] overflow-y-auto" aria-live="polite" aria-busy={scanning} aria-label="Enforcement matches">
         <div className="flex items-center justify-between mb-3">
           <span className="mono text-[10px] tracking-[0.25em] text-[var(--dim)]">ENFORCEMENT MATCHES</span>
           {result !== null && <span className="mono text-[9px] text-[var(--dim)]">{fdaCount + fsaCount} RESULT{fdaCount + fsaCount === 1 ? '' : 'S'}</span>}
@@ -130,7 +131,7 @@ function Scanner({ pack }: { pack: CountryPack }) {
           </div>
         )}
         {fdaCount > 0 && (
-          <>
+          <PopVerdict className="mb-0">
             <div className="mono text-[9px] tracking-[0.25em] text-[var(--dim)] mt-1 mb-1.5">US FDA — ENFORCEMENT ({fdaCount})</div>
             <ul className="space-y-2.5 mb-4">
               {fdaList.map(h => {
@@ -149,7 +150,7 @@ function Scanner({ pack }: { pack: CountryPack }) {
                 );
               })}
             </ul>
-          </>
+          </PopVerdict>
         )}
         {fsaCount > 0 && (
           <>

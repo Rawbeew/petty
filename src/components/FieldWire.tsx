@@ -3,7 +3,7 @@ import { Car, Landmark, Radio, ShieldCheck, ExternalLink, TriangleAlert, Refresh
 import { fetchNYPDCollisions, fetchUKCrime, fetchUKStops, UK_TOWNS } from '../lib/live';
 import type { UKStopFeed } from '../lib/live';
 import type { NYPDCollision } from '../lib/live';
-import { SectionHeader } from './Shared';
+import { SectionHeader } from './ui/SectionHeader';
 import { cx } from '../lib/ui';
 
 interface NYPDData { total: number; injured: number; killed: number; rows: NYPDCollision[] }

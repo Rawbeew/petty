@@ -3,6 +3,7 @@ import { Vault, Lock, ExternalLink, ShieldCheck, BadgeDollarSign, Sparkles, Code
 import { COUNTRY_PACKS, PHASE2_PACKS, PRICING } from '../data/packs';
 import type { CountryPack } from '../data/packs';
 import { cx } from '../lib/ui';
+import { Reveal } from './ui/Motion';
 
 const LICENSE_STYLE: Record<string, { label: string; cls: string }> = {
   public_domain: { label: 'PUBLIC DOMAIN', cls: 'chip-green' },
@@ -75,7 +76,8 @@ function Pricing({ pack }: { pack: CountryPack }) {
       </div>
       <div className="grid sm:grid-cols-3 gap-3">
         {PRICING.map(p => (
-          <div key={p.id} className={cx('glow-card p-5 flex flex-col', p.featured && 'spotlight border-[rgba(242,193,78,0.5)]')}>
+          <Reveal key={p.id} className="h-full">
+          <div className={cx('glow-card card-hover p-5 flex flex-col h-full', p.featured && 'border-beam')}>
             {p.featured && <span className="absolute top-3 right-3 chip chip-gold"><Sparkles size={10} />MOST CHOSEN</span>}
             <div className="mono text-[10px] tracking-[0.25em] text-[var(--dim)]">{p.name.toUpperCase()}</div>
             <div className="mt-2 flex items-end gap-1"><span className="font-display text-4xl text-[var(--ink)]">{p.price}</span><span className="mono text-[10px] text-[var(--dim)] mb-1.5">{p.per}</span></div>
@@ -83,6 +85,7 @@ function Pricing({ pack }: { pack: CountryPack }) {
             <p className="text-[11px] leading-relaxed text-[#c9cddb] mt-3 flex-1">{p.blurb}</p>
             <button className={cx('mt-4 rounded-xl py-2.5 mono text-[10px] tracking-[0.2em] uppercase font-bold', p.featured ? 'bg-[var(--gold)] text-black hover:bg-[var(--gold2)]' : 'border border-[var(--line2)] text-[var(--ink)] hover:border-[var(--gold)] hover:text-[var(--gold)]')}>{p.cta}</button>
           </div>
+          </Reveal>
         ))}
       </div>
       <p className="mono text-[8px] text-[var(--dim)] mt-2">30-day money-back if zero verified signals surface in your radius · Cancel anytime · Petty Radar is not affiliated with any government agency · Information, not advice.</p>

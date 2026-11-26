@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { X, ExternalLink, Download, Link2, CloudLightning, HeartPulse, Siren, TrafficCone, Scale, Banknote, Luggage, LayoutGrid, Search, Radar as RadarIcon, RadioTower, RefreshCw, ShieldQuestion } from 'lucide-react';
 import type { SafetySignal, Pillar } from '../data/signals';
 import type { CountryPack } from '../data/packs';
 import { PILLARS } from '../data/packs';
-import { ConfidenceBadge } from './Shared';
+import { ConfidenceBadge } from './ui/ConfidenceBadge';
 import { cx, timeAgo, useGlow } from '../lib/ui';
 import { fetchOpenFDA, fetchNWSAlerts, fetchCPSCRecalls, fetchFSAAsSignals, fetchFindCaseLaw, fetchECCCWeatherAlerts, fetchWHONews } from '../lib/live';
 import useSafetyCard from './SafetyCard';
+import { Stagger, StaggerItem } from './ui/Motion';
+import { EmptyState } from './ui/EmptyState';
 
 const PILLAR_ICON: Record<Pillar, typeof HeartPulse> = {
   health: HeartPulse, weather: CloudLightning, dispatch: Siren, stops: TrafficCone, courts: Scale, money: Banknote, luggage: Luggage,
@@ -162,29 +164,29 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
           </section>
 
           {/* Feed */}
-          <section className="panel-flat flex flex-col max-h-[640px] lg:max-h-none lg:h-full overflow-hidden">
+          <section className="panel-flat rise-in rise-in-d1 flex flex-col max-h-[640px] lg:max-h-none lg:h-full overflow-hidden">
             <div className="px-4 pt-3 pb-2 border-b border-[var(--line)] flex items-center justify-between">
               <span className="mono text-[10px] tracking-[0.25em] text-[var(--dim)]">VERIFIED LEDGER — {visible.length} EVENTS</span>
-              {syncedAt && <span className="flex items-center gap-1.5 mono text-[9px] text-[var(--green)]"><span className="dot" style={{ background: '#3ddc97' }} />SYNCED {timeAgo(syncedAt).toUpperCase()}</span>}
+              {syncedAt && <span className="flex items-center gap-1.5 mono text-[9px] text-[var(--green)]"><span className="dot live-dot" style={{ background: '#3ddc97' }} />SYNCED {timeAgo(syncedAt).toUpperCase()}</span>}
             </div>
             <div className="overflow-y-auto divide-y divide-[var(--line)]">
               {visible.length === 0 && (
-                <div className="p-6 text-center">
-                  <ShieldQuestion size={30} className="mx-auto text-[var(--dim)]" strokeWidth={1.4} />
-                  <p className="text-sm text-[var(--ink)] mt-3">{liveState === 'loading' ? 'Contacting source agencies…' : liveSupported ? 'No matching agency-reported events for this filter.' : `No verified wire for ${pack.name} yet.`}</p>
-                  <p className="text-[11px] text-[var(--dim)] mt-1.5 max-w-md mx-auto">Petty does not fill silence with fiction. Verify directly at the official portals for this market:</p>
-                  <ul className="mt-3 space-y-1.5">
+                <EmptyState icon={ShieldQuestion} title={liveState === 'loading' ? 'Contacting source agencies…' : liveSupported ? 'No matching agency-reported events for this filter.' : `No verified wire for ${pack.name} yet.`}>
+                  Petty does not fill silence with fiction. Verify directly at the official portals for this market:
+                  <ul className="mt-3 space-y-1.5 text-left">
                     {healthRegs.slice(0, 4).map((r, i) => (
                       <li key={i}><a href={r.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[11px] mono text-[var(--cyan)] hover:underline"><ExternalLink size={11} />{r.name}</a></li>
                     ))}
                   </ul>
-                </div>
+                </EmptyState>
               )}
+              <Stagger>
               {visible.map(s => {
                 const I = PILLAR_ICON[s.pillar];
                 return (
-                  <button key={s.id} onClick={() => { setSelected(s); }} onMouseMove={glow}
-                    className="glow-card w-full text-left grid grid-cols-[3px_1fr_auto] gap-3 px-3 sm:px-4 py-3 hover:bg-[var(--panel2)] transition-colors border-b border-[var(--line)]">
+                  <StaggerItem key={s.id} className="border-b border-[var(--line)]">
+                  <button onClick={() => { setSelected(s); }} onMouseMove={glow}
+                    className="glow-card card-hover w-full text-left grid grid-cols-[3px_1fr_auto] gap-3 px-3 sm:px-4 py-3 hover:bg-[var(--panel2)] transition-colors">
                     <span style={{ background: SEV_COLOR[s.severity] }} className="rounded-full" />
                     <span className="min-w-0">
                       <span className="flex items-center gap-2 text-[9px] mono text-[var(--dim)]"><I size={10} className="text-[var(--gold)]" />{s.agency.toUpperCase()}<span>·</span>{s.country}<span>·</span>{timeAgo(s.publishedAt)}</span>
@@ -193,21 +195,24 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
                     </span>
                     <span className="self-center text-[var(--dim)]">›</span>
                   </button>
+                  </StaggerItem>
                 );
               })}
+              </Stagger>
             </div>
           </section>
         </div>
       </div>
 
-      {/* Verbatim drawer */}
+      {/* Verbatim drawer — Esc closes; focus lands on the close button */}
+      <DrawerA11y selected={selected} onClose={() => { setSelected(null); }} />
       {selected && (
         <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={selected.title}>
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => { setSelected(null); }} />
-          <aside className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[var(--panel)] border-l border-[var(--line2)] flex flex-col animate-[slideIn_.28s_ease]">
+          <aside className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[var(--panel)] border-l border-[var(--line2)] flex flex-col slide-in">
             <div className="flex items-center justify-between px-5 h-14 border-b border-[var(--line)]">
               <span className="mono text-[10px] tracking-[0.25em] text-[var(--gold)]">VERBATIM SOURCE DRAWER</span>
-              <button onClick={() => { setSelected(null); }} aria-label="Close" className="p-2 rounded-lg hover:bg-[var(--panel2)] text-[var(--dim)] hover:text-[var(--ink)]"><X size={17} /></button>
+              <button id="verbatim-close" onClick={() => { setSelected(null); }} aria-label="Close" className="p-2 rounded-lg hover:bg-[var(--panel2)] text-[var(--dim)] hover:text-[var(--ink)]"><X size={17} /></button>
             </div>
             <div className="overflow-y-auto flex-1 p-5 space-y-4">
               <div className="flex items-center gap-2 flex-wrap"><ConfidenceBadge c={selected.confidence} /><span className="chip">{selected.severity.toUpperCase()}</span></div>
@@ -231,4 +236,17 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
       <style>{`@keyframes slideIn { from { transform: translateX(48px); opacity: .4; } to { transform: none; opacity: 1; } }`}</style>
     </div>
   );
+}
+
+function DrawerA11y({ selected, onClose }: { selected: unknown; onClose: () => void }) {
+  const returnFocus = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (selected === null) return;
+    returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    const t = window.setTimeout(() => { document.getElementById('verbatim-close')?.focus(); }, 30);
+    return () => { document.removeEventListener('keydown', onKey); window.clearTimeout(t); returnFocus.current?.focus(); };
+  }, [selected, onClose]);
+  return null;
 }
