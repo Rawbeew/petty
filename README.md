@@ -26,12 +26,28 @@ npm run build     # production build (static SPA, no server needed)
 
 | Surface | Owns |
 |---|---|
-| **Side-Eye** (Radar) | Live agency signals — recalls, weather hazards, public data |
+| **Side-Eye** (Radar) | Live agency signals — recalls, weather hazards, public data. Every merged signal passes the **eligibility gate** (`src/lib/pipeline.ts`): no https source, parseable date and known confidence class → dropped and counted, never rendered |
 | **Receipts** (Guard) | Recall scanner (openFDA + FSA) · docket watchdog (CourtListener, token or deep-link) · **The Pantry** (household goods ledger, on-device) · Label Lies (food fraud) |
 | **Comeuppance** (Recover) | Deterministic engines: EU261/DOT/Montreal/APPR baggage · tenant deposit (NY/CA/TX/FL/IL) · unpaid wages (FLSA § 216(b) + NY/CA layers) · US settlement watchlist · **Clockwatch** (on-device deadline reminders) · **Complaint Desk** (9 lanes, 50 states + DC AG routing, audited) |
 | **The Black Book** (Vault) | 46-row regulator registry with audited statuses (WIRED/PORTAL/BOT-WALLED/UNVERIFIABLE) + tariff docket watch (importers only) |
 
 The chain is the product: **Scanner → Pantry → case file → Complaint Desk** — one tap apart, one on-device narrative, zero network hops.
+
+## The signal pipeline (architecture)
+
+```
+retrieve  live.ts (openFDA · CPSC · NWS · FSA · WHO · CourtListener)
+   ↓
+ELIGIBILITY GATE  lib/pipeline.ts — citation or silence as a stage,
+                   not a promise: drop + count what fails
+   ↓
+RANK (UI only)    severity/freshness ordering — legal verdicts are
+                   never ranked, packets are pure statute functions
+   ↓
+ACT               letter / claim packet / complaint — always yours to send
+```
+
+Eligibility is never a function of prominence: a critical severity cannot outrank a missing source. GuardView’s recall scanner shows verbatim agency records only; the Radar’s merged feed shows live API signals that name their source.
 
 ## Repo map
 
@@ -52,7 +68,7 @@ docs/                # FIRST_PRINCIPLES.md (P1–P10, PV1–PV4), EDGE_CACHING.m
 
 | Command | What it does |
 |---|---|
-| `npm run gate` | The full gauntlet: `eslint --max-warnings=0` + five tsx assertion suites + `tsc -b` + `vite build` |
+| `npm run gate` | The full gauntlet: `eslint --max-warnings=0` + six tsx assertion suites + `tsc -b` + `vite build` |
 | `npm run test` | Engines only (no lint, no build) |
 | `python3 scripts/verify_links.py` | Re-audits every registry URL; writes `reports/link-audit-<date>.md`; **exits 0 always** (audit, not gate) |
 
@@ -65,6 +81,10 @@ docs/                # FIRST_PRINCIPLES.md (P1–P10, PV1–PV4), EDGE_CACHING.m
 ## Not built yet / honestly labeled
 
 CA and AU packs are largely portal-only. Phase-2 markets (NG, ZA, IN, BR) are gated placeholders. Monetization is flat-subscription-only and not implemented. One maintainer — the CI gate is a floor, not a guarantee.
+
+## License & repo policy
+
+Licensed **Apache-2.0** — see `LICENSE`. Public repo, issues **open**: scrutiny is a feature. Please quote the “verified” date next to any figure you challenge; statute text and settlement windows change. Success-fee forks are expected and are precisely why the moat is audits, not secrecy.
 
 ## Not legal, financial, or medical advice
 

@@ -7,6 +7,7 @@ import { ConfidenceBadge } from './ui/ConfidenceBadge';
 import { cx, timeAgo, useGlow } from '../lib/ui';
 import { fetchOpenFDA, fetchNWSAlerts, fetchCPSCRecalls, fetchFSAAsSignals, fetchECCCWeatherAlerts, fetchWHONews } from '../lib/live';
 import useSafetyCard from './SafetyCard';
+import { partitionEligible } from '../lib/pipeline';
 import { Stagger, StaggerItem } from './ui/Motion';
 import { EmptyState } from './ui/EmptyState';
 
@@ -76,6 +77,7 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
   const [q, setQ] = useState('');
   const [selected, setSelected] = useState<SafetySignal | null>(null);
   const [live, setLive] = useState<SafetySignal[]>([]);
+  const [withheld, setWithheld] = useState(0);
   const [liveState, setLiveState] = useState<'loading' | 'live' | 'offline'>('loading');
   const [syncedAt, setSyncedAt] = useState<string | null>(null);
   const exportCard = useSafetyCard();
@@ -93,9 +95,12 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
       : pack.code === 'CA' ? [fetchECCCWeatherAlerts(8)]
       : [fetchWHONews(5)];
     return Promise.allSettled(jobs).then(results => {
-      const merged = results.flatMap(r => (r.status === 'fulfilled' ? r.value : []))
-        .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+      /* ELIGIBILITY GATE — stage 2. Retrieval may return anything; nothing renders
+         unless it names an https source, a parseable date and a known confidence class. */
+      const { eligible, withheld } = partitionEligible(results.flatMap(r => (r.status === 'fulfilled' ? r.value : [])));
+      const merged = eligible.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
       setLive(merged);
+      setWithheld(withheld);
       setLiveState(merged.length > 0 ? 'live' : 'offline');
       setSyncedAt(new Date().toISOString());
     });
@@ -179,6 +184,11 @@ export default function RadarView({ pack }: { pack: CountryPack }) {
                     ))}
                   </ul>
                 </EmptyState>
+              )}
+              {withheld > 0 && (
+                <div className="px-3 sm:px-4 py-2 border-b border-[var(--line)] mono text-[8.5px] text-[var(--dim)] tracking-wide">
+                  {withheld} SIGNAL{withheld === 1 ? '' : 'S'} WITHHELD — CITATION OR SILENCE (NO HTTPS SOURCE / UNPARSEABLE DATE / UNKNOWN CONFIDENCE)
+                </div>
               )}
               <Stagger>
               {visible.map(s => {
