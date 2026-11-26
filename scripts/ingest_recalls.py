@@ -20,8 +20,14 @@ Run:  FIRECRAWL_API_KEY=fc-... python3 scripts/ingest_recalls.py
 """
 import json, os, re, sys, datetime, urllib.request, urllib.error
 
-FIRECRAWL = 'https://api.firecrawl.dev/v1/scrape'
+BASE = os.environ.get('FIRECRAWL_API_URL', 'https://api.firecrawl.dev').rstrip('/')
+FIRECRAWL = f'{BASE}/v1/scrape'
 KEY = os.environ.get('FIRECRAWL_API_KEY', '').strip()
+SELF_HOSTED = BASE not in ('https://api.firecrawl.dev', 'https://firecrawl.dev')
+MIN_MARKDOWN_CHARS = 400          # shorter than this is a dead/JS-failing page, not a portal
+MAX_MARKDOWN_CHARS = 200_000      # verbatim but bounded — cache is a snapshot, not a mirror
+SUSPECT_MARKERS = ('access denied', 'captcha', 'you have been blocked', 'attention required',
+                   'enable javascript', 'are you a robot')  # heuristics, flagged not deleted
 
 # Public recall/alert portals with no machine-readable keyless feed (2026-11-26 audit).
 SOURCES = [
@@ -39,42 +45,59 @@ SOURCES = [
          url='https://www.gov.uk/drug-device-alerts'),
 ]
 
-def scrape(url: str) -> dict:
+def scrape(url: str) -> tuple[int, dict]:
     body = json.dumps({'url': url, 'formats': ['markdown'], 'onlyMainContent': True,
                        'timeout': 30000}).encode()
-    req = urllib.request.Request(FIRECRAWL, data=body, method='POST',
-        headers={'Authorization': f'Bearer {KEY}', 'Content-Type': 'application/json'})
+    headers = {'Content-Type': 'application/json'}
+    if KEY:
+        headers['Authorization'] = f'Bearer {KEY}'
+    req = urllib.request.Request(FIRECRAWL, data=body, method='POST', headers=headers)
     with urllib.request.urlopen(req, timeout=75) as r:
-        return json.loads(r.read().decode())
+        return r.status, json.loads(r.read().decode())
 
 def main() -> int:
-    if not KEY:
-        print('FIRECRAWL_API_KEY not set — refusing to write a cache. No data was fabricated.', file=sys.stderr)
+    if not KEY and not SELF_HOSTED:
+        print('Set FIRECRAWL_API_KEY (cloud) or FIRECRAWL_API_URL (self-hosted, e.g. http://localhost:3002). No cache written.', file=sys.stderr)
         return 1
     out = {'schema': 'petty.recall-cache/v1', 'generated_at': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
-           'engine': 'firecrawl /v1/scrape', 'entries': []}
+           'engine': f'firecrawl /v1/scrape @ {BASE}', 'entries': []}
     for src in SOURCES:
         entry = dict(src, fetched_at=None, status='unreachable', markdown=None, error=None)
         try:
-            res = scrape(src['url'])
+            http_status, res = scrape(src['url'])
             md = ((res.get('data') or {}).get('markdown') or '').strip()
-            if res.get('success') and md:
-                # scrub emails/phones defensively — verbatim product data stays verbatim
+            low = md.lower()
+            suspect = next((m for m in SUSPECT_MARKERS if m in low), None)
+            if http_status == 200 and res.get('success') is not False and len(md) >= MIN_MARKDOWN_CHARS and suspect is None:
                 entry.update(status='ok', fetched_at=datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'))
-                entry['markdown'] = md[:200000]
-                print(f"ok           {src['id']:22} {len(md):>8} chars")
+                entry['markdown'] = md[:MAX_MARKDOWN_CHARS]
+                flag = ' TRUNCATED' if len(md) > MAX_MARKDOWN_CHARS else ''
+                print(f"ok           {src['id']:22} {len(md):>8} chars{flag}")
+            elif suspect is not None:
+                entry['error'] = f'suspect content ({suspect!r}) — likely bot-walled page, not portal data'[:300]
+                print(f"suspect      {src['id']:22} {entry['error']}")
             else:
-                entry['error'] = str(res.get('error') or 'empty payload')[:300]
+                entry['error'] = f'http {http_status} · {str(res.get("error") or "short/empty markdown")}'[:300]
                 print(f"empty        {src['id']:22} {entry['error']}")
         except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
             entry['error'] = f'{type(e).__name__}: {e}'[:300]
             print(f"unreachable  {src['id']:22} {entry['error']}")
         out['entries'].append(entry)
-    target = os.path.join(os.path.dirname(__file__), '..', 'public', 'recall-cache.json')
-    with open(target, 'w') as f:
-        json.dump(out, f, indent=1)
     ok = sum(1 for e in out['entries'] if e['status'] == 'ok')
-    print(f'\nwrote public/recall-cache.json — {ok}/{len(out["entries"])} sources ok')
+    target = os.path.join(os.path.dirname(__file__), '..', 'public', 'recall-cache.json')
+    if ok == 0:
+        # Never overwrite a previously good cache with an all-failure one.
+        if os.path.exists(target):
+            print('all sources failed — keeping previous recall-cache.json untouched', file=sys.stderr)
+            return 2
+        print('all sources failed — no cache written', file=sys.stderr)
+        return 2
+    prev_entries = len(out['entries'])
+    tmp = target + '.tmp'
+    with open(tmp, 'w') as f:
+        json.dump(out, f, indent=1)
+    os.replace(tmp, target)  # atomic — readers never see a half-written cache
+    print(f'\nwrote public/recall-cache.json — {ok}/{prev_entries} sources ok')
     return 0
 
 if __name__ == '__main__':
