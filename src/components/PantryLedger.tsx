@@ -1,13 +1,14 @@
 /* The Pantry — your household shelf, watched. Local-only (IndexedDB), no account, no sync.
  * Purpose: keep the items you actually have one re-scan away from every new enforcement dataset. */
 import { useCallback, useEffect, useState } from 'react';
-import { Package, Trash2, ShieldCheck, ScanLine, Download, ChevronDown, ChevronUp } from 'lucide-react';
+import { Package, Trash2, ShieldCheck, ScanLine, Download, ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import {
   isStorageAvailable, listItems, putItem, deleteItem, newItem, itemScope, requestPersistence,
   type HouseholdItem, type HouseholdCategory, type PersistStatus,
 } from '../lib/household';
 import { SectionHeader } from './ui/SectionHeader';
 import PhotoEvidence from './PhotoEvidence';
+import { useCaseFile } from '../lib/caseFile';
 import { cx, downloadText } from '../lib/ui';
 
 const CATEGORIES: { id: HouseholdCategory; label: string }[] = [
@@ -16,6 +17,7 @@ const CATEGORIES: { id: HouseholdCategory; label: string }[] = [
 ];
 
 export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query: string) => void }) {
+  const { beginFromItem } = useCaseFile();
   const [items, setItems] = useState<HouseholdItem[] | null>(null);
   const [unavailable, setUnavailable] = useState(!isStorageAvailable());
   const [persist, setPersist] = useState<PersistStatus | null>(null);
@@ -92,6 +94,7 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
               </button>
               <span className="flex items-center gap-1 shrink-0">
                 <button onClick={() => { onRecallCheck([it.brand, it.name].filter(Boolean).join(' ')); }} title="Scan this item in the Recall Scanner" aria-label="Scan in recall scanner" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[var(--gold)] text-[var(--dim)] hover:text-[var(--gold)]"><ScanLine size={14} /></button>
+                <button onClick={() => { beginFromItem(it); }} title="Start an official complaint using this item" aria-label="Start complaint with this item" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[var(--cyan)] text-[var(--dim)] hover:text-[var(--cyan)]"><FileText size={14} /></button>
                 <button onClick={() => { void remove(it.id); }} aria-label="Remove item" className="p-2 rounded-lg border border-[var(--line2)] hover:border-[#ff5a5a] text-[var(--dim)] hover:text-[#ff5a5a]"><Trash2 size={14} /></button>
                 <button onClick={() => { setExpanded(expanded === it.id ? null : it.id); }} aria-label={expanded === it.id ? 'Hide photos' : 'Show photos'} className="p-2 rounded-lg border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)]">{expanded === it.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
               </span>

@@ -1,12 +1,12 @@
 /* When the label lies — food fraud evidence card + complaint packet generator.
  * Checklist + honest remedies map + deterministic filing text. Not legal advice; FDCA has no private right of action. */
-import { useState } from 'react';
 import { Milk, Camera, ClipboardCheck, Stethoscope, Landmark, FileText, ShieldCheck } from 'lucide-react';
 import { SectionHeader } from './ui/SectionHeader';
 import PhotoEvidence from './PhotoEvidence';
 import { downloadText } from '../lib/ui';
 import { buildComplaintLetter } from '../lib/complaintLetters';
 import { stateByCode, isStateAG } from '../data/states';
+import { useCaseFile } from '../lib/caseFile';
 
 const STEPS = [
   { icon: Camera, text: 'Photograph the front AND ingredient/nutrition panels — both hands flat on the counter. Screenshot the shelf tag if you still have it.' },
@@ -16,7 +16,8 @@ const STEPS = [
 ];
 
 export default function FoodFraudCard() {
-  const [product, setProduct] = useState(''); const [business, setBusiness] = useState(''); const [date, setDate] = useState(''); const [what, setWhat] = useState(''); const [ill, setIll] = useState(false);
+  const { c, set, goComplaint } = useCaseFile();
+  const product = c.product; const business = c.business; const date = c.date; const what = c.what; const ill = c.ill;
 
   const generate = () => {
     const agCode = (() => { try { return localStorage.getItem('petty.ag.state') ?? ''; } catch { return ''; } })();
@@ -34,20 +35,21 @@ export default function FoodFraudCard() {
 
       <div className="rounded-2xl border border-[var(--line2)] p-4 space-y-2">
         <div className="mono text-[8px] tracking-[0.25em] text-[var(--dim)] flex items-center gap-1.5"><ShieldCheck size={10} className="text-[var(--green)]" />EVIDENCE — ATTACH NOW, IT NEVER LEAVES THIS PHONE</div>
-        <PhotoEvidence scope="foodfraud" />
+        <PhotoEvidence scope="case" />
       </div>
 
       <div className="rounded-2xl border border-[var(--line2)] p-4 space-y-2.5">
         <div className="mono text-[8px] tracking-[0.25em] text-[var(--dim)] flex items-center gap-1.5"><FileText size={10} />BUILD THE COMPLAINT PACKET</div>
         <div className="grid grid-cols-2 gap-2.5">
-          <input className="field col-span-2" placeholder="Product (e.g. 2% reduced fat milk)" value={product} onChange={e => { setProduct(e.target.value); }} aria-label="Product" />
-          <input className="field col-span-2" placeholder="Seller / maker (store or brand)" value={business} onChange={e => { setBusiness(e.target.value); }} aria-label="Seller or maker" />
-          <input className="field col-span-2" type="date" value={date} onChange={e => { setDate(e.target.value); }} aria-label="Purchase date" />
-          <textarea className="field col-span-2 min-h-[72px]" placeholder="What the label promised vs what the product was (ingredients, net weight, organic/raw claim, allergen, quality…)" value={what} onChange={e => { setWhat(e.target.value); }} aria-label="What happened" />
-          <label className="col-span-2 flex items-center gap-2 text-[11px] text-[var(--dim)]"><input type="checkbox" checked={ill} onChange={e => { setIll(e.target.checked); }} className="accent-[#F2C14E] h-4 w-4" />Someone was made ill — keep medical records and any retained sample</label>
+          <input className="field col-span-2" placeholder="Product (e.g. 2% reduced fat milk)" value={product} onChange={e => { set('product', e.target.value); }} aria-label="Product" />
+          <input className="field col-span-2" placeholder="Seller / maker (store or brand)" value={business} onChange={e => { set('business', e.target.value); }} aria-label="Seller or maker" />
+          <input className="field col-span-2" type="date" value={date} onChange={e => { set('date', e.target.value); }} aria-label="Purchase date" />
+          <textarea className="field col-span-2 min-h-[72px]" placeholder="What the label promised vs what the product was (ingredients, net weight, organic/raw claim, allergen, quality…)" value={what} onChange={e => { set('what', e.target.value); }} aria-label="What happened" />
+          <label className="col-span-2 flex items-center gap-2 text-[11px] text-[var(--dim)]"><input type="checkbox" checked={ill} onChange={e => { set('ill', e.target.checked); }} className="accent-[#F2C14E] h-4 w-4" />Someone was made ill — keep medical records and any retained sample</label>
         </div>
         <button onClick={generate} className="w-full flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] py-2.5 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[rgba(242,193,78,0.1)]"><FileText size={13} />Generate complaint packet (.txt)</button>
-        <p className="mono text-[8px] text-[var(--dim)]">One letter, every channel: illness → county health department · no illness → FDA (Report a Problem) · mislabeled meat/poultry → USDA FSIS. Pick your state in the Complaint Desk to name your AG verbatim. Attach your photos to whatever channel you use.</p>
+        {goComplaint && <button onClick={goComplaint} className="w-full text-center mono text-[9px] text-[var(--cyan)] py-1.5 underline underline-offset-4 decoration-[var(--line2)] hover:decoration-[var(--cyan)]">Open the Complaint Desk — facts and photos flow with you →</button>}
+        <p className="mono text-[8px] text-[var(--dim)]">Shared case file with the Complaint Desk — photos and facts flow both ways. Illness → county health department · no illness → FDA · meat/poultry → FSIS. Pick your state in the Complaint Desk to name your AG verbatim.</p>
       </div>
 
       <div className="rounded-2xl border border-[var(--line2)] p-4 space-y-2">

@@ -10,6 +10,7 @@ import RadarView from './components/RadarView';
 import GuardView from './components/GuardView';
 import RecoverView from './components/RecoverView';
 import VaultView from './components/VaultView';
+import { CaseProvider } from './components/CaseProvider';
 import { COUNTRY_PACKS } from './data/packs';
 import type { CountryPack } from './data/packs';
 
@@ -26,6 +27,7 @@ export default function App() {
 
   return (
     <LazyMotion features={domAnimation} strict>
+    <CaseProvider goComplaint={() => { setView('recover'); }}>
     <div className="relative h-screen flex flex-col overflow-hidden bg-[var(--bg)]">
       {/* ambient layers — purely visual, screen-reader invisible */}
       <div aria-hidden className="aurora" />
@@ -46,6 +48,7 @@ export default function App() {
 
       <ComplianceStrip />
     </div>
+    </CaseProvider>
     </LazyMotion>
   );
 }

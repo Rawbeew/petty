@@ -12,6 +12,7 @@ import { PopVerdict } from './ui/Motion';
 import ClipStudio from './ClipStudio';
 import FoodFraudCard from './FoodFraudCard';
 import PantryLedger from './PantryLedger';
+import { newItem as newPantryItem, putItem as putPantryItem } from '../lib/household';
 
 const SAMPLES = ['peanut butter', 'losartan', 'infusion pump', 'e-bike battery', 'sunscreen'];
 
@@ -39,8 +40,9 @@ function FSAHitCard({ h }: { h: FSAFoodAlert }) {
   );
 }
 
-function Scanner({ pack, seed }: { pack: CountryPack; seed?: string | undefined }) {
+function Scanner({ pack, seed, onGoPantry }: { pack: CountryPack; seed?: string | undefined; onGoPantry?: (() => void) | undefined }) {
   const [input, setInput] = useState(seed ?? '');
+  const [pantrySaved, setPantrySaved] = useState(false);
   const [result, setResult] = useState<{ query: string; fda: FDAEnforcementHit[] | null; fsa: FSAFoodAlert[] | null; fdaError: boolean; fsaError: boolean } | null>(null);
   const [scanning, setScanning] = useState(false);
   const healthPortals = COUNTRY_PACKS.filter(p => p.code === pack.code || p.code === 'GL').flatMap(p => p.regulators.filter(r => r.pillar === 'health').slice(0, 2));
@@ -91,12 +93,16 @@ function Scanner({ pack, seed }: { pack: CountryPack; seed?: string | undefined 
         <p className="text-[12px] text-[var(--dim)] leading-relaxed -mt-2">Queries the <strong>live openFDA enforcement database</strong> (food · drug · device) and the <strong>UK FSA Food Alerts API</strong> (OGL v3){showFda && showFsa ? ' — both' : showFsa ? ' — FSA only' : ' — openFDA only'}. Verbatim fields, every result links to the agency notice. Not a medical diagnosis — recalls, not advice.</p>
         <form onSubmit={e => { e.preventDefault(); void scan(input); }}>
           <label className="lbl" htmlFor="scan">Product / drug / ingredient / allergen</label>
-          <input id="scan" autoFocus value={input} onChange={e => { setInput(e.target.value); setResult(null); }} placeholder="e.g. peanut butter, losartan, infusion pump…" className="field" aria-label="Product to scan" />
+          <input id="scan" autoFocus value={input} onChange={e => { setInput(e.target.value); setResult(null); setPantrySaved(false); }} placeholder="e.g. peanut butter, losartan, infusion pump…" className="field" aria-label="Product to scan" />
           <div className="flex flex-wrap gap-1.5 mt-2">
             <span className="mono text-[9px] text-[var(--dim)] self-center mr-1">TRY:</span>
             {SAMPLES.map(s => <button key={s} type="button" onClick={() => { setInput(s); void scan(s); }} className="chip hover:chip-gold transition-colors">{s}</button>)}
           </div>
           <button type="submit" disabled={scanning} className="mt-3 w-full rounded-xl bg-[var(--gold)] disabled:opacity-60 text-black font-bold py-3 mono text-xs tracking-[0.2em] uppercase hover:bg-[var(--gold2)] transition-colors flex items-center justify-center gap-2"><Sparkles size={14} aria-hidden />{scanning ? 'QUERYING SOURCES…' : 'Scan enforcement databases'}</button>
+          <div className="mt-2 flex items-center gap-2">
+            <button type="button" disabled={!input.trim() || pantrySaved} onClick={() => { void (async () => { const name = input.trim(); if (!name) return; try { await putPantryItem(newPantryItem(name, '', 'other', 'Added from Recall Scanner — re-verify against new enforcement data')); setPantrySaved(true); } catch { /* storage blocked — the Pantry tab will say so */ } })(); }} className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--line2)] px-3 py-2 mono text-[8px] tracking-[0.2em] uppercase text-[var(--dim)] hover:text-[var(--ink)] hover:border-[var(--gold)] disabled:opacity-40"><Package size={11} />+ Save “{input.trim().slice(0, 28) || '…'}” to Pantry</button>
+            {pantrySaved && <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--green)]"><CheckCircle2 size={12} />Saved<button type="button" onClick={onGoPantry} className="underline underline-offset-2 hover:text-[#7df0b6]">Open the Pantry →</button></span>}
+          </div>
         </form>
         <p className="mono text-[8px] text-[var(--dim)]">openFDA: field-limited search (product_description), sort report_date desc · FSA: latest 60 alerts, client-side filter (their server-side search silently returns 0 — verified 2026-11-26) · openFDA disclaimer: data is unvalidated — confirm at the linked recall file before acting.</p>
       </section>
@@ -358,7 +364,7 @@ export default function GuardView({ pack }: { pack: CountryPack }) {
             </button>
           ))}
         </div>
-        {tab === 'scan' && <Scanner key={scanSeed?.k ?? 'idle'} pack={pack} seed={scanSeed?.q} />}
+        {tab === 'scan' && <Scanner key={scanSeed?.k ?? 'idle'} pack={pack} seed={scanSeed?.q} onGoPantry={() => { setTab('pantry'); }} />}
         {tab === 'scan' && <IngestedPortals />}
         {tab === 'docket' && <DocketSearch market={pack.code} />}
         {tab === 'cuts' && <ClipStudio />}

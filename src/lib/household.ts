@@ -130,3 +130,24 @@ export async function requestPersistence(): Promise<PersistStatus> {
 
 export const newItem = (name: string, brand: string, category: HouseholdCategory, note: string): HouseholdItem =>
   ({ id: newId(), name: name.trim(), brand: brand.trim(), category, note: note.trim(), addedAt: new Date().toISOString() });
+
+/* One-shot scope migration (e.g. legacy 'complaint'/'foodfraud' → 'case'). Idempotent. */
+export async function migratePhotoScopes(map: Record<string, string>): Promise<number> {
+  const db = await openDb();
+  try {
+    return await new Promise<number>((resolve, reject) => {
+      const t = db.transaction([PHOTOS], 'readwrite');
+      let moved = 0;
+      const cur = t.objectStore(PHOTOS).openCursor();
+      cur.onsuccess = () => {
+        const c = cur.result;
+        if (!c) { return; }
+        const v: unknown = c.value;
+        if (isPhoto(v) && map[v.scope] !== undefined) { v.scope = map[v.scope] ?? v.scope; void c.update(v); moved += 1; }
+        c.continue();
+      };
+      t.oncomplete = () => { resolve(moved); };
+      t.onerror = () => { reject(t.error ?? new Error('migrate-failed')); };
+    });
+  } finally { db.close(); }
+}
