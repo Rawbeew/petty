@@ -1,0 +1,21 @@
+name: Link audit (weekly, report-only)
+on:
+  schedule: [{ cron: '17 5 * * 1' }]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Re-audit registry links (exits 0 always — audit, not gate)
+        run: python3 scripts/verify_links.py
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-audit-${{ github.run_id }}
+          path: reports/link-audit-*.md
+          retention-days: 90

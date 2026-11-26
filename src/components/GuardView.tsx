@@ -250,8 +250,8 @@ function DocketSearch({ market }: { market: string }) {
   return (
     <div className="grid lg:grid-cols-[1.15fr_1fr] gap-4">
       <section className="panel p-5">
-        <SectionHeader icon={Gavel} kicker="Court watchdog — LIVE" title="Oral arguments, straight from the docket." />
-        <p className="text-[12px] text-[var(--dim)] leading-relaxed -mt-2">Free CourtListener account = free API token (125 req/day). Your token never leaves this device except to CourtListener, directly from your browser.</p>
+        <SectionHeader icon={Gavel} kicker="Court watchdog — bring a free token" title="Oral arguments, with nothing pre-fetched." />
+        <p className="text-[12px] text-[var(--dim)] leading-relaxed -mt-2">Free CourtListener account = free API token (125 req/day). Your token never leaves this device except to CourtListener, directly from your browser. No cache, no proxy, no pre-fetching — results appear only when you run them, and only if the API answers. No token? The deep link below runs the same query for you.</p>
         <form onSubmit={e => { e.preventDefault(); if (token) { void runLive(); } }} className="flex gap-2 mt-3">
           <div className="relative flex-1">
             <FileSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--dim)] pointer-events-none" />

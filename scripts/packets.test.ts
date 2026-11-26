@@ -13,6 +13,8 @@ ok(DEPOSIT_STATUTES.every(d => d.law.length > 0 && d.returnDays > 0 && d.penalty
 ok(WAGE_STATUTES.length === 6, 'wage registry: federal + 5 states');
 ok(SETTLEMENTS.length >= 1 && SETTLEMENTS.every(s => s.claimUrl.startsWith('https://') && /^\d{4}-\d{2}-\d{2}$/.test(s.deadline)), 'settlements: https claims + ISO deadlines only');
 ok(SETTLEMENTS.every(s => s.verifiedAt === '2026-11-26'), 'settlements: fetch-verified today');
+ok(DEPOSIT_STATUTES.every(d => d.verifiedAt === '2026-11-26'), 'deposit registry: verifiedAt stamped (2026-11-26)');
+ok(WAGE_STATUTES.every(w => w.verifiedAt === '2026-11-26'), 'wage registry: verifiedAt stamped (2026-11-26)');
 
 /* --- NY: 14 days + forfeiture --- */
 const ny = computeDeposit({ state: 'NY', depositUsd: 2000, withheldUsd: 2000, vacatedOn: '2026-10-01', forwardingAddressGiven: true }, NOW);

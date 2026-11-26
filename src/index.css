@@ -2,3 +2,23 @@
 @import "./design/tokens.css";
 @import "./design/base.css";
 @import "./design/components.css";
+
+/* print / save-as-PDF — only #print-root survives; the app is chrome for this moment */
+#print-root { display: none; }
+@media print {
+  html, body { background: #ffffff !important; }
+  body > *:not(#print-root) { display: none !important; }
+  #print-root {
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #111111;
+    background: #ffffff;
+    padding: 0;
+    margin: 0;
+  }
+  @page { margin: 18mm; }
+}

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { Landmark, Plane, Download, ListChecks, ShieldCheck, TriangleAlert, FileText } from 'lucide-react';
+import { Landmark, Plane, Download, ListChecks, ShieldCheck, TriangleAlert, FileText, Printer } from 'lucide-react';
 import type { CountryPack } from '../data/packs';
-import { assessLuggage, luggageLetter, namePermutations, addressPermutations, claimTargets, type RouteKind } from '../statutes';
+import { assessLuggage, luggageLetter, namePermutations, addressPermutations, claimTargets, SDR_VERIFIED_AT, type RouteKind } from '../statutes';
 import { SectionHeader } from './ui/SectionHeader';
 import { PopVerdict } from './ui/Motion';
 import { cx, downloadText } from '../lib/ui';
@@ -9,6 +9,8 @@ import DepositPacket from './DepositPacket';
 import WagePacket from './WagePacket';
 import SettlementWatchlist from './SettlementWatchlist';
 import ComplaintDesk from './ComplaintDesk';
+import Clockwatch from './Clockwatch';
+import { printDocument } from '../lib/print';
 
 function Unclaimed({ pack }: { pack: CountryPack }) {
   const [first, setFirst] = useState('Ada'); const [last, setLast] = useState('Okafor'); const [maiden, setMaiden] = useState('');
@@ -66,7 +68,10 @@ function Unclaimed({ pack }: { pack: CountryPack }) {
           <li key={t.name}><a href={t.url} target="_blank" rel="noreferrer" className="text-[11px] mono text-[var(--cyan)] hover:underline">{t.name} <span className="text-[var(--dim)]">— {t.covers}</span></a></li>
         ))}</ul>
       </div>
-      <button onClick={() => { downloadText('petty-claim-pack.txt', packet()); }} className="w-full flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] py-3 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[rgba(242,193,78,0.1)]"><Download size={13} />Download claim pack (.txt)</button>
+      <div className="flex gap-2">
+        <button onClick={() => { downloadText('petty-claim-pack.txt', packet()); }} className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] py-3 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[rgba(242,193,78,0.1)]"><Download size={13} />Download claim pack (.txt)</button>
+        <button onClick={() => { printDocument('Petty — Unclaimed Property Search Pack', packet()); }} aria-label="Print or save as PDF" title="Print / save as PDF" className="w-12 flex items-center justify-center rounded-xl border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)] hover:border-[var(--gold)]"><Printer size={16} /></button>
+      </div>
     </section>
   );
 }
@@ -139,8 +144,11 @@ function Luggage() {
         <input className="field col-span-2" placeholder="Passenger name" value={f.passengerName} onChange={set('passengerName')} aria-label="Passenger name" />
         <input className="field col-span-2" placeholder="Postal address" value={f.address} onChange={set('address')} aria-label="Address" />
       </div>
-      <button onClick={letter} className="w-full flex items-center justify-center gap-2 rounded-xl bg-[var(--gold)] text-black font-bold py-3 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[var(--gold2)]"><FileText size={14} />Generate statutory demand letter (.txt)</button>
-      <p className="mono text-[8px] text-[var(--dim)]">Statutes simplified for triage — DOT 14 CFR 254 · Reg (EC) 261/2004 · UK261 · CTA APPR · Montreal 1999 (1,519 SDR). SDR rate is approximate; verify at IMF. This template is not legal advice; escalate to DOT/CAA/CTA or small-claims.</p>
+      <div className="flex gap-2">
+        <button onClick={letter} className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[var(--gold)] text-black font-bold py-3 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[var(--gold2)]"><FileText size={14} />Generate demand letter (.txt)</button>
+        <button onClick={() => { printDocument('Petty — Baggage Demand Letter', luggageLetter(f)); }} aria-label="Print or save as PDF" title="Print / save as PDF" className="w-12 flex items-center justify-center rounded-xl border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)] hover:border-[var(--gold)]"><Printer size={16} /></button>
+      </div>
+      <p className="mono text-[8px] text-[var(--dim)]">Statutes simplified for triage — DOT 14 CFR 254 · Reg (EC) 261/2004 · UK261 · CTA APPR · Montreal 1999 (1,519 SDR). SDR rate + cap last verified {SDR_VERIFIED_AT}; re-verify at IMF before filing. This template is not legal advice; escalate to DOT/CAA/CTA or small-claims.</p>
     </section>
   );
 }
@@ -157,6 +165,7 @@ export default function RecoverView({ pack }: { pack: CountryPack }) {
           <DepositPacket />
           <WagePacket />
         </div>
+        <Clockwatch />
         <SettlementWatchlist />
         <ComplaintDesk />
       </div>

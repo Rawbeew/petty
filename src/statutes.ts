@@ -3,6 +3,7 @@
  * Sources: US 14 CFR Part 254 · EU261/UK261 · CTA APPR · Montreal Convention 1999 · NCAA Part 19 (Phase 2) */
 
 export const SDR_TO_USD = 1.31; // approx — verify daily at IMF
+export const SDR_VERIFIED_AT = '2026-11-26'; /* last manual check of IMF SDR rate + Montreal cap (1,519 SDR) */
 export const MONTREAL_CAP_SDR = 1519;
 export const USD_PER_SDR_CAP = Math.round(MONTREAL_CAP_SDR * SDR_TO_USD);
 

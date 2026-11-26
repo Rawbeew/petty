@@ -1,10 +1,11 @@
 /* When the label lies — food fraud evidence card + complaint packet generator.
  * Checklist + honest remedies map + deterministic filing text. Not legal advice; FDCA has no private right of action. */
-import { Milk, Camera, ClipboardCheck, Stethoscope, Landmark, FileText, ShieldCheck } from 'lucide-react';
+import { Milk, Camera, ClipboardCheck, Stethoscope, Landmark, FileText, ShieldCheck, Printer } from 'lucide-react';
 import { SectionHeader } from './ui/SectionHeader';
 import PhotoEvidence from './PhotoEvidence';
 import { downloadText } from '../lib/ui';
 import { buildComplaintLetter } from '../lib/complaintLetters';
+import { printDocument } from '../lib/print';
 import { stateByCode, isStateAG } from '../data/states';
 import { safeGet } from '../lib/safeStorage';
 import { useCaseFile } from '../lib/caseFile';
@@ -48,7 +49,10 @@ export default function FoodFraudCard() {
           <textarea className="field col-span-2 min-h-[72px]" placeholder="What the label promised vs what the product was (ingredients, net weight, organic/raw claim, allergen, quality…)" value={what} onChange={e => { set('what', e.target.value); }} aria-label="What happened" />
           <label className="col-span-2 flex items-center gap-2 text-[11px] text-[var(--dim)]"><input type="checkbox" checked={ill} onChange={e => { set('ill', e.target.checked); }} className="accent-[#F2C14E] h-4 w-4" />Someone was made ill — keep medical records and any retained sample</label>
         </div>
-        <button onClick={generate} className="w-full flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] py-2.5 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[rgba(242,193,78,0.1)]"><FileText size={13} />Generate complaint packet (.txt)</button>
+        <div className="flex gap-2">
+          <button onClick={generate} className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)] text-[var(--gold)] py-2.5 mono text-[10px] tracking-[0.2em] uppercase hover:bg-[rgba(242,193,78,0.1)]"><FileText size={13} />Generate packet (.txt)</button>
+          <button onClick={() => { const agCode = safeGet('petty.ag.state') ?? ''; const ag = isStateAG(agCode) ? stateByCode(agCode) : null; const narrative = [`Product: ${product.trim() || '(fill in)'}`, what.trim() || '(describe the label vs the product)'].join('\n'); printDocument('Petty — Food Fraud Complaint', buildComplaintLetter(ill ? 'food_illness' : 'food_packaged', { business, date, what: narrative, ill }, ag)); }} aria-label="Print or save as PDF" title="Print / save as PDF" className="w-12 flex items-center justify-center rounded-xl border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)] hover:border-[var(--gold)]"><Printer size={16} /></button>
+        </div>
         {goComplaint && <button onClick={goComplaint} className="w-full text-center mono text-[9px] text-[var(--cyan)] py-1.5 underline underline-offset-4 decoration-[var(--line2)] hover:decoration-[var(--cyan)]">Open the Complaint Desk — facts and photos flow with you →</button>}
         <p className="mono text-[8px] text-[var(--dim)]">Shared case file with the Complaint Desk — photos and facts flow both ways. Illness → county health department · no illness → FDA · meat/poultry → FSIS. Pick your state in the Complaint Desk to name your AG verbatim.</p>
       </div>

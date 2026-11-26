@@ -19,6 +19,7 @@ export default function WagePacket() {
   const [dailyRate, setDailyRate] = useState(176);
   const entry = WAGE_STATUTES.find(w => w.state === state);
   const verdict = computeWageClaim({ state, unpaidWagesUsd: unpaid, otHours, hourlyRateUsd: rate, finalPayDaysLate: lateDays, dailyRateUsd: dailyRate });
+  if (!entry) return null; /* unreachable — select is driven by WAGE_STATUTES */
 
   return (
     <section className="panel p-5 space-y-4">
@@ -44,9 +45,9 @@ export default function WagePacket() {
         </div>
         <p className="text-[11px] text-[#c9cddb] mt-3 leading-relaxed">{verdict.stateRule}</p>
         <p className="text-[10px] text-[var(--dim)] mt-1 leading-relaxed">{verdict.note}</p>
-        {entry?.url
-          ? <a href={entry.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 mono text-[9px] text-[var(--cyan)] hover:underline mt-2"><ExternalLink size={10} />File free — agency retrieved 2026-11-26</a>
-          : <span className="mono text-[8px] text-[var(--dim)] mt-2 block">Agency link withheld — not fetch-verified from build network 2026-11-26. Search the WHD / state labour office directly.</span>}
+        {entry.url
+          ? <a href={entry.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 mono text-[9px] text-[var(--cyan)] hover:underline mt-2"><ExternalLink size={10} />File free — verified {entry.verifiedAt}</a>
+          : <span className="mono text-[8px] text-[var(--dim)] mt-2 block">Agency link withheld — not fetch-verified from build network {entry.verifiedAt}. Search the WHD / state labour office directly.</span>}
       </PopVerdict>
       <p className="mono text-[8px] text-[var(--dim)]">OT math: FLSA 1.5× — the premium half is computed on your hourly rate × OT hours above; straight-time OT may be inside “wages owed.” 2-year SOL, 3 if willful. You never pay to file an official claim. Not legal advice; retaliation for asserting FLSA rights is itself unlawful (§ 215(a)(3)).</p>
     </section>
