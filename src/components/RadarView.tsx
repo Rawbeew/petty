@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { X, ExternalLink, Download, Link2, CloudLightning, HeartPulse, Siren, TrafficCone, Banknote, LayoutGrid, Search, Radar as RadarIcon, RadioTower, RefreshCw, ShieldQuestion, Landmark, LockKeyhole } from 'lucide-react';
 import type { SafetySignal, Pillar } from '../data/signals';
 import { COUNTRY_PACKS, RADAR_PILLARS } from '../data/packs';
