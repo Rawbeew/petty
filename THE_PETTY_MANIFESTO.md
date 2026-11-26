@@ -1,5 +1,5 @@
-# PETTY — Lawful Revenge, Delivered
-*Legal pettiness to the core.* | Raw open-government data · zero fabrication · flat subscriptions · information, not advice.
+# The Petty Manifesto
+*Lawful revenge, delivered. Legal pettiness to the core.* | Raw open-government data · zero fabrication · flat subscriptions · information, not advice.
 
 Petty: the honest engine, rebuilt with a spine. Petty collects the debts statute and enforcement culture actually owe ordinary people — EU261, DOT 14 CFR 254, Montreal 1999, CTA APPR, unclaimed balances, recall exposure — flattened into one screen, with citations.
 
