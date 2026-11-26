@@ -8,13 +8,18 @@ import { SectionHeader } from './ui/SectionHeader';
 import PhotoEvidence from './PhotoEvidence';
 import { cx, downloadText } from '../lib/ui';
 import { LANES, routeComplaint, type LaneId, type RouteResult } from '../lib/complaints';
+import { US_STATES, stateByCode, isStateAG } from '../data/states';
 import { buildComplaintLetter } from '../lib/complaintLetters';
 
 export default function ComplaintDesk() {
   const [lane, setLane] = useState<LaneId>('food_illness');
   const [business, setBusiness] = useState(''); const [date, setDate] = useState(''); const [what, setWhat] = useState(''); const [ill, setIll] = useState(false);
   const [route, setRoute] = useState<RouteResult | null>(null);
+  const [stateCode, setStateCode] = useState<string>(() => { try { return localStorage.getItem('petty.ag.state') ?? ''; } catch { return ''; } });
   const isLaneId = (v: string): v is LaneId => LANES.some(l => l.id === v);
+  const AG_Routed = (id: LaneId) => id === 'contractor' || id === 'auto_repair' || id === 'debt' || id === 'other';
+  const ag = isStateAG(stateCode) ? stateByCode(stateCode) : null;
+  const pickState = (code: string) => { setStateCode(code); try { localStorage.setItem('petty.ag.state', code); } catch { /* storage full/blocked — session only */ } };
   const first = LANES[0];
   if (first === undefined) return null; // static table — unreachable
   const active = LANES.find(l => l.id === lane) ?? first;
@@ -27,7 +32,7 @@ export default function ComplaintDesk() {
   const editFacts = (fn: () => void) => { fn(); setRoute(null); };
 
   const generate = () => {
-    downloadText('petty-official-complaint.txt', buildComplaintLetter(lane, { business, date, what, ill }));
+    downloadText('petty-official-complaint.txt', buildComplaintLetter(lane, { business, date, what, ill }, ag));
   };
 
   return (
@@ -68,8 +73,14 @@ export default function ComplaintDesk() {
       </div>
 
       <div className="rounded-2xl border border-[var(--line2)] p-4 space-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-2"><div className="mono text-[8px] tracking-[0.25em] text-[var(--dim)]">YOUR STATE — ALL 50 + DC AUDITED 2026-11-26</div>
+          <select className="field !w-auto text-[10px]" value={stateCode} onChange={e => { pickState(e.target.value); }} aria-label="Your state"><option value="">— pick your state —</option>{US_STATES.map(st => <option key={st.code} value={st.code}>{st.code} — {st.name}</option>)}</select></div>
+        {stateCode && ag && (<div className="text-[10px] text-[var(--dim)] space-y-1"><p>{ag.office}{ag.status === 'bot-walled' ? ' — official portal, may block bots; opens in your browser' : ag.status === 'unverified' ? ' — not linked: the official domain redirects off-gov; search the name in your browser' : ''}</p>{ag.url && <a href={ag.url} target="_blank" rel="noreferrer" className="mono text-[var(--cyan)] break-all hover:underline inline-flex items-center gap-1">{ag.url}<ExternalLink size={9} /></a>}<p className="mono text-[8px]">Applies to the AG-routed lanes (contractor · auto repair · debt · other). Federal lanes ignore this.</p></div>)}
+      </div>
+
+      <div className="rounded-2xl border border-[var(--line2)] p-4 space-y-2">
         <div className="mono text-[8px] tracking-[0.25em] text-[var(--dim)] flex items-center gap-1.5"><Landmark size={10} className="text-[var(--gold)]" />WHERE THIS GOES</div>
-        <p className="text-[12px] text-[var(--ink)]">{active.who}</p>
+        <p className="text-[12px] text-[var(--ink)]">{ag && AG_Routed(active.id) ? `${ag.office} — file the AG consumer complaint (portal below)` : active.who}</p>
         <p className="text-[11px] text-[#c9cddb]">{active.how}</p>
         <p className="text-[10px] mono text-[var(--cyan)] break-words">{active.portal}</p>
         <p className="text-[10px] text-[var(--dim)] leading-relaxed"><TriangleAlert size={10} className="inline text-[var(--gold)] mr-1" />{active.note}</p>

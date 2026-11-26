@@ -2,6 +2,7 @@
  * Each lane gets its own subject line, legal hooks (only ones verified in-repo or universally
  * factual) and its own asks. Common envelope: truthful/good-faith, not advice, no guarantee. */
 import { LANES, type LaneId, type Lane } from './complaints';
+import type { StateAG } from '../data/states';
 
 export interface ComplaintFacts {
   business: string;
@@ -21,8 +22,17 @@ const LANE_MAP: Record<LaneId, Lane> = {
   debt: laneOrThrow('debt'), wages: laneOrThrow('wages'), other: laneOrThrow('other'),
 };
 
-const env = (lane: Lane, facts: ComplaintFacts, reLine: string, body: string[]): string => {
+const AG_LANES: LaneId[] = ['contractor', 'auto_repair', 'debt', 'other'];
+
+const env = (lane: Lane, facts: ComplaintFacts, reLine: string, body: string[], ag?: StateAG | null): string => {
   const today = new Date().toISOString().slice(0, 10);
+  const stateBlock = ag && AG_LANES.includes(lane.id) ? [
+    'STATE ROUTING',
+    ` - ${ag.office}`,
+    ` - Portal: ${ag.url ?? `unverified from audit network 2026-11-26 — search “${ag.name} Attorney General consumer complaint” and use the official portal result`}`,
+    ' - Reference this letter when you file with the state AG consumer complaint form.',
+    '',
+  ] : [];
   return [
     'PETTY — OFFICIAL COMPLAINT LETTER (generated on this device; facts are yours)',
     `Generated: ${today}`,
@@ -32,6 +42,7 @@ const env = (lane: Lane, facts: ComplaintFacts, reLine: string, body: string[]):
     '',
     `RE: ${reLine}`,
     '',
+    ...stateBlock,
     `Business / establishment: ${facts.business.trim() || '(fill in — exact legal/trading name as it appeared)'}`,
     `Date(s) of incident: ${facts.date.trim() || '(fill in)'}`,
     '',
@@ -55,7 +66,7 @@ const env = (lane: Lane, facts: ComplaintFacts, reLine: string, body: string[]):
   ].join('\n');
 };
 
-export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): string {
+export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts, ag?: StateAG | null): string {
   const lane = LANE_MAP[laneId];
   switch (laneId) {
     case 'food_illness':
@@ -70,7 +81,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 4. Tell me in writing what (if anything) your inspection found.',
         '',
         'I have retained any remaining food sample and all packaging. Tell me before you need them — I understand they are perishable and can only be held so long.',
-      ]);
+      ], ag);
     case 'food_packaged':
       return env(lane, facts, 'Reportable food problem — product, UPC and lot below', [
         'PRODUCT IDENTIFICATION (the traceability key)',
@@ -87,7 +98,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 4. Preserve this report for pattern analysis against other complaints on the same lot.',
         '',
         'I am keeping the product, packaging and receipt. I did not consume (or I consumed and was affected by) the portions described above.',
-      ]);
+      ], ag);
     case 'contractor':
       return env(lane, facts, 'Contractor complaint — licensing, payment and non/poor performance', [
         'THE TRANSACTION',
@@ -104,7 +115,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 4. Notify me in writing of the outcome and any recourse timelines that apply.',
         '',
         'I have the contract, invoices, receipts, photos of the work state and our written communications.',
-      ]);
+      ], ag);
     case 'product_hazard':
       return env(lane, facts, 'Product hazard report — defect, incident and potential for harm', [
         'THE PRODUCT',
@@ -121,7 +132,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 2. Evaluate the defect against your substantial-product-hazard criteria for recall classification.',
         ' 3. Cross-match this incident against prior reports on the model; if a pattern exists, act.',
         ' 4. Tell me in writing whether the product has been or will be investigated.',
-      ]);
+      ], ag);
     case 'telecom':
       return env(lane, facts, 'Informal complaint — billing / service abuse by provider', [
         'THE ACCOUNT',
@@ -140,7 +151,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 2. Review the disputed charges against the filed tariff/contract terms.',
         ' 3. If the provider fails to respond adequately, take enforcement action as your authority allows.',
         ' 4. Tell me how to escalate to small claims or arbitration if the money is not recovered.',
-      ]);
+      ], ag);
     case 'auto_repair':
       return env(lane, facts, 'Auto repair complaint — estimate vs actual, unauthorised work', [
         'THE VEHICLE AND THE SHOP',
@@ -159,7 +170,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 2. Investigate the shop against your auto-repair standards (estimate rules, authorisation, itemisation).',
         ' 3. Where you have restitution authority, use it; otherwise, tell me the correct forum.',
         ' 4. Notify me in writing of the outcome.',
-      ]);
+      ], ag);
     case 'debt':
       return env(lane, facts, 'Debt collection complaint — request for investigation', [
         'THE COLLECTION',
@@ -176,7 +187,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 4. Correct credit-reporting entries I have shown to be inaccurate, per your processes.',
         '',
         'I have the call log, letters, texts and envelopes. I am disputing the debt in good faith and I want the record straight more than I want the calls to stop.',
-      ]);
+      ], ag);
     case 'wages':
       return env(lane, facts, 'Unpaid wages intake — request for investigation', [
         'THE EMPLOYMENT',
@@ -194,7 +205,7 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 4. Tell me in writing what my rights are if the investigation stalls — including the limitations bridge to court.',
         '',
         'I have pay stubs, timesheets/schedules, offer letters and termination communications.',
-      ]);
+      ], ag);
     case 'other':
       return env(lane, facts, 'Consumer complaint — request for review and response', [
         'THE GRIEVANCE',
@@ -205,6 +216,6 @@ export function buildComplaintLetter(laneId: LaneId, facts: ComplaintFacts): str
         ' 2. Review this against your consumer-protection mandate — deceptive practices, unfair contract terms, licensing, safety.',
         ' 3. Tell me in writing (a) whether you can act, (b) if so, what you need from me, (c) if not, which agency can.',
         ' 4. Where thousands share this fact pattern, consider treating this file as one of many toward a pattern inquiry.',
-      ]);
+      ], ag);
   }
 }

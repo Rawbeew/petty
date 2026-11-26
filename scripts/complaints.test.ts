@@ -1,6 +1,7 @@
 /* Petty — complaint desk engines: deterministic router + per-lane letters. No network. */
 import { LANES, routeComplaint, type LaneId } from '../src/lib/complaints';
 import { buildComplaintLetter } from '../src/lib/complaintLetters';
+import { US_STATES, stateByCode } from '../src/data/states';
 
 let failures = 0;
 const ok = (cond: boolean, label: string) => { console.log((cond ? 'PASS' : 'FAIL'), '-', label); if (!cond) failures++; };
@@ -37,6 +38,27 @@ ok(boosted.best?.lane === 'food_illness', 'router: ill flag boosts food_illness'
 
 /* letters: every lane builds a complete, lane-specific document */
 const facts = { business: 'Test Roofing Co', date: '2026-11-01', what: 'Took $3,000 deposit, vanished.', ill: false };
+
+/* US registry: 50 states + DC, audited 2026-11-26 */
+ok(US_STATES.length === 51, 'US registry: 50 states + DC');
+ok(new Set(US_STATES.map(s2 => s2.code)).size === 51, 'US registry: unique codes');
+ok(US_STATES.every(s2 => s2.url === null || s2.url.startsWith('https://')), 'US registry: https only');
+ok(US_STATES.every(s2 => /^\d{4}-\d{2}-\d{2}$/.test(s2.verifiedAt)), 'US registry: audit date on every row');
+ok(US_STATES.filter(s2 => s2.status === 'bot-walled').length === 4, 'US registry: exactly 4 bot-walled (AK/KS/MA/NH), all labeled');
+const ms = US_STATES.find(s2 => s2.code === 'MS');
+ok(ms ? ms.url === null && ms.status === 'unverified' : false, 'US registry: MS not linked (off-gov redirect)');
+const tx = US_STATES.find(s2 => s2.code === 'TX');
+if (!tx) throw new Error('TX missing from registry');
+ok(stateByCode('CA')?.url === 'https://oag.ca.gov/', 'US registry: CA → oag.ca.gov');
+const withState = buildComplaintLetter('contractor', facts, tx);
+ok(withState.includes('Texas Attorney General'), 'letter[state]: state AG office named in contractor lane');
+ok(withState.includes('texasattorneygeneral.gov'), 'letter[state]: state portal url included');
+const msFound = US_STATES.find(s2 => s2.code === 'MS');
+if (!msFound) throw new Error('MS missing from registry');
+const msLetter = buildComplaintLetter('other', facts, msFound);
+ok(msLetter.includes('Mississippi Attorney General') && !msLetter.includes('attorneygenerallynnfitch'), 'letter[MS]: office named, off-gov domain never rendered');
+ok(buildComplaintLetter('wages', facts, tx).includes('216(b)'), 'letter[state]: federal wages lane ignores state AG but stays valid');
+
 for (const l of LANES) {
   const letter = buildComplaintLetter(l.id, facts);
   ok(letter.includes(l.who), `letter[${l.id}]: addressed to lane regulator`);
