@@ -10,6 +10,7 @@ import { cx, downloadText } from '../lib/ui';
 import { LANES, routeComplaint, type LaneId, type RouteResult } from '../lib/complaints';
 import { useCaseFile } from '../lib/caseFile';
 import { US_STATES, stateByCode, isStateAG } from '../data/states';
+import { safeGet, safeSet } from '../lib/safeStorage';
 import { buildComplaintLetter } from '../lib/complaintLetters';
 
 export default function ComplaintDesk() {
@@ -17,11 +18,11 @@ export default function ComplaintDesk() {
   const { c, set, clear } = useCaseFile();
   const business = c.business; const date = c.date; const what = c.what; const ill = c.ill;
   const [route, setRoute] = useState<RouteResult | null>(null);
-  const [stateCode, setStateCode] = useState<string>(() => { try { return localStorage.getItem('petty.ag.state') ?? ''; } catch { return ''; } });
+  const [stateCode, setStateCode] = useState<string>(() => safeGet('petty.ag.state') ?? '');
   const isLaneId = (v: string): v is LaneId => LANES.some(l => l.id === v);
   const AG_Routed = (id: LaneId) => id === 'contractor' || id === 'auto_repair' || id === 'debt' || id === 'other';
   const ag = isStateAG(stateCode) ? stateByCode(stateCode) : null;
-  const pickState = (code: string) => { setStateCode(code); try { localStorage.setItem('petty.ag.state', code); } catch { /* storage full/blocked — session only */ } };
+  const pickState = (code: string) => { setStateCode(code); safeSet('petty.ag.state', code); };
   const first = LANES[0];
   if (first === undefined) return null; // static table — unreachable
   const active = LANES.find(l => l.id === lane) ?? first;

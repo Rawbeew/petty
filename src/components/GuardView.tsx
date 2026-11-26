@@ -12,7 +12,9 @@ import { PopVerdict } from './ui/Motion';
 import ClipStudio from './ClipStudio';
 import FoodFraudCard from './FoodFraudCard';
 import PantryLedger from './PantryLedger';
+import LitigationSweep from './LitigationSweep';
 import { newItem as newPantryItem, putItem as putPantryItem } from '../lib/household';
+import { safeGet, safeSet, safeRemove } from '../lib/safeStorage';
 
 const SAMPLES = ['peanut butter', 'losartan', 'infusion pump', 'e-bike battery', 'sunscreen'];
 
@@ -103,6 +105,7 @@ function Scanner({ pack, seed, onGoPantry }: { pack: CountryPack; seed?: string 
             <button type="button" disabled={!input.trim() || pantrySaved} onClick={() => { void (async () => { const name = input.trim(); if (!name) return; try { await putPantryItem(newPantryItem(name, '', 'other', 'Added from Recall Scanner — re-verify against new enforcement data')); setPantrySaved(true); } catch { /* storage blocked — the Pantry tab will say so */ } })(); }} className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--line2)] px-3 py-2 mono text-[8px] tracking-[0.2em] uppercase text-[var(--dim)] hover:text-[var(--ink)] hover:border-[var(--gold)] disabled:opacity-40"><Package size={11} />+ Save “{input.trim().slice(0, 28) || '…'}” to Pantry</button>
             {pantrySaved && <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--green)]"><CheckCircle2 size={12} />Saved<button type="button" onClick={onGoPantry} className="underline underline-offset-2 hover:text-[#7df0b6]">Open the Pantry →</button></span>}
           </div>
+          {input.trim().length > 2 && <div className="mt-2"><LitigationSweep query={input} /></div>}
         </form>
         <p className="mono text-[8px] text-[var(--dim)]">openFDA: field-limited search (product_description), sort report_date desc · FSA: latest 60 alerts, client-side filter (their server-side search silently returns 0 — verified 2026-11-26) · openFDA disclaimer: data is unvalidated — confirm at the linked recall file before acting.</p>
       </section>
@@ -208,7 +211,7 @@ function UKCaseLaw() {
 
 function DocketSearch({ market }: { market: string }) {
   const [q, setQ] = useState('daubert');
-  const [token, setToken] = useState(() => localStorage.getItem('petty-cl-token') ?? '');
+  const [token, setToken] = useState(() => safeGet('petty-cl-token') ?? '');
   const [tokenDraft, setTokenDraft] = useState('');
   const [liveState, setLiveState] = useState<'idle' | 'loading' | 'live' | 'error' | 'blocked'>('idle');
   const [liveResults, setLiveResults] = useState<LiveArgument[]>([]);
@@ -241,8 +244,8 @@ function DocketSearch({ market }: { market: string }) {
     }
   };
 
-  const saveToken = () => { const t = tokenDraft.trim(); if (t) { localStorage.setItem('petty-cl-token', t); setToken(t); setTokenDraft(''); setLiveState('idle'); } };
-  const clearToken = () => { localStorage.removeItem('petty-cl-token'); setToken(''); setLiveState('idle'); setLiveResults([]); };
+  const saveToken = () => { const t = tokenDraft.trim(); if (t && safeSet('petty-cl-token', t)) { setToken(t); setTokenDraft(''); setLiveState('idle'); } };
+  const clearToken = () => { safeRemove('petty-cl-token'); setToken(''); setLiveState('idle'); setLiveResults([]); };
 
   return (
     <div className="grid lg:grid-cols-[1.15fr_1fr] gap-4">

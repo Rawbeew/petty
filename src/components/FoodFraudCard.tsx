@@ -6,6 +6,7 @@ import PhotoEvidence from './PhotoEvidence';
 import { downloadText } from '../lib/ui';
 import { buildComplaintLetter } from '../lib/complaintLetters';
 import { stateByCode, isStateAG } from '../data/states';
+import { safeGet } from '../lib/safeStorage';
 import { useCaseFile } from '../lib/caseFile';
 
 const STEPS = [
@@ -20,7 +21,7 @@ export default function FoodFraudCard() {
   const product = c.product; const business = c.business; const date = c.date; const what = c.what; const ill = c.ill;
 
   const generate = () => {
-    const agCode = (() => { try { return localStorage.getItem('petty.ag.state') ?? ''; } catch { return ''; } })();
+    const agCode = safeGet('petty.ag.state') ?? '';
     const ag = isStateAG(agCode) ? stateByCode(agCode) : null;
     const narrative = [`Product: ${product.trim() || '(fill in)'}`, what.trim() || '(describe the label vs the product: ingredients, net weight, organic/raw claim, allergen, quality…)'].join('\n');
     downloadText('petty-food-fraud-complaint.txt', buildComplaintLetter(ill ? 'food_illness' : 'food_packaged', { business, date, what: narrative, ill }, ag));

@@ -2,12 +2,13 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { migratePhotoScopes } from '../lib/household';
 import { CaseContext, EMPTY, KEY, readStored, type CaseContextValue, type CaseFile } from '../lib/caseFile';
+import { safeSet } from '../lib/safeStorage';
 
 export function CaseProvider({ children, goComplaint }: { children: ReactNode; goComplaint?: () => void }) {
   const [c, setC] = useState<CaseFile>(readStored);
 
   useEffect(() => {
-    try { localStorage.setItem(KEY, JSON.stringify(c)); } catch { /* full/blocked — session-only */ }
+    safeSet(KEY, JSON.stringify(c)); /* blocked contexts are session-only */
   }, [c]);
   useEffect(() => { void migratePhotoScopes({ complaint: 'case', foodfraud: 'case' }).catch(() => { /* legacy scopes stay; nothing lost */ }); }, []);
 

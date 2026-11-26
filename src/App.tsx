@@ -10,6 +10,7 @@ import RadarView from './components/RadarView';
 import GuardView from './components/GuardView';
 import RecoverView from './components/RecoverView';
 import VaultView from './components/VaultView';
+import ErrorBoundary from './components/ErrorBoundary';
 import { CaseProvider } from './components/CaseProvider';
 import { COUNTRY_PACKS } from './data/packs';
 import type { CountryPack } from './data/packs';
@@ -40,10 +41,12 @@ export default function App() {
       <Ticker />
 
       <main id="main" className="relative flex-1 min-h-0" tabIndex={-1}>
-        {view === 'radar' && <RadarView pack={pack} />}
-        {view === 'guard' && <GuardView pack={pack} />}
-        {view === 'recover' && <RecoverView pack={pack} />}
-        {view === 'vault' && <VaultView pack={pack} />}
+        <ErrorBoundary key={view} label={view === 'guard' ? 'Receipts' : view === 'recover' ? 'Comeuppance' : view === 'vault' ? 'The Black Book' : 'Side-Eye'}>
+          {view === 'radar' && <RadarView pack={pack} />}
+          {view === 'guard' && <GuardView pack={pack} />}
+          {view === 'recover' && <RecoverView pack={pack} />}
+          {view === 'vault' && <VaultView pack={pack} />}
+        </ErrorBoundary>
       </main>
 
       <ComplianceStrip />

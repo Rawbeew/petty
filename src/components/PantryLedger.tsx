@@ -9,6 +9,7 @@ import {
 import { SectionHeader } from './ui/SectionHeader';
 import PhotoEvidence from './PhotoEvidence';
 import { useCaseFile } from '../lib/caseFile';
+import LitigationSweep from './LitigationSweep';
 import { cx, downloadText } from '../lib/ui';
 
 const CATEGORIES: { id: HouseholdCategory; label: string }[] = [
@@ -99,7 +100,7 @@ export default function PantryLedger({ onRecallCheck }: { onRecallCheck: (query:
                 <button onClick={() => { setExpanded(expanded === it.id ? null : it.id); }} aria-label={expanded === it.id ? 'Hide photos' : 'Show photos'} className="p-2 rounded-lg border border-[var(--line2)] text-[var(--dim)] hover:text-[var(--ink)]">{expanded === it.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
               </span>
             </div>
-            {expanded === it.id && <div className="mt-3 border-t border-[var(--line)] pt-3"><PhotoEvidence scope={itemScope(it.id)} /></div>}
+            {expanded === it.id && <div className="mt-3 border-t border-[var(--line)] pt-3 space-y-3"><PhotoEvidence scope={itemScope(it.id)} /><LitigationSweep query={[it.brand, it.name].filter(Boolean).join(' ')} /></div>}
           </li>
         ))}
         {items?.length === 0 && storageOk && <li className="mono text-[9px] text-[var(--dim)] text-center py-4">Nothing on file. Add the pantry jars, the losartan, the infusion pump — the things you actually live with.</li>}

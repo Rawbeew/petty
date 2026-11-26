@@ -2,6 +2,7 @@
  * Persisted to localStorage (text only, tiny, origin-scoped). Photos live in IndexedDB under scope 'case'.
  * Nothing here leaves the device; nothing here is sent anywhere. Clear = erase. */
 import { createContext, useContext } from 'react';
+import { safeGet } from './safeStorage';
 
 export interface CaseFile {
   product: string; business: string; date: string; what: string; ill: boolean; updatedAt: string | null;
@@ -21,7 +22,7 @@ export const CaseContext = createContext<CaseContextValue | null>(null);
 
 export const readStored = (): CaseFile => {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = safeGet(KEY);
     if (!raw) return EMPTY;
     const parsed: unknown = JSON.parse(raw);
     if (typeof parsed !== 'object' || parsed === null) return EMPTY;
