@@ -94,3 +94,9 @@ Snapblocks/Animata (component glamour), Scroll Shaders/Scrolltide (paid WebGL sh
 ## 7 · Honesty contract (unchanged, restated)
 
 1. No fabricated data, ever — citation or silence. 2. Live means synced-on-screen with a timestamp. 3. Dead/unreachable is *named* (with official portal links), never covered. 4. Money gateways: no fake matches — no API exists, we say so. 5. YMYL: information, not advice; not affiliated with agencies; flat pricing only.
+## 8 · The device is the vault (privacy doctrine, 2026-11-26)
+
+- Household ledger (The Pantry) and evidence photos are origin-scoped IndexedDB — no account, no upload, no sync. UI copy never says "backed up" or "secured"; it says PERSISTED (asked) or MAY BE EVICTED, and tells you to export what matters.
+- Photo capture is one tap (`capture="environment"`), photos show size/date, download individually, delete per-photo or per-item (item delete cascades to its photos).
+- "Report it" only ever routes to official regulators (health dept · FDA/USDA FSIS · state AG · FTC · FCC · CFPB · CPSC · DOL) with a generated complaint letter the **user** sends — Petty never files and never publishes. No reviews, no ratings, no callouts, no shame walls. Voice sharp, engine sober — the desk is a clerk, not a mob.
+- Canon: `docs/FIRST_PRINCIPLES.md` PV1–PV4.

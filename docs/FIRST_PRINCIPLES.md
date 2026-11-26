@@ -23,6 +23,18 @@ A redesign is not "make it pop." It is: understand *why* the interface exists, t
 
 **P10 · Reduced-motion is a hard gate.** `prefers-reduced-motion` collapses *all* animation to near-instant; content and affordances are 100% intact. Accessibility is not a lint rule — it's the floor.
 
+## Privacy doctrine — the device is the vault (2026-11-26)
+
+Any feature that touches the user's own stuff obeys four hard rules:
+
+**PV1 · On-device or it doesn't exist.** Household goods ledgers and evidence photographs live in origin-scoped IndexedDB (`petty-household`), never on a Petty server — none exists. No account, no sync, no upload, ever. Petty's developers cannot see your shelf.
+
+**PV2 · Eviction is the enemy, export is the shield.** The UI must (a) request persistent storage, (b) warn that clearing browser site data erases the ledger and photos, (c) offer one-tap export of whatever matters (ledger manifest .txt; photos downloadable individually). Latency honesty applies: the chips say PERSISTED vs MAY BE EVICTED, not "secured".
+
+**PV3 · Reporting means officials, never audiences.** "Report a restaurant/service" produces a guided official complaint: pick the lane, attach on-device photos, get cited regulator routing + a generated complaint letter. It **never** becomes a review, rating, comment, public callout or shaming feed. Petty never files, never contacts, never posts — the user sends.
+
+**PV4 · No camera theatre.** Evidence capture must be one tap from the context where it's needed (pantry item, label-lies file, complaint desk) and every photo removable per-item or per-photo. Delete means delete (IndexedDB delete, object URLs revoked).
+
 ## Systems thinking — how the codebase encodes the laws
 
 ```
